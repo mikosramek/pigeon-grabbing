@@ -5,7 +5,7 @@
 /**
  * Simple example with a spinning quad.
  * This shows how to manually generate geometry and draw it,
- * although most o the time you should use the builtin model format.
+ * although most of the time you should use the builtin model format.
  */
 int main()
 {
@@ -58,7 +58,7 @@ int main()
   for(;;)
   {
     // ======== Update ======== //
-    rotAngle += 0.03f;
+    rotAngle += 0.06f;
 
     // we can set up our viewport settings beforehand here
     t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(85.0f), 10.0f, 100.0f);
