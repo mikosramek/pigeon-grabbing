@@ -54,8 +54,6 @@ int main()
   t3d_init((T3DInitParams){});
   joypad_init();
 
-  // T3DMat4FP* modelMatFP = malloc_uncached(sizeof(T3DMat4) * FB_COUNT);
-
   T3DViewport viewport = t3d_viewport_create_buffered(FB_COUNT);
 
   const fm_vec3_t camPos = {{ 0, 10.0f, 40.0f }};
@@ -67,19 +65,10 @@ int main()
   fm_vec3_t lightDirVec = {{-1.0f, 1.0f, 1.0f}};
   fm_vec3_norm(&lightDirVec, &lightDirVec);
 
-  // T3DModel *model = t3d_model_load("rom:/model.t3dm");
   T3DModel *hand = t3d_model_load("rom:/hand.t3dm");
 
-  // float rotAngle = 0.0f;
-  // fm_vec3_t handPosition = {{ 0, 0, 0 }};
-  // rspq_block_t *dplDraw = NULL;
   rspq_block_t *rightHandDraw = NULL;
-  // rspq_block_t *leftHandDraw = NULL;
-  
-  // float movementSpeed = 5;
-
-  Hand rightHand = createHand(0, rightHandDraw, 50.0f);
-  // Hand leftHand = createHand(0, leftHandDraw, -50.0f);
+  Hand hands = createHand(0, rightHandDraw, 50.0f);
 
   fm_vec3_t handRot = {{ -45.0f, 0, 0 }};
 
@@ -121,19 +110,15 @@ int main()
       handRot.y -= 0.02f;
     }
 
-    updateHand(&rightHand, inputVector, handRot);
-    // updateHand(&leftHand, inputVector);
-
-    // rotAngle += 0.02f;
-    // float modelScale = 1.0f;
+    updateHand(&hands, inputVector, handRot);
 
     t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(85.0f), 10.0f, 150.0f);
     t3d_viewport_look_at(&viewport, &camPos, &camTarget, &(fm_vec3_t){{0,1,0}});
 
-    t3d_mat4fp_from_srt_euler(&rightHand.modelMat[frameIdx],
-      rightHand.scale,
-      rightHand.rot,
-      rightHand.pos
+    t3d_mat4fp_from_srt_euler(&hands.modelMat[frameIdx],
+      hands.scale,
+      hands.rot,
+      hands.pos
     );
 
     // DRAW
@@ -149,38 +134,18 @@ int main()
     t3d_light_set_count(1); // 0-7 lights in addition to the ambient light
 
 
-    // if (!dplDraw) {
-    //   rspq_block_begin();
-    //   t3d_model_draw(hand);
-    //   t3d_matrix_pop(1);
-
-    //   dplDraw = rspq_block_end();
-    // }
-
-    if (!rightHand.dpl) {
+    // setup hand draw block
+    if (!hands.dpl) {
       rspq_block_begin();
       t3d_model_draw(hand);
       t3d_matrix_pop(1);
 
-      rightHand.dpl = rspq_block_end();
+      hands.dpl = rspq_block_end();
     }
-    // if (!leftHand.dpl) {
-    //   rspq_block_begin();
-    //   t3d_model_draw(hand);
-    //   t3d_matrix_pop(1);
-
-    //   leftHand.dpl = rspq_block_end();
-    // }
-
-    // t3d_matrix_push(&modelMatFP[frameIdx]);
-    // rspq_block_run(dplDraw);
 
     t3d_matrix_push(
-      rightHand.modelMat);
-    rspq_block_run(rightHand.dpl);
-    // t3d_matrix_push(
-    //   leftHand.modelMat);
-    // rspq_block_run(leftHand.dpl);
+      hands.modelMat);
+    rspq_block_run(hands.dpl);
 
     rdpq_detach_show();
   }
