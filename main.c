@@ -17,6 +17,7 @@ typedef struct {
   T3DMat4FP *modelMat;
 } Hand;
 
+
 Hand createHand(uint32_t id, rspq_block_t *dpl, float xOffset) {
   Hand newHand = (Hand) {
     .id = id,
@@ -29,9 +30,12 @@ Hand createHand(uint32_t id, rspq_block_t *dpl, float xOffset) {
   return newHand;
 }
 
-void updateHand (Hand *hand, fm_vec3_t inputVector) {
+void updateHand (Hand *hand, fm_vec3_t inputVector, fm_vec3_t newRot) {
   hand->pos[0] += inputVector.x * handSpeed;
   hand->pos[1] += inputVector.y * handSpeed;
+  hand->rot[0] = newRot.x;
+  hand->rot[1] = newRot.y;
+  hand->rot[2] = newRot.z;
   t3d_mat4fp_from_srt_euler(&hand->modelMat[frameIdx], hand->scale, hand->rot, hand->pos);
 }
 
@@ -70,13 +74,14 @@ int main()
   // fm_vec3_t handPosition = {{ 0, 0, 0 }};
   // rspq_block_t *dplDraw = NULL;
   rspq_block_t *rightHandDraw = NULL;
-  rspq_block_t *leftHandDraw = NULL;
+  // rspq_block_t *leftHandDraw = NULL;
   
   // float movementSpeed = 5;
 
   Hand rightHand = createHand(0, rightHandDraw, 50.0f);
-  Hand leftHand = createHand(0, leftHandDraw, -50.0f);
+  // Hand leftHand = createHand(0, leftHandDraw, -50.0f);
 
+  fm_vec3_t handRot = {{ -45.0f, 0, 0 }};
 
   for(;;) {
     // UPDATE
@@ -102,8 +107,22 @@ int main()
 
     fm_vec3_norm(&inputVector, &inputVector);
 
-    updateHand(&rightHand, inputVector);
-    updateHand(&leftHand, inputVector);
+    
+
+    if (input.cstick_y > 0) {
+      handRot.x -= 0.02f;
+    } else if (input.cstick_y < 0) {
+      handRot.x += 0.02f;
+    }
+
+    if (input.cstick_x > 0) {
+      handRot.y += 0.02f;
+    } else if (input.cstick_x < 0) {
+      handRot.y -= 0.02f;
+    }
+
+    updateHand(&rightHand, inputVector, handRot);
+    // updateHand(&leftHand, inputVector);
 
     // rotAngle += 0.02f;
     // float modelScale = 1.0f;
@@ -145,13 +164,13 @@ int main()
 
       rightHand.dpl = rspq_block_end();
     }
-    if (!leftHand.dpl) {
-      rspq_block_begin();
-      t3d_model_draw(hand);
-      t3d_matrix_pop(1);
+    // if (!leftHand.dpl) {
+    //   rspq_block_begin();
+    //   t3d_model_draw(hand);
+    //   t3d_matrix_pop(1);
 
-      leftHand.dpl = rspq_block_end();
-    }
+    //   leftHand.dpl = rspq_block_end();
+    // }
 
     // t3d_matrix_push(&modelMatFP[frameIdx]);
     // rspq_block_run(dplDraw);
@@ -159,9 +178,9 @@ int main()
     t3d_matrix_push(
       rightHand.modelMat);
     rspq_block_run(rightHand.dpl);
-    t3d_matrix_push(
-      leftHand.modelMat);
-    rspq_block_run(leftHand.dpl);
+    // t3d_matrix_push(
+    //   leftHand.modelMat);
+    // rspq_block_run(leftHand.dpl);
 
     rdpq_detach_show();
   }
