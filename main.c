@@ -15,22 +15,28 @@ typedef struct {
 
   rspq_block_t *dpl;
   T3DMat4FP *modelMat;
-} Hand;
+} Actor;
 
 
-Hand createHand(uint32_t id, rspq_block_t *dpl, float xOffset) {
-  Hand newHand = (Hand) {
+Actor createActor(uint32_t id, rspq_block_t *dpl, float *position) {
+  float scale = 0.6f;
+  Actor newHand = (Actor) {
     .id = id,
-    .pos = {xOffset, 0, -100.0f},
     .rot = {-45.0f, 0, 0},
-    .scale = {1.0f, 1.0f, 1.0f},
+    .scale = {scale, scale, scale},
     .dpl = dpl,
     .modelMat = malloc_uncached(sizeof(T3DMat4FP) * FB_COUNT)
   };
+
+  newHand.pos[0] = position[0];
+  newHand.pos[1] = position[1];
+  newHand.pos[2] = position[2];
+
   return newHand;
 }
 
-void updateHand (Hand *hand, fm_vec3_t inputVector, fm_vec3_t newRot) {
+
+void updateHand (Actor *hand, fm_vec3_t inputVector, fm_vec3_t newRot) {
   hand->pos[0] += inputVector.x * handSpeed;
   hand->pos[1] += inputVector.y * handSpeed;
   hand->rot[0] = newRot.x;
@@ -56,11 +62,11 @@ int main()
 
   T3DViewport viewport = t3d_viewport_create_buffered(FB_COUNT);
 
-  const fm_vec3_t camPos = {{ 0, 10.0f, 40.0f }};
-  const fm_vec3_t camTarget = {{0,0,0}};
+  fm_vec3_t camPos = {{ 0, 100.0f, 40.0f }};
+  fm_vec3_t camTarget = {{0,100.0f,0}};
 
-  uint8_t colorAmbient[4] = {80, 80, 100, 0xFF};
-  uint8_t colorDir[4]     = {0xEE, 0xAA, 0xAA, 0xFF};
+  uint8_t colorAmbient[4] = {69, 69, 69, 0x22};
+  uint8_t colorDir[4]     = {0xFF, 0xFF, 0xFF, 0x22};
 
   fm_vec3_t lightDirVec = {{-1.0f, 1.0f, 1.0f}};
   fm_vec3_norm(&lightDirVec, &lightDirVec);
@@ -68,13 +74,27 @@ int main()
   T3DModel *hand = t3d_model_load("rom:/hand.t3dm");
 
   rspq_block_t *rightHandDraw = NULL;
-  Hand hands = createHand(0, rightHandDraw, 50.0f);
+  Actor hands = createActor(0, rightHandDraw, (float[3]){0.0f, 40.0f, -50.0f});
 
   fm_vec3_t handRot = {{ -45.0f, 0, 0 }};
+
+  // SETUP ENVIRONMENT
+  T3DModel *ground = t3d_model_load("rom:/ground.t3dm");
+  T3DMat4FP* groundMatFP = malloc_uncached(sizeof(T3DMat4) * FB_COUNT);
+
+  T3DModel *stump = t3d_model_load("rom:/stump.t3dm");
+  // T3DModel *stump2 = t3d_model_load("rom:/stump.t3dm");
+  T3DMat4FP* stumpMatFP = malloc_uncached(sizeof(T3DMat4) * FB_COUNT);
+  T3DMat4FP* stumpMatFP2 = malloc_uncached(sizeof(T3DMat4) * FB_COUNT);
+
+  rspq_block_t *parkSceneDrawBlock = NULL;
+  rspq_block_t *stumpDrawBlock = NULL;
 
   for(;;) {
     // UPDATE
     frameIdx = (frameIdx + 1) % FB_COUNT;
+
+    // camPos.z += 0.01f;
 
     joypad_poll();
     joypad_inputs_t input = joypad_get_inputs(0);
@@ -96,6 +116,11 @@ int main()
 
     fm_vec3_norm(&inputVector, &inputVector);
 
+    camPos.z -= inputVector.y * 5;
+    camPos.x += inputVector.x * 5;
+    camTarget.x = camPos.x;
+    camTarget.y = 100.0f;
+    camTarget.z = camPos.z - 10.0f;
     
 
     if (input.cstick_y > 0) {
@@ -110,9 +135,27 @@ int main()
       handRot.y -= 0.02f;
     }
 
-    updateHand(&hands, inputVector, handRot);
+    // updateHand(&hands, inputVector, handRot);
+    t3d_mat4fp_from_srt_euler(
+      groundMatFP,
+      (float[3]){0.5f, 0.5f, 0.5f},
+      (float[3]){0.0f, 0.0f, 0.0f},
+      (float[3]){0.0f, 0.0f, -250.0f}
+    );
+    t3d_mat4fp_from_srt_euler(
+      stumpMatFP,
+      (float[3]){1.0f, 1.0f, 1.0f},
+      (float[3]){0.0f, -90.0f, 0.0f},
+      (float[3]){500.0f, 0.0f, -250.0f}
+    );
+    t3d_mat4fp_from_srt_euler(
+      stumpMatFP2,
+      (float[3]){0.5f, 0.5f, 0.5f},
+      (float[3]){0.0f, 45.0f, 0.0f},
+      (float[3]){-100.0f, 0.0f, -250.0f}
+    );
 
-    t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(85.0f), 10.0f, 150.0f);
+    t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(85.0f), 10.0f, 250.0f);
     t3d_viewport_look_at(&viewport, &camPos, &camTarget, &(fm_vec3_t){{0,1,0}});
 
     t3d_mat4fp_from_srt_euler(&hands.modelMat[frameIdx],
@@ -125,6 +168,8 @@ int main()
     rdpq_attach(display_get(), display_get_zbuf());
     t3d_frame_start();
     t3d_viewport_attach(&viewport);
+
+    // rdpq_set_prim_color(RGBA32(0, 0, 0, 0xFF));
 
     t3d_screen_clear_color(RGBA32(100, 80, 80, 0xFF)); // clears the screen 
     t3d_screen_clear_depth(); // clears the depth buffer
@@ -143,9 +188,35 @@ int main()
       hands.dpl = rspq_block_end();
     }
 
+    if (!parkSceneDrawBlock) {
+      rspq_block_begin();
+
+      // t3d_model_draw(stump);
+      // t3d_model_draw(stump2);
+      t3d_model_draw(ground);
+      t3d_matrix_pop(1);
+
+      parkSceneDrawBlock = rspq_block_end();
+    }
+
+    if (!stumpDrawBlock) {
+      rspq_block_begin();
+      t3d_model_draw(stump);
+      t3d_model_draw(stump);
+      t3d_matrix_pop(2);
+      stumpDrawBlock = rspq_block_end();
+    }
+
     t3d_matrix_push(
       hands.modelMat);
     rspq_block_run(hands.dpl);
+
+    t3d_matrix_push(groundMatFP);
+    rspq_block_run(parkSceneDrawBlock);
+    t3d_matrix_push(stumpMatFP);
+    t3d_matrix_push(stumpMatFP2);
+
+    rspq_block_run(stumpDrawBlock);
 
     rdpq_detach_show();
   }

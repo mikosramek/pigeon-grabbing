@@ -7,6 +7,11 @@
       "label": "build",
       "type": "shell",
       "command": "make && open -a ares ./pigeon_grabbing.z64 "
+    },
+    {
+      "label": "clean",
+      "type": "shell",
+      "command": "make clean"
     }
   ]
 }
