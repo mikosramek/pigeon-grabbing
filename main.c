@@ -17,22 +17,34 @@ typedef struct {
   T3DMat4FP *modelMat;
 } Actor;
 
+typedef struct {
+  uint32_t id;
+  Actor *actors;
+} Scene;
 
-Actor createActor(uint32_t id, rspq_block_t *dpl, float *position) {
-  float scale = 0.6f;
-  Actor newHand = (Actor) {
+#define ACTOR_COUNT 3
+
+
+Actor createActor(uint32_t id, rspq_block_t *dpl, float *scale, float *rot, float *position) {
+  Actor newActor = (Actor) {
     .id = id,
-    .rot = {-45.0f, 0, 0},
-    .scale = {scale, scale, scale},
     .dpl = dpl,
     .modelMat = malloc_uncached(sizeof(T3DMat4FP) * FB_COUNT)
   };
 
-  newHand.pos[0] = position[0];
-  newHand.pos[1] = position[1];
-  newHand.pos[2] = position[2];
+  newActor.pos[0] = position[0];
+  newActor.pos[1] = position[1];
+  newActor.pos[2] = position[2];
 
-  return newHand;
+  newActor.rot[0] = rot[0];
+  newActor.rot[1] = rot[1];
+  newActor.rot[2] = rot[2];
+
+  newActor.scale[0] = scale[0];
+  newActor.scale[1] = scale[1];
+  newActor.scale[2] = scale[2];
+
+  return newActor;
 }
 
 
@@ -43,6 +55,84 @@ void updateHand (Actor *hand, fm_vec3_t inputVector, fm_vec3_t newRot) {
   hand->rot[1] = newRot.y;
   hand->rot[2] = newRot.z;
   t3d_mat4fp_from_srt_euler(&hand->modelMat[frameIdx], hand->scale, hand->rot, hand->pos);
+}
+
+// init actors
+/*
+
+INIT
+  rspq_block_t *dpls[2];
+  T3DModel *models[2] = {
+    t3d_model_load("rom:/box.t3dm"),
+    t3d_model_load("rom:/food.t3dm")
+  };
+
+  for(int i=0; i<2; ++i) {
+    rspq_block_begin();
+    t3d_model_draw(models[i]);
+    dpls[i] = rspq_block_end();
+  }
+
+  Actor actors[ACTOR_COUNT];
+  for(int i=0; i<ACTOR_COUNT; ++i) {
+    actors[i] = actor_create(i, dpls[i*3 % 2]);
+  }
+
+LOOP
+  for(int i=0; i<actorCount; ++i) {
+    actor_update(&actors[i]);
+    //   t3d_mat4fp_from_srt_euler(&actor->modelMat[frameIdx], actor->scale, actor->rot, actor->pos);
+  }
+
+
+  t3d_matrix_push_pos(1);
+  for(int i=0; i<actorCount; ++i) {
+    actor_draw(&actors[i]);
+    // t3d_matrix_set(&actor->modelMat[frameIdx], true);
+    // rspq_block_run(actor->dpl);
+  }
+  t3d_matrix_pop(1);
+
+*/
+
+// Scene initPark(void) {
+//   Actor items[3];
+//   items[0] = (Actor){
+//     .id = 0,
+//     .dpl
+//   };
+//   Scene Park = (Scene) {
+//     .id = 1,
+//     .actors = items
+//   };
+
+//   return Park;
+// }
+
+// void drawScene(void) {
+
+// }
+
+rspq_block_t* setupModel (const char *modelPath) {
+  T3DModel *model = t3d_model_load(modelPath);
+  rspq_block_t *envDPL = NULL;
+
+  rspq_block_begin();
+  t3d_model_draw(model);
+  envDPL = rspq_block_end();
+  return envDPL;
+}
+
+Actor setupActor(uint32_t id, rspq_block_t *dpl, const float pos[3], const float rot[3], const float scale[3]) {
+  Actor actor = (Actor) {
+    .id = id,
+    .pos = {pos[0], pos[1], pos[2]},
+    .rot = {rot[0], rot[1], rot[2]},
+    .scale = {scale[0], scale[1], scale[2]},
+    .dpl = dpl,
+    .modelMat = malloc_uncached(sizeof(T3DMat4FP) * FB_COUNT)
+  };
+  return actor;
 }
 
 int main()
@@ -71,30 +161,62 @@ int main()
   fm_vec3_t lightDirVec = {{-1.0f, 1.0f, 1.0f}};
   fm_vec3_norm(&lightDirVec, &lightDirVec);
 
-  T3DModel *hand = t3d_model_load("rom:/hand.t3dm");
+  // T3DModel *hand = t3d_model_load("rom:/hand.t3dm");
 
-  rspq_block_t *rightHandDraw = NULL;
-  Actor hands = createActor(0, rightHandDraw, (float[3]){0.0f, 40.0f, -50.0f});
+  // rspq_block_t *rightHandDraw = NULL;
+  // Actor hands = createActor(0, rightHandDraw, (float[3]){0.0f, 40.0f, -50.0f});
 
-  fm_vec3_t handRot = {{ -45.0f, 0, 0 }};
+  // fm_vec3_t handRot = {{ -45.0f, 0, 0 }};
 
   // SETUP ENVIRONMENT
-  T3DModel *ground = t3d_model_load("rom:/ground.t3dm");
-  T3DMat4FP* groundMatFP = malloc_uncached(sizeof(T3DMat4) * FB_COUNT);
+  // T3DModel *ground = t3d_model_load("rom:/ground.t3dm");
+  // T3DModel *stump = t3d_model_load("rom:/stump.t3dm");
+  // rspq_block_t *envDPLs[2];
 
-  T3DModel *stump = t3d_model_load("rom:/stump.t3dm");
-  // T3DModel *stump2 = t3d_model_load("rom:/stump.t3dm");
-  T3DMat4FP* stumpMatFP = malloc_uncached(sizeof(T3DMat4) * FB_COUNT);
-  T3DMat4FP* stumpMatFP2 = malloc_uncached(sizeof(T3DMat4) * FB_COUNT);
+  // for(int i=0; i<2; ++i) {
+  //   rspq_block_begin();
+  //   t3d_model_draw(models[i]);
+  //   envDPLs[i] = rspq_block_end();
+  // }
+  // rspq_block_begin();
+  // t3d_model_draw(ground);
+  // envDPLs[0] = rspq_block_end();
 
-  rspq_block_t *parkSceneDrawBlock = NULL;
-  rspq_block_t *stumpDrawBlock = NULL;
+  // rspq_block_begin();
+  // t3d_model_draw(stump);
+  // envDPLs[1] = rspq_block_end();
+
+  rspq_block_t *groundDPL = setupModel("rom:/ground.t3dm");
+  rspq_block_t *stumpDPL = setupModel("rom:/stump.t3dm");
+
+  // Actor actors[2];
+  // actors[0] = (Actor) {
+  //   .id = 0,
+  //   .pos = {0,0,0},
+  //   .rot = {0,0,0},
+  //   .scale={0.5f, 0.5f, 0.5f},
+  //   .dpl = groundDPL,
+  //   .modelMat = malloc_uncached(sizeof(T3DMat4FP) * FB_COUNT)
+  // };
+  // actors[1] = (Actor) {
+  //   .id = 0,
+  //   .pos = {-100.0f, 0.0f, -250.0f},
+  //   .rot = {0,0,0},
+  //   .scale={0.5f, 0.5f, 0.5f},
+  //   .dpl = stumpDPL,
+  //   .modelMat = malloc_uncached(sizeof(T3DMat4FP) * FB_COUNT)
+  // };
+
+
+  Actor actors[ACTOR_COUNT] = {
+    setupActor(0, groundDPL, (float[3]){0,0,0}, (float[3]){0,0,0}, (float[3]){0.5f,0.5f,0.5f}),
+    setupActor(1, stumpDPL, (float[3]){-200.0f,0,-50.0f}, (float[3]){0,-45.0f,0}, (float[3]){0.5f,0.5f,0.5f}),
+    setupActor(2, stumpDPL, (float[3]){100.0f, 0, 50.0f}, (float[3]){0,90.0f,0}, (float[3]){0.5f,0.5f,0.5f}),
+  };
 
   for(;;) {
     // UPDATE
     frameIdx = (frameIdx + 1) % FB_COUNT;
-
-    // camPos.z += 0.01f;
 
     joypad_poll();
     joypad_inputs_t input = joypad_get_inputs(0);
@@ -123,46 +245,32 @@ int main()
     camTarget.z = camPos.z - 10.0f;
     
 
-    if (input.cstick_y > 0) {
-      handRot.x -= 0.02f;
-    } else if (input.cstick_y < 0) {
-      handRot.x += 0.02f;
-    }
+    // if (input.cstick_y > 0) {
+    //   handRot.x -= 0.02f;
+    // } else if (input.cstick_y < 0) {
+    //   handRot.x += 0.02f;
+    // }
 
-    if (input.cstick_x > 0) {
-      handRot.y += 0.02f;
-    } else if (input.cstick_x < 0) {
-      handRot.y -= 0.02f;
-    }
+    // if (input.cstick_x > 0) {
+    //   handRot.y += 0.02f;
+    // } else if (input.cstick_x < 0) {
+    //   handRot.y -= 0.02f;
+    // }
 
     // updateHand(&hands, inputVector, handRot);
-    t3d_mat4fp_from_srt_euler(
-      groundMatFP,
-      (float[3]){0.5f, 0.5f, 0.5f},
-      (float[3]){0.0f, 0.0f, 0.0f},
-      (float[3]){0.0f, 0.0f, -250.0f}
-    );
-    t3d_mat4fp_from_srt_euler(
-      stumpMatFP,
-      (float[3]){1.0f, 1.0f, 1.0f},
-      (float[3]){0.0f, -90.0f, 0.0f},
-      (float[3]){500.0f, 0.0f, -250.0f}
-    );
-    t3d_mat4fp_from_srt_euler(
-      stumpMatFP2,
-      (float[3]){0.5f, 0.5f, 0.5f},
-      (float[3]){0.0f, 45.0f, 0.0f},
-      (float[3]){-100.0f, 0.0f, -250.0f}
-    );
+
+    for(int i=0; i<ACTOR_COUNT; ++i) {
+      t3d_mat4fp_from_srt_euler(&actors[i].modelMat[frameIdx], actors[i].scale, actors[i].rot, actors[i].pos);
+    }
 
     t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(85.0f), 10.0f, 250.0f);
     t3d_viewport_look_at(&viewport, &camPos, &camTarget, &(fm_vec3_t){{0,1,0}});
 
-    t3d_mat4fp_from_srt_euler(&hands.modelMat[frameIdx],
-      hands.scale,
-      hands.rot,
-      hands.pos
-    );
+    // t3d_mat4fp_from_srt_euler(&hands.modelMat[frameIdx],
+    //   hands.scale,
+    //   hands.rot,
+    //   hands.pos
+    // );
 
     // DRAW
     rdpq_attach(display_get(), display_get_zbuf());
@@ -180,43 +288,21 @@ int main()
 
 
     // setup hand draw block
-    if (!hands.dpl) {
-      rspq_block_begin();
-      t3d_model_draw(hand);
-      t3d_matrix_pop(1);
+    // if (!hands.dpl) {
+    //   rspq_block_begin();
+    //   t3d_model_draw(hand);
+    //   t3d_matrix_pop(1);
 
-      hands.dpl = rspq_block_end();
+    //   hands.dpl = rspq_block_end();
+    // }
+
+    t3d_matrix_push_pos(1);
+    for(int i=0; i<ACTOR_COUNT; ++i) {
+      // actor_draw(&actors[i]);
+      t3d_matrix_set(&actors[i].modelMat[frameIdx], true);
+      rspq_block_run(actors[i].dpl);
     }
-
-    if (!parkSceneDrawBlock) {
-      rspq_block_begin();
-
-      // t3d_model_draw(stump);
-      // t3d_model_draw(stump2);
-      t3d_model_draw(ground);
-      t3d_matrix_pop(1);
-
-      parkSceneDrawBlock = rspq_block_end();
-    }
-
-    if (!stumpDrawBlock) {
-      rspq_block_begin();
-      t3d_model_draw(stump);
-      t3d_model_draw(stump);
-      t3d_matrix_pop(2);
-      stumpDrawBlock = rspq_block_end();
-    }
-
-    t3d_matrix_push(
-      hands.modelMat);
-    rspq_block_run(hands.dpl);
-
-    t3d_matrix_push(groundMatFP);
-    rspq_block_run(parkSceneDrawBlock);
-    t3d_matrix_push(stumpMatFP);
-    t3d_matrix_push(stumpMatFP2);
-
-    rspq_block_run(stumpDrawBlock);
+    t3d_matrix_pop(1);
 
     rdpq_detach_show();
   }
