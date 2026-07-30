@@ -113,6 +113,7 @@ LOOP
 
 // }
 
+// Import the model + create a draw block for it
 rspq_block_t* setupModel (const char *modelPath) {
   T3DModel *model = t3d_model_load(modelPath);
   rspq_block_t *envDPL = NULL;
@@ -123,6 +124,7 @@ rspq_block_t* setupModel (const char *modelPath) {
   return envDPL;
 }
 
+// create an Actor struct, applying base pos/rot/scale + draw block and model material
 Actor setupActor(uint32_t id, rspq_block_t *dpl, const float pos[3], const float rot[3], const float scale[3]) {
   Actor actor = (Actor) {
     .id = id,
@@ -169,43 +171,9 @@ int main()
   // fm_vec3_t handRot = {{ -45.0f, 0, 0 }};
 
   // SETUP ENVIRONMENT
-  // T3DModel *ground = t3d_model_load("rom:/ground.t3dm");
-  // T3DModel *stump = t3d_model_load("rom:/stump.t3dm");
-  // rspq_block_t *envDPLs[2];
-
-  // for(int i=0; i<2; ++i) {
-  //   rspq_block_begin();
-  //   t3d_model_draw(models[i]);
-  //   envDPLs[i] = rspq_block_end();
-  // }
-  // rspq_block_begin();
-  // t3d_model_draw(ground);
-  // envDPLs[0] = rspq_block_end();
-
-  // rspq_block_begin();
-  // t3d_model_draw(stump);
-  // envDPLs[1] = rspq_block_end();
-
+  // you basically need 1 model import and 1 DPL per model
   rspq_block_t *groundDPL = setupModel("rom:/ground.t3dm");
   rspq_block_t *stumpDPL = setupModel("rom:/stump.t3dm");
-
-  // Actor actors[2];
-  // actors[0] = (Actor) {
-  //   .id = 0,
-  //   .pos = {0,0,0},
-  //   .rot = {0,0,0},
-  //   .scale={0.5f, 0.5f, 0.5f},
-  //   .dpl = groundDPL,
-  //   .modelMat = malloc_uncached(sizeof(T3DMat4FP) * FB_COUNT)
-  // };
-  // actors[1] = (Actor) {
-  //   .id = 0,
-  //   .pos = {-100.0f, 0.0f, -250.0f},
-  //   .rot = {0,0,0},
-  //   .scale={0.5f, 0.5f, 0.5f},
-  //   .dpl = stumpDPL,
-  //   .modelMat = malloc_uncached(sizeof(T3DMat4FP) * FB_COUNT)
-  // };
 
 
   Actor actors[ACTOR_COUNT] = {
@@ -259,6 +227,7 @@ int main()
 
     // updateHand(&hands, inputVector, handRot);
 
+    // Apply actor's settings
     for(int i=0; i<ACTOR_COUNT; ++i) {
       t3d_mat4fp_from_srt_euler(&actors[i].modelMat[frameIdx], actors[i].scale, actors[i].rot, actors[i].pos);
     }
@@ -296,12 +265,15 @@ int main()
     //   hands.dpl = rspq_block_end();
     // }
 
+    // we say we'd like to take a "single" matrix
     t3d_matrix_push_pos(1);
     for(int i=0; i<ACTOR_COUNT; ++i) {
       // actor_draw(&actors[i]);
+      // we set a matrix (the model's material / transform + dpl) with doMultiply as true, it just push+pops it by itself
       t3d_matrix_set(&actors[i].modelMat[frameIdx], true);
       rspq_block_run(actors[i].dpl);
     }
+    // we then pop a "singular" matrix
     t3d_matrix_pop(1);
 
     rdpq_detach_show();
