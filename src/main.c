@@ -10,19 +10,6 @@
 
 static int frameIdx = 0;
 
-// #define ACTOR_COUNT 3
-
-
-// Import the model + create a draw block for it
-// rspq_block_t* setupModel (const char *modelPath) {
-//   T3DModel *model = t3d_model_load(modelPath);
-//   rspq_block_t *envDPL = NULL;
-
-//   rspq_block_begin();
-//   t3d_model_draw(model);
-//   envDPL = rspq_block_end();
-//   return envDPL;
-// }
 
 static Scene currentScene;
 
@@ -43,8 +30,13 @@ int main()
 
   T3DViewport viewport = t3d_viewport_create_buffered(FB_COUNT);
 
-  fm_vec3_t camPos = {{ 0, 100.0f, 40.0f }};
-  fm_vec3_t camTarget = {{0,100.0f,0}};
+  float cameraY = 20.0f;
+  float cam_near = 10.0f;
+  float cam_far = 250.0f;
+  uint32_t cameraSpeed = 2;
+
+  fm_vec3_t camPos = {{ 0, cameraY, 40.0f }};
+  fm_vec3_t camTarget = {{0,cameraY,0}};
 
   uint8_t colorAmbient[4] = {69, 69, 69, 0x22};
   uint8_t colorDir[4]     = {0xFF, 0xFF, 0xFF, 0x22};
@@ -53,6 +45,8 @@ int main()
   fm_vec3_norm(&lightDirVec, &lightDirVec);
 
   currentScene = createPark(FB_COUNT);
+
+
 
   for(;;) {
     // UPDATE
@@ -78,20 +72,19 @@ int main()
 
     fm_vec3_norm(&inputVector, &inputVector);
 
-    camPos.z -= inputVector.y * 5;
-    camPos.x += inputVector.x * 5;
+    camPos.z -= inputVector.y * cameraSpeed;
+    camPos.x += inputVector.x * cameraSpeed;
     camTarget.x = camPos.x;
-    camTarget.y = 100.0f;
+    camTarget.y = cameraY;
     camTarget.z = camPos.z - 10.0f;
     
-
     // Apply actor's settings
     Actor* actors = currentScene.actors;
     for(int i=0; i<currentScene.actorCount; ++i) {
       t3d_mat4fp_from_srt_euler(&actors[i].modelMat[frameIdx], actors[i].scale, actors[i].rot, actors[i].pos);
     }
 
-    t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(85.0f), 10.0f, 250.0f);
+    t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(85.0f), cam_near, cam_far);
     t3d_viewport_look_at(&viewport, &camPos, &camTarget, &(fm_vec3_t){{0,1,0}});
 
     // DRAW

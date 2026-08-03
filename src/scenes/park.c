@@ -1,3 +1,8 @@
+/*
+* PARK SCENE
+* GENERATED ON 03/08/2026
+*/
+// INCLUDES
 #include "park.h"
 
 
@@ -8,51 +13,53 @@
 #include <t3d/t3d.h>
 #include <t3d/t3dmodel.h>
 
-// SCENE
+// DEFINITIONS
 #define PARK_ACTOR_COUNT 8
 
 static Scene Park = (Scene) {
-  .actorCount = PARK_ACTOR_COUNT
+  .actorCount = PARK_ACTOR_COUNT,
+  .modelCount = 3,
 };
 
-
+// LOAD FUNCTION
 Scene createPark(uint32_t FB_COUNT) {
-  ModelData ground = setupModel("rom:/ground.t3dm");
-  ModelData stump = setupModel("rom:/stump.t3dm");
-  ModelData stump2 = setupModel("rom:/stump2.t3dm");
-  ModelData hedge = setupModel("rom:/hedge.t3dm");
-
-  // make this a global thing?
-  uint32_t startingIndex = 0;
-
-  // ACTORS
-  Actor *actors = malloc(sizeof(Actor) * PARK_ACTOR_COUNT);
-  actors[0] = setupActor(startingIndex + 0, stump.dpl, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f, 1.00f, 1.00f }, FB_COUNT);
-  actors[1] = setupActor(startingIndex + 1, stump.dpl, (float[3]){ 80.56f, 0.06f, -160.84f }, (float[3]){ 0.00f, -60.43f, 0.00f }, (float[3]){ 1.15f, 1.15f, 1.15f }, FB_COUNT);
-  actors[2] = setupActor(startingIndex + 2, stump2.dpl, (float[3]){ -130.06f, -30.06f, -90.77f }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f, 1.00f, 1.00f }, FB_COUNT);
-  actors[3] = setupActor(startingIndex + 3, hedge.dpl, (float[3]){ 280.32f, 20.07f, -80.14f }, (float[3]){ 0.00f, -69.88f, 0.00f }, (float[3]){ 1.20f, 1.20f, 1.20f }, FB_COUNT);
-  actors[4] = setupActor(startingIndex + 4, ground.dpl, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f, 1.00f, 1.00f }, FB_COUNT);
-  actors[5] = setupActor(startingIndex + 5, hedge.dpl, (float[3]){ 280.32f, 20.07f, -80.14f }, (float[3]){ 0.00f, -69.88f, 0.00f }, (float[3]){ 1.20f, 1.20f, 1.20f }, FB_COUNT);
-  actors[6] = setupActor(startingIndex + 6, hedge.dpl, (float[3]){ 280.32f, 20.07f, -80.14f }, (float[3]){ 0.00f, -69.88f, 0.00f }, (float[3]){ 1.20f, 1.20f, 1.20f }, FB_COUNT);
-  actors[7] = setupActor(startingIndex + 7, stump2.dpl, (float[3]){ -130.06f, -30.06f, -90.77f }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f, 1.00f, 1.00f }, FB_COUNT);
-  // actors[8] = setupActor(startingIndex + 8, stump.dpl, (float[3]){ 8.56f, 0.06f, -16.84f }, (float[3]){ 0.00f, -60.43f, 0.00f }, (float[3]){ 1.15f, 1.15f, 1.15f }, FB_COUNT);
-
-  Park.actors = actors;
-
   Park.id = 1;
-  Park.actors = actors;
-  
-  T3DModel **models = malloc(sizeof(T3DModel *) * 4);
-  models[0] = ground.model;
-  models[1] = stump.model;
-  models[2] = stump2.model;
-  models[3] = hedge.model;
+  // MODEL IMPORT
+  ModelData test_plane = setupModel("rom:/test_plane.t3dm");;
+	ModelData stump = setupModel("rom:/stump.t3dm");;
+	ModelData stump2 = setupModel("rom:/stump2.t3dm");;
+
+  T3DModel **models = malloc(sizeof(T3DModel *) * 3);
+  models[0] = test_plane.model;
+	models[1] = stump.model;
+	models[2] = stump2.model;
 
   Park.models = models;
 
+  // make this a global thing?
+  uint32_t startingIndex = 0;
+  float xPositionMultiplier = 10.0f;
+  float yPositionMultiplier = 5.0f;
+  float zPositionMultiplier = 10.0f;
+  float scaleMultiplier = 0.1f;
+
+  // ACTORS
+  Actor *actors = malloc(sizeof(Actor) * PARK_ACTOR_COUNT);
+  actors[0] = setupActor(startingIndex + 0, test_plane.dpl, (float[3]){ 0.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, 0.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
+	actors[1] = setupActor(startingIndex + 1, stump.dpl, (float[3]){ 10.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, 0.00f * zPositionMultiplier }, (float[3]){ 0.00f, -56.93f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
+	actors[2] = setupActor(startingIndex + 2, stump.dpl, (float[3]){ -10.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, 0.00f * zPositionMultiplier }, (float[3]){ 0.00f, 36.13f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
+	actors[3] = setupActor(startingIndex + 3, stump.dpl, (float[3]){ 0.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, -10.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
+	actors[4] = setupActor(startingIndex + 4, stump.dpl, (float[3]){ 0.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, 10.00f * zPositionMultiplier }, (float[3]){ 0.00f, 41.80f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
+	actors[5] = setupActor(startingIndex + 5, stump2.dpl, (float[3]){ -7.50f * xPositionMultiplier, 0.00f * yPositionMultiplier, -7.50f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
+	actors[6] = setupActor(startingIndex + 6, stump2.dpl, (float[3]){ -5.16f * xPositionMultiplier, -2.00f * yPositionMultiplier, -7.50f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
+	actors[7] = setupActor(startingIndex + 7, stump.dpl, (float[3]){ 4.48f * xPositionMultiplier, 0.00f * yPositionMultiplier, -10.00f * zPositionMultiplier }, (float[3]){ 0.00f, 77.82f, 0.00f }, (float[3]){ 0.75f * scaleMultiplier, 0.75f * scaleMultiplier, 0.75f * scaleMultiplier}, FB_COUNT);
+
+  Park.actors = actors;
+  
   return Park;  
 }
 
+// UNLOAD FUNCTION
 void unloadPark(void) {
   for (int i = 0; i < Park.modelCount; i++) {
     cleanupModel(Park.models[i]);
@@ -66,17 +73,3 @@ void unloadPark(void) {
 
   free(Park.actors);
 }
-
-
-// //   setupActor(startingIndex + 0, hedge, (float[3]){ -16.55f, 0.00f, 13.48f }, (float[3]){ 0.00f, 25.01f, 0.00f }, (float[3]){ 1.00f, 1.00f, 1.00f });
-// //   setupActor(startingIndex + 1, stump, (float[3]){ 3.58f, 0.00f, -4.42f }, (float[3]){ 0.00f, -60.00f, 0.00f }, (float[3]){ 1.00f, 1.00f, 1.00f });
-// //   setupActor(startingIndex + 2, stump2, (float[3]){ 5.82f, 0.00f, 9.98f }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f, 1.50f, 1.00f });
-// //   setupActor(startingIndex + 3, player, (float[3]){ -7.74f, 0.00f, 0.00f }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f, 1.00f, 1.00f });
-// //   setupActor(startingIndex + 4, test_plane, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 12.00f, 12.00f, 12.00f });
-// //   setupActor(startingIndex + 5, hedge copy, (float[3]){ -16.55f, 0.00f, 13.48f }, (float[3]){ 0.00f, 25.01f, 0.00f }, (float[3]){ 1.00f, 1.00f, 1.00f });
-// //   setupActor(startingIndex + 6, hedge copy copy, (float[3]){ -16.55f, 0.00f, 13.48f }, (float[3]){ 0.00f, 25.01f, 0.00f }, (float[3]){ 1.00f, 1.00f, 1.00f });
-// //   setupActor(startingIndex + 7, hedge copy copy copy, (float[3]){ -16.55f, 0.00f, 13.48f }, (float[3]){ 0.00f, 25.01f, 0.00f }, (float[3]){ 1.00f, 1.00f, 1.00f });
-// //   setupActor(startingIndex + 8, hedge copy copy copy copy, (float[3]){ -16.55f, 0.00f, 13.48f }, (float[3]){ 0.00f, 25.01f, 0.00f }, (float[3]){ 1.00f, 1.00f, 1.00f });
-// //   setupActor(startingIndex + 9, stump2 copy, (float[3]){ 5.82f, 0.00f, 9.98f }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f, 1.50f, 1.00f });
-// //   setupActor(startingIndex + 10, stump copy, (float[3]){ 3.58f, 0.00f, -4.42f }, (float[3]){ 0.00f, -60.00f, 0.00f }, (float[3]){ 1.00f, 1.00f, 1.00f })
-// // }
