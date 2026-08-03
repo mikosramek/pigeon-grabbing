@@ -4,6 +4,7 @@
 #include <math.h>
 
 #include "utils/pigeon_utils.h"
+#include "utils/pigeon_math.h"
 #include "scenes/scene.h"
 #include "scenes/park.h"
 
@@ -89,6 +90,13 @@ int main()
     }
     cameraAngle = fmod(cameraAngle, M_PI * 2.0f);
 
+    if (input.cstick_y > 0) {
+      cameraY -= 0.5f * cameraRotationSpeed;
+    } else if (input.cstick_y < 0) {
+      cameraY += 0.5f * cameraRotationSpeed;
+    }
+    cameraY = clamp(cameraY, 19.0f, 20.6f);
+
     // get forward angle
     float xTarget = cos(cameraAngle);
     float zTarget = sin(cameraAngle);
@@ -151,9 +159,10 @@ int main()
     t3d_matrix_pop(1);
 
     // debug text
-    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 210, "camera angle: %f", cameraAngle);
-    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "camera x: %f", cos(cameraAngle));
-    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "camera z: %f", sin(cameraAngle));
+    // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 210, "camera angle: %f", cameraAngle);
+    // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "camera x: %f", cos(cameraAngle));
+    // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "camera z: %f", sin(cameraAngle));
+    // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "camera y: %f", cameraY);
 
     rdpq_detach_show();
   }
