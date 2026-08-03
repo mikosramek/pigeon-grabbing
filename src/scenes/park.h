@@ -8,7 +8,7 @@
 #include <t3d/t3d.h>
 #include <t3d/t3dmodel.h>
 
-Scene createPark(uint32_t FB_COUNT);
+Scene createPark(uint32_t FB_COUNT, uint32_t scene_id);
 
 void unloadPark(void);
 

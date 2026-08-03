@@ -17,19 +17,20 @@
 #define PARK_ACTOR_COUNT 8
 
 static Scene Park = (Scene) {
+  .name = "Park",
   .actorCount = PARK_ACTOR_COUNT,
   .modelCount = 3,
 };
 
 // LOAD FUNCTION
-Scene createPark(uint32_t FB_COUNT) {
-  Park.id = 1;
+Scene createPark(uint32_t FB_COUNT, uint32_t scene_id) {
+  Park.id = scene_id;
   // MODEL IMPORT
   ModelData test_plane = setupModel("rom:/test_plane.t3dm");;
 	ModelData stump = setupModel("rom:/stump.t3dm");;
 	ModelData stump2 = setupModel("rom:/stump2.t3dm");;
 
-  T3DModel **models = malloc(sizeof(T3DModel *) * 3);
+  T3DModel **models = malloc_uncached(sizeof(T3DModel *) * 3);
   models[0] = test_plane.model;
 	models[1] = stump.model;
 	models[2] = stump2.model;
@@ -38,13 +39,13 @@ Scene createPark(uint32_t FB_COUNT) {
 
   // make this a global thing?
   uint32_t startingIndex = 0;
-  float xPositionMultiplier = 10.0f;
+  float xPositionMultiplier = 5.0f;
   float yPositionMultiplier = 5.0f;
-  float zPositionMultiplier = 10.0f;
+  float zPositionMultiplier = 5.0f;
   float scaleMultiplier = 0.1f;
 
   // ACTORS
-  Actor *actors = malloc(sizeof(Actor) * PARK_ACTOR_COUNT);
+  Actor *actors = malloc_uncached(sizeof(Actor) * PARK_ACTOR_COUNT);
   actors[0] = setupActor(startingIndex + 0, test_plane.dpl, (float[3]){ 0.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, 0.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
 	actors[1] = setupActor(startingIndex + 1, stump.dpl, (float[3]){ 10.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, 0.00f * zPositionMultiplier }, (float[3]){ 0.00f, -56.93f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
 	actors[2] = setupActor(startingIndex + 2, stump.dpl, (float[3]){ -10.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, 0.00f * zPositionMultiplier }, (float[3]){ 0.00f, 36.13f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
@@ -65,11 +66,11 @@ void unloadPark(void) {
     cleanupModel(Park.models[i]);
   }
 
-  free(Park.models);
+  free_uncached(Park.models);
 
   for (int i = 0; i < Park.actorCount; i++) {
-      deleteActor(&Park.actors[i]);
+    deleteActor(&Park.actors[i]);
   }
 
-  free(Park.actors);
+  free_uncached(Park.actors);
 }

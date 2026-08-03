@@ -4,6 +4,7 @@
 #include "../utils/pigeon_utils.h"
 
 typedef struct {
+  char *name;
   uint32_t id;
   Actor *actors;
   uint32_t actorCount;
