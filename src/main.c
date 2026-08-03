@@ -1,6 +1,7 @@
 #include <libdragon.h>
 #include <t3d/t3d.h>
 #include <t3d/t3dmodel.h>
+#include <math.h>
 
 #include "utils/pigeon_utils.h"
 #include "scenes/scene.h"
@@ -24,16 +25,20 @@ int main()
   display_init(RESOLUTION_320x240, DEPTH_16_BPP, FB_COUNT, GAMMA_NONE, FILTERS_RESAMPLE_ANTIALIAS);
 
   rdpq_init();
-
   t3d_init((T3DInitParams){});
+
+  // camera controls
+  float cameraY = 20.0f;
+  float cameraAngle = 0.0f;
+  uint32_t movementSpeed = 2;
+  float cameraRotationSpeed = 0.05f;
   joypad_init();
 
   T3DViewport viewport = t3d_viewport_create_buffered(FB_COUNT);
 
-  float cameraY = 20.0f;
+  // rendering distance
   float cam_near = 10.0f;
   float cam_far = 250.0f;
-  uint32_t cameraSpeed = 2;
 
   fm_vec3_t camPos = {{ 0, cameraY, 40.0f }};
   fm_vec3_t camTarget = {{0,cameraY,0}};
@@ -47,6 +52,8 @@ int main()
   currentScene = createPark(FB_COUNT);
 
 
+  rdpq_text_register_font(FONT_BUILTIN_DEBUG_MONO, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO));
+
 
   for(;;) {
     // UPDATE
@@ -55,6 +62,8 @@ int main()
     joypad_poll();
     joypad_inputs_t input = joypad_get_inputs(0);
 
+
+    // MOVEMENT INPUTS
     float xInput = 0.0f;
     float yInput = 0.0f;  
     if (input.stick_x > 0) {
@@ -72,11 +81,40 @@ int main()
 
     fm_vec3_norm(&inputVector, &inputVector);
 
-    camPos.z -= inputVector.y * cameraSpeed;
-    camPos.x += inputVector.x * cameraSpeed;
-    camTarget.x = camPos.x;
+    // CAMERA INPUTS
+    if (input.cstick_x > 0) {
+      cameraAngle += 1.0f * cameraRotationSpeed;
+    } else if (input.cstick_x < 0) {
+      cameraAngle -= 1.0f * cameraRotationSpeed;
+    }
+    cameraAngle = fmod(cameraAngle, M_PI * 2.0f);
+
+    // get forward angle
+    float xTarget = cos(cameraAngle);
+    float zTarget = sin(cameraAngle);
+
+    // get perpendicular angle
+    float perpXTarget = cos(cameraAngle + M_PI / 2.0f);
+    float perpZTarget = sin(cameraAngle + M_PI / 2.0f);
+
+    // UPDATE CAMERA
+
+    // combine forward/back input + forward angle AND left/right input + perp angle
+    float zChange = (inputVector.y * zTarget * movementSpeed) + (inputVector.x * perpZTarget * movementSpeed);
+    float xChange = (inputVector.y * xTarget * movementSpeed) + (inputVector.x * perpXTarget * movementSpeed);
+
+    // normalize input, so angular movement isn't doubled
+    fm_vec3_t posChange = {{ xChange, 0, zChange }};
+    fm_vec3_norm(&posChange, &posChange);
+    
+    // apply position
+    camPos.z += posChange.z;
+    camPos.x += posChange.x;
+
+    // apply camera target
+    camTarget.x = camPos.x + xTarget;
     camTarget.y = cameraY;
-    camTarget.z = camPos.z - 10.0f;
+    camTarget.z = camPos.z + zTarget;
     
     // Apply actor's settings
     Actor* actors = currentScene.actors;
@@ -111,6 +149,11 @@ int main()
     }
     // we then pop a "singular" matrix
     t3d_matrix_pop(1);
+
+    // debug text
+    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 210, "camera angle: %f", cameraAngle);
+    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "camera x: %f", cos(cameraAngle));
+    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "camera z: %f", sin(cameraAngle));
 
     rdpq_detach_show();
   }
