@@ -3,12 +3,14 @@
 #include <t3d/t3dmodel.h>
 
 #include "utils/pigeon_utils.h"
+#include "scenes/scene.h"
+#include "scenes/park.h"
 
 #define FB_COUNT 3
 
 static int frameIdx = 0;
 
-#define ACTOR_COUNT 3
+// #define ACTOR_COUNT 3
 
 
 // Import the model + create a draw block for it
@@ -21,6 +23,8 @@ static int frameIdx = 0;
 //   envDPL = rspq_block_end();
 //   return envDPL;
 // }
+
+static Scene currentScene;
 
 int main()
 {
@@ -48,17 +52,7 @@ int main()
   fm_vec3_t lightDirVec = {{-1.0f, 1.0f, 1.0f}};
   fm_vec3_norm(&lightDirVec, &lightDirVec);
 
-  // SETUP ENVIRONMENT
-  // you basically need 1 model import and 1 DPL per model
-  rspq_block_t *groundDPL = setupModel("rom:/ground.t3dm");
-  rspq_block_t *stumpDPL = setupModel("rom:/stump.t3dm");
-
-
-  Actor actors[ACTOR_COUNT] = {
-    setupActor(0, groundDPL, (float[3]){0,0,0}, (float[3]){0,0,0}, (float[3]){0.5f,0.5f,0.5f}, FB_COUNT),
-    setupActor(1, stumpDPL, (float[3]){-200.0f,0,-50.0f}, (float[3]){0,-45.0f,0}, (float[3]){0.5f,0.5f,0.5f}, FB_COUNT),
-    setupActor(2, stumpDPL, (float[3]){100.0f, 0, 50.0f}, (float[3]){0,90.0f,0}, (float[3]){0.5f,0.5f,0.5f}, FB_COUNT),
-  };
+  currentScene = createPark(FB_COUNT);
 
   for(;;) {
     // UPDATE
@@ -92,7 +86,8 @@ int main()
     
 
     // Apply actor's settings
-    for(int i=0; i<ACTOR_COUNT; ++i) {
+    Actor* actors = currentScene.actors;
+    for(int i=0; i<currentScene.actorCount; ++i) {
       t3d_mat4fp_from_srt_euler(&actors[i].modelMat[frameIdx], actors[i].scale, actors[i].rot, actors[i].pos);
     }
 
@@ -115,7 +110,7 @@ int main()
 
     // we say we'd like to take a "single" matrix
     t3d_matrix_push_pos(1);
-    for(int i=0; i<ACTOR_COUNT; ++i) {
+    for(int i=0; i<currentScene.actorCount; ++i) {
       // actor_draw(&actors[i]);
       // we set a matrix (the model's material / transform + dpl) with doMultiply as true, it just push+pops it by itself
       t3d_matrix_set(&actors[i].modelMat[frameIdx], true);
@@ -126,6 +121,8 @@ int main()
 
     rdpq_detach_show();
   }
+
+  unloadPark();
 
   t3d_destroy();
   return 0;

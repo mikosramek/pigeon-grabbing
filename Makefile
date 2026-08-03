@@ -7,7 +7,8 @@ include $(N64_INST)/include/t3d.mk
 N64_CFLAGS += -std=gnu2x -Os
 
 # Make sure to add reference to any new c files here!
-src := main.c utils/pigeon_utils.c
+# src := main.c utils/pigeon_utils.h utils/pigeon_utils.c scenes/park.c
+src := $(shell find src -name '*.c')
 
 assets_png = $(wildcard assets/*.png)
 assets_gltf = $(wildcard assets/*.glb)

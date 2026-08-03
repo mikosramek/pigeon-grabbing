@@ -15,8 +15,17 @@ typedef struct {
   T3DMat4FP *modelMat;
 } Actor;
 
-rspq_block_t* setupModel (const char *modelPath);
+typedef struct {
+  T3DModel *model;
+  rspq_block_t *dpl;
+} ModelData;
+
+ModelData setupModel (const char *modelPath);
+
+void cleanupModel(T3DModel *model);
 
 Actor setupActor(uint32_t id, rspq_block_t *dpl, const float pos[3], const float rot[3], const float scale[3], uint32_t fbCount);
+
+void deleteActor(Actor *actor);
 
 #endif
