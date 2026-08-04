@@ -39,9 +39,9 @@ Scene createPark(uint32_t FB_COUNT, uint32_t scene_id) {
 
   // make this a global thing?
   uint32_t startingIndex = 0;
-  float xPositionMultiplier = 5.0f;
-  float yPositionMultiplier = 5.0f;
-  float zPositionMultiplier = 5.0f;
+  float xPositionMultiplier = 6.0f;
+  float yPositionMultiplier = 6.0f;
+  float zPositionMultiplier = 6.0f;
   float scaleMultiplier = 0.1f;
 
   // ACTORS

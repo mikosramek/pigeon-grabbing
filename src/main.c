@@ -10,6 +10,7 @@
 #include "scenes/scene.h"
 #include "scenes/park.h"
 #include "scenes/hedges.h"
+#include "scenes/pond.h"
 
 #define FB_COUNT 3
 
@@ -17,6 +18,40 @@ static int frameIdx = 0;
 
 
 static Scene currentScene;
+#define SCENE_COUNT 3
+
+void changeScene (int sceneId) {
+  rspq_wait();
+
+  // unload current scene
+  switch(currentScene.id) {
+    case 0:
+      unloadPark();
+      break;
+    case 1:
+      unloadHedges();
+      break;
+    case 2:
+      unloadPond();
+      break;
+    default:
+      assertf(false, "Current scene doesn't have an unload: %d", (int)currentScene.id);
+  }
+
+  switch(sceneId) {
+    case 0:
+      currentScene = createPark(FB_COUNT, 0);
+      break;
+    case 1:
+      currentScene = createHedges(FB_COUNT, 1);
+      break;
+    case 2:
+      currentScene = createPond(FB_COUNT, 2);
+      break;
+    default:
+      assertf(false, "Invalid scene-id: %d", sceneId);
+  }
+};
 
 int main()
 {
@@ -33,7 +68,7 @@ int main()
 
   // camera controls
   float cameraY = 20.0f;
-  float cameraAngle = 0.0f;
+  float cameraAngle = -M_PI / 2;
   uint32_t movementSpeed = 2;
   float cameraRotationSpeed = 0.05f;
   joypad_init();
@@ -49,6 +84,7 @@ int main()
 
   uint8_t colorAmbient[4] = {69, 69, 69, 0x22};
   uint8_t colorDir[4]     = {0xFF, 0xFF, 0xFF, 0x22};
+  // color_t fogColor = (color_t){140, 50, 20, 0xFF};
 
   fm_vec3_t lightDirVec = {{-1.0f, 1.0f, 1.0f}};
   fm_vec3_norm(&lightDirVec, &lightDirVec);
@@ -56,7 +92,7 @@ int main()
   // Scene park = createPark(FB_COUNT, 1);
   // Scene hedges = createHedges(FB_COUNT, 2);
   // currentScene = park;
-  currentScene = createPark(FB_COUNT, 1);
+  currentScene = createPark(FB_COUNT, 0);
 
   rdpq_text_register_font(FONT_BUILTIN_DEBUG_MONO, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO));
 
@@ -135,6 +171,7 @@ int main()
       t3d_mat4fp_from_srt_euler(&actors[i].modelMat[frameIdx], actors[i].scale, actors[i].rot, actors[i].pos);
     }
 
+    // set camera
     t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(85.0f), cam_near, cam_far);
     t3d_viewport_look_at(&viewport, &camPos, &camTarget, &(fm_vec3_t){{0,1,0}});
 
@@ -152,6 +189,13 @@ int main()
     t3d_light_set_directional(0, colorDir, &lightDirVec);
     t3d_light_set_count(1); // 0-7 lights in addition to the ambient light
 
+    // fog settings
+    // rdpq_mode_fog(RDPQ_FOG_STANDARD);
+    // rdpq_set_fog_color(fogColor);
+
+    // t3d_fog_set_range(-20.0f, 50.0f);
+    // t3d_fog_set_enabled(true);
+
     // we say we'd like to take a "single" matrix
     t3d_matrix_push_pos(1);
     for(int i=0; i<currentScene.actorCount; ++i) {
@@ -168,20 +212,25 @@ int main()
     // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "camera x: %f", cos(cameraAngle));
     // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "camera z: %f", sin(cameraAngle));
     // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "camera y: %f", cameraY);
+    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "current scene: %i", (int)currentScene.id);
 
     rdpq_detach_show();
 
 
+    // SCENE CHANGE DEBUG
     joypad_buttons_t buttons = joypad_get_buttons_pressed(0);
-
-    if (buttons.l && currentScene.id != 1) {
-      rspq_wait();
-      unloadHedges();
-      currentScene = createPark(FB_COUNT, 1);
-    } else if (buttons.r && currentScene.id != 2) {
-      rspq_wait();
-      unloadPark();
-      currentScene = createHedges(FB_COUNT, 2);
+    if (buttons.l) {
+      if (currentScene.id > 0) {
+        changeScene(currentScene.id - 1);
+      } else {
+        changeScene(SCENE_COUNT - 1);
+      }
+    } else if (buttons.r) {
+      if (currentScene.id < SCENE_COUNT - 1) {
+        changeScene(currentScene.id + 1);
+      } else {
+        changeScene(0);
+      }
     }
   }
 
