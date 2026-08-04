@@ -53,9 +53,10 @@ int main()
   fm_vec3_t lightDirVec = {{-1.0f, 1.0f, 1.0f}};
   fm_vec3_norm(&lightDirVec, &lightDirVec);
 
-  Scene park = createPark(FB_COUNT, 1);
-  Scene hedges = createHedges(FB_COUNT, 2);
-  currentScene = park;
+  // Scene park = createPark(FB_COUNT, 1);
+  // Scene hedges = createHedges(FB_COUNT, 2);
+  // currentScene = park;
+  currentScene = createPark(FB_COUNT, 1);
 
   rdpq_text_register_font(FONT_BUILTIN_DEBUG_MONO, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO));
 
@@ -174,13 +175,13 @@ int main()
     joypad_buttons_t buttons = joypad_get_buttons_pressed(0);
 
     if (buttons.l && currentScene.id != 1) {
-      // unloadHedges();
-      currentScene = park;
-      // rspq_wait();
+      rspq_wait();
+      unloadHedges();
+      currentScene = createPark(FB_COUNT, 1);
     } else if (buttons.r && currentScene.id != 2) {
-      // unloadPark();
-      currentScene = hedges;
-      // rspq_wait();
+      rspq_wait();
+      unloadPark();
+      currentScene = createHedges(FB_COUNT, 2);
     }
   }
 
