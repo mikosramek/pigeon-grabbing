@@ -79,7 +79,7 @@ int main()
   float cam_near = 10.0f;
   float cam_far = 250.0f;
 
-  fm_vec3_t camPos = {{ 0, cameraY, 40.0f }};
+  fm_vec3_t camPos = {{ 0, cameraY, 0.0f }};
   fm_vec3_t camTarget = {{0,cameraY,0}};
 
   uint8_t colorAmbient[4] = {69, 69, 69, 0x22};
