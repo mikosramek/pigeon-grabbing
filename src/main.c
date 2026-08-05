@@ -11,6 +11,7 @@
 #include "scenes/park.h"
 #include "scenes/hedges.h"
 #include "scenes/pond.h"
+#include "scenes/test.h"
 
 #define FB_COUNT 3
 
@@ -18,7 +19,7 @@ static int frameIdx = 0;
 
 
 static Scene currentScene;
-#define SCENE_COUNT 3
+#define SCENE_COUNT 4
 
 void changeScene (int sceneId) {
   rspq_wait();
@@ -26,28 +27,27 @@ void changeScene (int sceneId) {
   // unload current scene
   switch(currentScene.id) {
     case 0:
-      unloadPark();
-      break;
+      unloadPark(); break;
     case 1:
-      unloadHedges();
-      break;
+      unloadHedges(); break;
     case 2:
-      unloadPond();
-      break;
+      unloadPond(); break;
+    case 3:
+      unloadTest(); break;
     default:
       assertf(false, "Current scene doesn't have an unload: %d", (int)currentScene.id);
   }
 
+  // create new scene
   switch(sceneId) {
     case 0:
-      currentScene = createPark(FB_COUNT, 0);
-      break;
+      currentScene = createPark(FB_COUNT, 0); break;
     case 1:
-      currentScene = createHedges(FB_COUNT, 1);
-      break;
+      currentScene = createHedges(FB_COUNT, 1); break;
     case 2:
-      currentScene = createPond(FB_COUNT, 2);
-      break;
+      currentScene = createPond(FB_COUNT, 2); break;
+    case 3:
+      currentScene = createTest(FB_COUNT, 3); break;
     default:
       assertf(false, "Invalid scene-id: %d", sceneId);
   }
@@ -84,19 +84,15 @@ int main()
 
   uint8_t colorAmbient[4] = {69, 69, 69, 0x22};
   uint8_t colorDir[4]     = {0xFF, 0xFF, 0xFF, 0x22};
-  // color_t fogColor = (color_t){140, 50, 20, 0xFF};
+  // color_t fogColor = (color_t){50, 50, 20, 0xFF};
 
   fm_vec3_t lightDirVec = {{-1.0f, 1.0f, 1.0f}};
   fm_vec3_norm(&lightDirVec, &lightDirVec);
 
-  // Scene park = createPark(FB_COUNT, 1);
-  // Scene hedges = createHedges(FB_COUNT, 2);
-  // currentScene = park;
-  currentScene = createPark(FB_COUNT, 0);
-
+  
   rdpq_text_register_font(FONT_BUILTIN_DEBUG_MONO, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO));
-
-
+  
+  currentScene = createPark(FB_COUNT, 0);
   for(;;) {
     // UPDATE
     frameIdx = (frameIdx + 1) % FB_COUNT;
@@ -192,9 +188,8 @@ int main()
     // fog settings
     // rdpq_mode_fog(RDPQ_FOG_STANDARD);
     // rdpq_set_fog_color(fogColor);
-
-    // t3d_fog_set_range(-20.0f, 50.0f);
     // t3d_fog_set_enabled(true);
+    // t3d_fog_set_range(-200.0f, 1250.0f);
 
     // we say we'd like to take a "single" matrix
     t3d_matrix_push_pos(1);
@@ -212,7 +207,7 @@ int main()
     // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "camera x: %f", cos(cameraAngle));
     // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "camera z: %f", sin(cameraAngle));
     // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "camera y: %f", cameraY);
-    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "current scene: %i", (int)currentScene.id);
+    // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "current scene: %i", (int)currentScene.id);
 
     rdpq_detach_show();
 

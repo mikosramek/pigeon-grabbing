@@ -36,9 +36,9 @@ Scene createHedges(uint32_t FB_COUNT, uint32_t scene_id) {
   Hedges.models = models;
 
   uint32_t startingIndex = 0;
-  float xPositionMultiplier = 6.0f;
-  float yPositionMultiplier = 6.0f;
-  float zPositionMultiplier = 6.0f;
+  float xPositionMultiplier = 6.4f;
+  float yPositionMultiplier = 6.4f;
+  float zPositionMultiplier = 6.4f;
   float scaleMultiplier = 0.1f;
 
   // ACTORS
