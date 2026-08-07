@@ -6,15 +6,15 @@ include $(N64_INST)/include/t3d.mk
 
 N64_CFLAGS += -std=gnu2x -Os
 
-# Make sure to add reference to any new c files here!
-# src := main.c utils/pigeon_utils.h utils/pigeon_utils.c scenes/park.c
 src := $(shell find src -name '*.c')
 
 assets_png = $(wildcard assets/*.png)
 assets_gltf = $(wildcard assets/*.glb)
+assets_xm = $(wildcard src/resources/audio/*.xm)
 assets_conv = $(addprefix filesystem/,$(notdir $(assets_png:%.png=%.sprite))) \
 			  $(addprefix filesystem/,$(notdir $(assets_ttf:%.ttf=%.font64))) \
-			  $(addprefix filesystem/,$(notdir $(assets_gltf:%.glb=%.t3dm)))
+			  $(addprefix filesystem/,$(notdir $(assets_gltf:%.glb=%.t3dm))) \
+			  $(addprefix filesystem/,$(notdir $(assets_xm:%.xm=%.xm64)))
 
 all: pigeon_grabbing.z64
 
@@ -28,6 +28,13 @@ filesystem/%.t3dm: assets/%.glb
 	@echo "    [T3D-MODEL] $@"
 	$(T3D_GLTF_TO_3D) "$<" $@
 	$(N64_BINDIR)/mkasset -c 2 -o filesystem $@
+
+filesystem/%.xm64: src/resources/audio/%.xm
+	@mkdir -p $(dir $@)
+	@echo "     [AUDIO] $@ $<"
+	@echo "$<"
+	audioconv64 --output filesystem $<
+	mv $(notdir $@) $@
 
 $(BUILD_DIR)/pigeon_grabbing.dfs: $(assets_conv)
 $(BUILD_DIR)/pigeon_grabbing.elf: $(src:%.c=$(BUILD_DIR)/%.o)

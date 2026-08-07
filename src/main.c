@@ -13,6 +13,7 @@
 // UTILS
 #include "utils/pigeon_utils.h"
 #include "utils/pigeon_math.h"
+#include "utils/pigeon_audio.h"
 
 // SCENES
 #include "sceneManager.h"
@@ -46,6 +47,8 @@ int main()
 
   joypad_init();
 
+  pigeonAudioInit();
+
   T3DViewport viewport = t3d_viewport_create_buffered(FB_COUNT);
 
   // rendering distance
@@ -64,14 +67,17 @@ int main()
   rdpq_text_register_font(FONT_BUILTIN_DEBUG_MONO, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO));
 
   SceneManager* sceneManager = Scene_Manager_Create(0);
+  Player *player = getPlayer();
+
+  playTrack(0);
 
   for(;;) {
     // UPDATE
     sceneManager->update();
     frameIdx = (frameIdx + 1) % FB_COUNT;
 
-    Player *player = getPlayer();
     updatePlayer();
+    updateAudio();
     
     // Grab Actors from the current active scene + apply actor's settings
     State *state = getState();

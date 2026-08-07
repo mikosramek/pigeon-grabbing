@@ -17,6 +17,11 @@
       "label": "build + unfload",
       "type": "shell",
       "command": "make && ../UNFLoader -r ./pigeon_grabbing.z64"
+    },
+    {
+      "label": "build + unfload (listen)",
+      "type": "shell",
+      "command": "make && ../UNFLoader -r ./pigeon_grabbing.z64 -l"
     }
   ]
 }
