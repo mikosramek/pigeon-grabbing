@@ -7,6 +7,9 @@
 #include "globals.h"
 #include "state.h"
 
+// PLAYER
+#include "player/player.h"
+
 // UTILS
 #include "utils/pigeon_utils.h"
 #include "utils/pigeon_math.h"
@@ -41,11 +44,6 @@ int main()
   rdpq_init();
   t3d_init((T3DInitParams){});
 
-  // camera controls
-  float cameraY = 20.0f;
-  float cameraAngle = -M_PI / 2;
-  uint32_t movementSpeed = 2;
-  float cameraRotationSpeed = 0.05f;
   joypad_init();
 
   T3DViewport viewport = t3d_viewport_create_buffered(FB_COUNT);
@@ -53,9 +51,6 @@ int main()
   // rendering distance
   float cam_near = 10.0f;
   float cam_far = 250.0f;
-
-  fm_vec3_t camPos = {{ 0, cameraY, 0.0f }};
-  fm_vec3_t camTarget = {{0,cameraY,0}};
 
   uint8_t colorAmbient[4] = {69, 69, 69, 0x22};
   uint8_t colorDir[4]     = {0xFF, 0xFF, 0xFF, 0x22};
@@ -70,76 +65,14 @@ int main()
 
   SceneManager* sceneManager = Scene_Manager_Create(0);
 
-  int8_t stickThreshold = 40;
 
   for(;;) {
     // UPDATE
     sceneManager->update();
     frameIdx = (frameIdx + 1) % FB_COUNT;
 
-    joypad_poll();
-    joypad_inputs_t input = joypad_get_inputs(0);
-
-
-    // MOVEMENT INPUTS
-    float xInput = 0.0f;
-    float yInput = 0.0f;  
-    if (input.stick_x > stickThreshold) {
-      xInput = 1.00f;
-    } else if (input.stick_x < -1 * stickThreshold) {
-      xInput = -1.00f;
-    }
-    if (input.stick_y > stickThreshold) {
-      yInput = 1.0f;
-    }else if (input.stick_y < -1 * stickThreshold) {
-      yInput = -1.0f;
-    }
-
-    fm_vec3_t inputVector = {{ xInput, yInput, 0.0f }};
-
-    fm_vec3_norm(&inputVector, &inputVector);
-
-    // CAMERA INPUTS
-    if (input.cstick_x > 0) {
-      cameraAngle += 1.0f * cameraRotationSpeed;
-    } else if (input.cstick_x < 0) {
-      cameraAngle -= 1.0f * cameraRotationSpeed;
-    }
-    cameraAngle = fmod(cameraAngle, M_PI * 2.0f);
-
-    if (input.cstick_y > 0) {
-      cameraY -= 0.5f * cameraRotationSpeed;
-    } else if (input.cstick_y < 0) {
-      cameraY += 0.5f * cameraRotationSpeed;
-    }
-    cameraY = clamp(cameraY, 19.0f, 20.6f);
-
-    // get forward angle
-    float xTarget = cos(cameraAngle);
-    float zTarget = sin(cameraAngle);
-
-    // get perpendicular angle
-    float perpXTarget = cos(cameraAngle + M_PI / 2.0f);
-    float perpZTarget = sin(cameraAngle + M_PI / 2.0f);
-
-    // UPDATE CAMERA
-
-    // combine forward/back input + forward angle AND left/right input + perp angle
-    float zChange = (inputVector.y * zTarget * movementSpeed) + (inputVector.x * perpZTarget * movementSpeed);
-    float xChange = (inputVector.y * xTarget * movementSpeed) + (inputVector.x * perpXTarget * movementSpeed);
-
-    // normalize input, so angular movement isn't doubled
-    fm_vec3_t posChange = {{ xChange, 0, zChange }};
-    fm_vec3_norm(&posChange, &posChange);
-    
-    // apply position
-    camPos.z += posChange.z;
-    camPos.x += posChange.x;
-
-    // apply camera target
-    camTarget.x = camPos.x + xTarget;
-    camTarget.y = cameraY;
-    camTarget.z = camPos.z + zTarget;
+    Player *player = getPlayer();
+    updatePlayer();
     
     // Apply actor's settings
     State *state = getState();
@@ -150,7 +83,7 @@ int main()
 
     // set camera
     t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(85.0f), cam_near, cam_far);
-    t3d_viewport_look_at(&viewport, &camPos, &camTarget, &(fm_vec3_t){{0,1,0}});
+    t3d_viewport_look_at(&viewport, &player->position, &player->cameraTarget, &(fm_vec3_t){{0,1,0}});
 
     // DRAW
     rdpq_attach(display_get(), display_get_zbuf());
@@ -193,6 +126,7 @@ int main()
     rdpq_detach_show();
 
     // SCENE CHANGE DEBUG
+    joypad_poll();
     joypad_buttons_t buttons = joypad_get_buttons_pressed(1);
     if (buttons.l) {
       if (state->activeScene->id > 0) {
