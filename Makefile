@@ -34,7 +34,6 @@ filesystem/%.xm64: src/resources/audio/%.xm
 	@echo "     [AUDIO] $@ $<"
 	@echo "$<"
 	audioconv64 --output filesystem $<
-	mv $(notdir $@) $@
 
 $(BUILD_DIR)/pigeon_grabbing.dfs: $(assets_conv)
 $(BUILD_DIR)/pigeon_grabbing.elf: $(src:%.c=$(BUILD_DIR)/%.o)
