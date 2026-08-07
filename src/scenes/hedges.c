@@ -7,6 +7,7 @@
 
 
 #include "../utils/pigeon_utils.h"
+#include "../globals.h"
 #include "scene.h"
 
 #include <libdragon.h>
@@ -23,7 +24,7 @@ static Scene Hedges = (Scene) {
 };
 
 // LOAD FUNCTION
-Scene createHedges(uint32_t FB_COUNT, uint32_t scene_id) {
+Scene *createHedges(uint32_t scene_id) {
   Hedges.id = scene_id;
   // MODEL IMPORT
   ModelData test_plane = setupModel("rom:/test_plane.t3dm");
@@ -52,7 +53,7 @@ Scene createHedges(uint32_t FB_COUNT, uint32_t scene_id) {
 
   Hedges.actors = actors;
   
-  return Hedges;  
+  return &Hedges;  
 }
 
 // UNLOAD FUNCTION

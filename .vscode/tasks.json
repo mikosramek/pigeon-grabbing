@@ -12,6 +12,11 @@
       "label": "clean",
       "type": "shell",
       "command": "make clean"
+    },
+    {
+      "label": "build + unfload",
+      "type": "shell",
+      "command": "make && ../UNFLoader -r ./pigeon_grabbing.z64"
     }
   ]
 }

@@ -3,55 +3,30 @@
 #include <t3d/t3dmodel.h>
 #include <math.h>
 
+// STATE
+#include "globals.h"
+#include "state.h"
+
+// UTILS
 #include "utils/pigeon_utils.h"
 #include "utils/pigeon_math.h"
 
 // SCENES
+#include "sceneManager.h"
 #include "scenes/scene.h"
-#include "scenes/park.h"
-#include "scenes/hedges.h"
-#include "scenes/pond.h"
-#include "scenes/test.h"
 
-#define FB_COUNT 3
 
 static int frameIdx = 0;
 
-
-static Scene currentScene;
-#define SCENE_COUNT 4
-
-void changeScene (int sceneId) {
-  rspq_wait();
-
-  // unload current scene
-  switch(currentScene.id) {
-    case 0:
-      unloadPark(); break;
-    case 1:
-      unloadHedges(); break;
-    case 2:
-      unloadPond(); break;
-    case 3:
-      unloadTest(); break;
-    default:
-      assertf(false, "Current scene doesn't have an unload: %d", (int)currentScene.id);
-  }
-
-  // create new scene
-  switch(sceneId) {
-    case 0:
-      currentScene = createPark(FB_COUNT, 0); break;
-    case 1:
-      currentScene = createHedges(FB_COUNT, 1); break;
-    case 2:
-      currentScene = createPond(FB_COUNT, 2); break;
-    case 3:
-      currentScene = createTest(FB_COUNT, 3); break;
-    default:
-      assertf(false, "Invalid scene-id: %d", sceneId);
-  }
+static State state = {
+  .activeScene = NULL,
+  .requestSceneId = -1
 };
+
+State *getState(void)
+{
+    return &state;
+}
 
 int main()
 {
@@ -92,9 +67,14 @@ int main()
   
   rdpq_text_register_font(FONT_BUILTIN_DEBUG_MONO, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO));
   
-  currentScene = createPark(FB_COUNT, 0);
+
+  SceneManager* sceneManager = Scene_Manager_Create(0);
+
+  int8_t stickThreshold = 40;
+
   for(;;) {
     // UPDATE
+    sceneManager->update();
     frameIdx = (frameIdx + 1) % FB_COUNT;
 
     joypad_poll();
@@ -104,14 +84,14 @@ int main()
     // MOVEMENT INPUTS
     float xInput = 0.0f;
     float yInput = 0.0f;  
-    if (input.stick_x > 0) {
+    if (input.stick_x > stickThreshold) {
       xInput = 1.00f;
-    } else if (input.stick_x < 0) {
+    } else if (input.stick_x < -1 * stickThreshold) {
       xInput = -1.00f;
     }
-    if (input.stick_y > 0) {
+    if (input.stick_y > stickThreshold) {
       yInput = 1.0f;
-    }else if (input.stick_y < 0) {
+    }else if (input.stick_y < -1 * stickThreshold) {
       yInput = -1.0f;
     }
 
@@ -162,8 +142,9 @@ int main()
     camTarget.z = camPos.z + zTarget;
     
     // Apply actor's settings
-    Actor* actors = currentScene.actors;
-    for(int i=0; i<currentScene.actorCount; ++i) {
+    State *state = getState();
+    Actor* actors = state->activeScene->actors;
+    for(int i=0; i < state->activeScene->actorCount; ++i) {
       t3d_mat4fp_from_srt_euler(&actors[i].modelMat[frameIdx], actors[i].scale, actors[i].rot, actors[i].pos);
     }
 
@@ -193,7 +174,7 @@ int main()
 
     // we say we'd like to take a "single" matrix
     t3d_matrix_push_pos(1);
-    for(int i=0; i<currentScene.actorCount; ++i) {
+    for(int i=0; i < state->activeScene->actorCount; ++i) {
       // actor_draw(&actors[i]);
       // we set a matrix (the model's material / transform + dpl) with doMultiply as true, it just push+pops it by itself
       t3d_matrix_set(&actors[i].modelMat[frameIdx], true);
@@ -207,24 +188,23 @@ int main()
     // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "camera x: %f", cos(cameraAngle));
     // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "camera z: %f", sin(cameraAngle));
     // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "camera y: %f", cameraY);
-    // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "current scene: %i", (int)currentScene.id);
+    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "current scene: %i", (int)state->activeScene->id);
 
     rdpq_detach_show();
 
-
     // SCENE CHANGE DEBUG
-    joypad_buttons_t buttons = joypad_get_buttons_pressed(0);
+    joypad_buttons_t buttons = joypad_get_buttons_pressed(1);
     if (buttons.l) {
-      if (currentScene.id > 0) {
-        changeScene(currentScene.id - 1);
+      if (state->activeScene->id > 0) {
+        sceneManager->loadScene(state->activeScene->id - 1);
       } else {
-        changeScene(SCENE_COUNT - 1);
+        sceneManager->loadScene(SCENE_COUNT - 1);
       }
     } else if (buttons.r) {
-      if (currentScene.id < SCENE_COUNT - 1) {
-        changeScene(currentScene.id + 1);
+      if (state->activeScene->id < SCENE_COUNT - 1) {
+        sceneManager->loadScene(state->activeScene->id + 1);
       } else {
-        changeScene(0);
+        sceneManager->loadScene(0);
       }
     }
   }

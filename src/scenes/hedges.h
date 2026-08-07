@@ -6,13 +6,14 @@
 #define HEDGES_H
 
 #include "../utils/pigeon_utils.h"
+#include "../globals.h"
 #include "scene.h"
 
 #include <libdragon.h>
 #include <t3d/t3d.h>
 #include <t3d/t3dmodel.h>
 
-Scene createHedges(uint32_t FB_COUNT, uint32_t scene_id);
+Scene *createHedges(uint32_t scene_id);
 
 void unloadHedges(void);
 

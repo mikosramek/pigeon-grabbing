@@ -7,6 +7,7 @@
 
 
 #include "../utils/pigeon_utils.h"
+#include "../globals.h"
 #include "scene.h"
 
 #include <libdragon.h>
@@ -23,7 +24,7 @@ static Scene Pond = (Scene) {
 };
 
 // LOAD FUNCTION
-Scene createPond(uint32_t FB_COUNT, uint32_t scene_id) {
+Scene *createPond(uint32_t scene_id) {
   Pond.id = scene_id;
   // MODEL IMPORT
   ModelData stump = setupModel("rom:/stump.t3dm");
@@ -73,7 +74,7 @@ Scene createPond(uint32_t FB_COUNT, uint32_t scene_id) {
 
   Pond.actors = actors;
   
-  return Pond;  
+  return &Pond;  
 }
 
 // UNLOAD FUNCTION

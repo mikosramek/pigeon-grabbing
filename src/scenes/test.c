@@ -7,6 +7,7 @@
 
 
 #include "../utils/pigeon_utils.h"
+#include "../globals.h"
 #include "scene.h"
 
 #include <libdragon.h>
@@ -23,7 +24,7 @@ static Scene Test = (Scene) {
 };
 
 // LOAD FUNCTION
-Scene createTest(uint32_t FB_COUNT, uint32_t scene_id) {
+Scene *createTest(uint32_t scene_id) {
   Test.id = scene_id;
   // MODEL IMPORT
   ModelData test_plane = setupModel("rom:/test_plane.t3dm");
@@ -79,7 +80,7 @@ Scene createTest(uint32_t FB_COUNT, uint32_t scene_id) {
 
   Test.actors = actors;
   
-  return Test;  
+  return &Test;  
 }
 
 // UNLOAD FUNCTION
