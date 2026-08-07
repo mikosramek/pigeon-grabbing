@@ -52,6 +52,7 @@ int main()
   float cam_near = 10.0f;
   float cam_far = 250.0f;
 
+  // basic lighting
   uint8_t colorAmbient[4] = {69, 69, 69, 0x22};
   uint8_t colorDir[4]     = {0xFF, 0xFF, 0xFF, 0x22};
   // color_t fogColor = (color_t){50, 50, 20, 0xFF};
@@ -61,10 +62,8 @@ int main()
 
   
   rdpq_text_register_font(FONT_BUILTIN_DEBUG_MONO, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO));
-  
 
   SceneManager* sceneManager = Scene_Manager_Create(0);
-
 
   for(;;) {
     // UPDATE
@@ -74,7 +73,7 @@ int main()
     Player *player = getPlayer();
     updatePlayer();
     
-    // Apply actor's settings
+    // Grab Actors from the current active scene + apply actor's settings
     State *state = getState();
     Actor* actors = state->activeScene->actors;
     for(int i=0; i < state->activeScene->actorCount; ++i) {
@@ -132,18 +131,18 @@ int main()
       if (state->activeScene->id > 0) {
         sceneManager->loadScene(state->activeScene->id - 1);
       } else {
-        sceneManager->loadScene(SCENE_COUNT - 1);
+        sceneManager->loadScene(sceneManager->sceneCount - 1);
       }
+      resetPlayer();
     } else if (buttons.r) {
-      if (state->activeScene->id < SCENE_COUNT - 1) {
+      if (state->activeScene->id < sceneManager->sceneCount - 1) {
         sceneManager->loadScene(state->activeScene->id + 1);
       } else {
         sceneManager->loadScene(0);
       }
+      resetPlayer();
     }
   }
-
-  unloadPark();
 
   t3d_destroy();
   return 0;

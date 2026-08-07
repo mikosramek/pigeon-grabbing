@@ -1,5 +1,4 @@
 #include <libdragon.h>
-#include "globals.h"
 #include "state.h"
 #include "sceneManager.h"
 #include "scenes/park.h"
@@ -7,8 +6,11 @@
 #include "scenes/pond.h"
 #include "scenes/test.h"
 
+const int SCENE_COUNT = 4;
+
 struct SceneManagerImpl {
-    SceneManager public_methods; // Must be the first element
+  SceneManager public_struct; // Must be the first element
+  // include private keys here
 };
 
 static void loadScene_impl(int sceneId) {
@@ -67,12 +69,13 @@ SceneManager* Scene_Manager_Create(int initial_scene_id) {
     state->requestSceneId = initial_scene_id;
 
     // Bind function pointers
-    impl->public_methods.update = update_impl;
-    impl->public_methods.loadScene = loadScene_impl;
+    impl->public_struct.sceneCount = SCENE_COUNT;
+    impl->public_struct.update = update_impl;
+    impl->public_struct.loadScene = loadScene_impl;
 
     return (SceneManager*)impl;
 }
 
 void Scene_Manager_Destroy(SceneManager* self) {
-    free_uncached(self); // Frees the entire CounterImpl structure
+    free_uncached(self); // Frees the entire SceneManagerImpl structure
 }

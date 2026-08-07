@@ -27,6 +27,7 @@ void resetPlayer() {
   player->cameraY = 20.0f;
   player->cameraTarget = (fm_vec3_t){{ 0, DEFAULT_CAMERA_Y, 0 }};
   player->position = (fm_vec3_t){{ 0, DEFAULT_CAMERA_Y, 0 }};
+  player->cameraAngle = -M_PI / 2;
 }
 
 void updatePlayer() {

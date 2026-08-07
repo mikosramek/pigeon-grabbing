@@ -2,7 +2,6 @@
 #define SCENE_MANAGER_H
 
 #include <libdragon.h>
-#include "globals.h"
 #include "state.h"
 #include "scenes/park.h"
 #include "scenes/hedges.h"
@@ -13,6 +12,7 @@ typedef struct SceneManager SceneManager;
 
 struct SceneManager
 {
+  int sceneCount;
   void (*update)();
   void (*loadScene)(int sceneId);
 };
