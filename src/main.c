@@ -112,10 +112,10 @@ void handle_debug_input(SceneManager *sceneManager) {
     }
   } else if (DEBUG.infoMode == AUDIO) {
     if (buttons.c_up) {
-      playTrack(0);
+      playTrack(TRANQUIL_WALK);
     }
     if (buttons.c_down) {
-      stopTrack(0);
+      stopTrack(TRANQUIL_WALK);
     }
   }
 }
@@ -155,7 +155,7 @@ int main()
   SceneManager* sceneManager = Scene_Manager_Create(0);
   Player *player = getPlayer();
 
-  playTrack(0);
+  // playTrack(TRANQUIL_WALK);
 
   for(;;) {
     // UPDATE

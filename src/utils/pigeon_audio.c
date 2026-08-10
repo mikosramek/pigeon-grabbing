@@ -9,16 +9,6 @@ const int MIXER_CHANNELS = 32; // power of 2
 #define CHANNEL_SFX2    1
 #define CHANNEL_MUSIC   2
 
-  // void audio_init (const int frequency, int numbuffers);
-  // void mixer_init (int num_channels);
-  // audio_init(44100, 20);
-  // mixer_init(32);
-  // mixer_ch_set_limits(6, 0, 128000, 0);
-  // xm64player_t xm;
-  // xm64player_open(&xm, "rom:/bg.xm64");
-  // xm64player_play(&xm, 0);
-  // xm64player_set_loop(&xm, true);
-
 static PigeonAudio pigeonAudio = {
   .currentTrackId = -1
 };
@@ -46,17 +36,19 @@ void pigeonAudioInit(void) {
   wav64_set_loop(&pA->step, false);
 }
 
-void playTrack(int trackId) {
+// TODO: probably refactor this to take in a xm64player_t that each scene holds + loads, rather than have them all defined here at once
+// only track the current / next track, so they can be transitioned to/from
+void playTrack(BackgroundMusic trackToPlay) {
   PigeonAudio *pA = getPigeonAudio();
 
-  switch(trackId) {
-    case 0:
+  switch(trackToPlay) {
+    case TRANQUIL_WALK:
       if (!pA->tranquilWalk.playing) {
         xm64player_play(&pA->tranquilWalk, CHANNEL_MUSIC);
       }
       break;
     default:
-      assertf(false, "Audio track ID isn't handled in playTrack: %d", trackId);
+      assertf(false, "Audio track isn't handled in playTrack (%i)", (int)trackToPlay);
   }
 }
 
@@ -68,19 +60,19 @@ void playSFX(SFX sfx) {
       wav64_play(&pA->step, CHANNEL_SFX1);
       break;
     default:
-      assertf(false, "SFX to play isn't defined");
+      assertf(false, "SFX to play isn't handled in playSFX (%i)", (int)sfx);
       break;
   }
 }
 
-void stopTrack(int trackId) {
+void stopTrack(BackgroundMusic trackToStop) {
   PigeonAudio *pA = getPigeonAudio();
-  switch(trackId) {
-    case 0:
+  switch(trackToStop) {
+    case TRANQUIL_WALK:
       xm64player_stop(&pA->tranquilWalk);
       break;
     default:
-      assertf(false, "Audio track ID isn't handled in stopTrack: %d", trackId);
+      assertf(false, "Audio track isn't handled in stopTrack (%i)", (int)trackToStop);
   }
 }
 
@@ -88,6 +80,9 @@ void stopTrack(int trackId) {
 //   mixer_try_play();
 // }
 
+// TODO: figure out some sort of crossfade / transition between tracks
+
+// TODO: unload tracks when needed (probably get called in unload scene functions)
 void clearTrack(void) {
   // void xm64player_stop(xm64player_t *player);
   // void xm64player_close(xm64player_t *player);
