@@ -61,8 +61,10 @@ void display_debug(void) {
       rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "c_right/c_left: scene change");
       break;
     case HIDDEN:
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "l/r: change info | start: disable debug");
+      break;
     default:
-    break;
+      break;
   }
 }
 
