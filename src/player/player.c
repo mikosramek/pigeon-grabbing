@@ -34,7 +34,6 @@ void updatePlayer() {
 
   Player *player = getPlayer();
   
-  joypad_poll();
   joypad_inputs_t input = joypad_get_inputs(0);
 
   // MOVEMENT INPUTS

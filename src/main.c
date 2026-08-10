@@ -32,6 +32,92 @@ State *getState(void)
     return &state;
 }
 
+static Debug DEBUG = {
+  .debugEnabled = true,
+  .infoMode = HIDDEN
+};
+
+void display_debug(void) {
+  if (!DEBUG.debugEnabled) {
+    return;
+  }
+  switch (DEBUG.infoMode) {
+    case CAMERA:
+      Player *player = getPlayer();
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 190, "camera angle: %f", player->cameraAngle);
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 200, "camera x: %f", cos(player->cameraAngle));
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 210, "camera z: %f", sin(player->cameraAngle));
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "camera y: %f", player->cameraY);
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "n/a");
+      break;
+    case AUDIO:
+      PigeonAudio *pigeonAudio = getPigeonAudio();
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "tranquil walk playing: %s", pigeonAudio->tranquilWalk.playing ? "y" : "n");
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "c_up: play | c_down: stop");
+      break;
+    case SCENE:
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 210, "current scene name: %s", state.activeScene->name);
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "current scene id: %i", (int)state.activeScene->id);
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "c_right/c_left: scene change");
+      break;
+    case HIDDEN:
+    default:
+    break;
+  }
+}
+
+void handle_debug_input(SceneManager *sceneManager) {
+  joypad_buttons_t buttons = joypad_get_buttons_pressed(1);
+  if (buttons.start) {
+    DEBUG.debugEnabled = !DEBUG.debugEnabled;
+  }
+
+  if (!DEBUG.debugEnabled) {
+    return;
+  }
+
+  if (buttons.l) {
+    if (DEBUG.infoMode == CAMERA) {
+      DEBUG.infoMode = HIDDEN;
+    } else {
+      DEBUG.infoMode = DEBUG.infoMode - 1;
+    }
+  }
+  if (buttons.r) {
+    if (DEBUG.infoMode == HIDDEN) {
+      DEBUG.infoMode = 0;
+    } else {
+      DEBUG.infoMode = DEBUG.infoMode + 1;
+    }
+  }
+
+  if (DEBUG.infoMode == SCENE) {
+    State *state = getState();
+    if (buttons.c_left) {
+      if (state->activeScene->id > 0) {
+        sceneManager->loadScene(state->activeScene->id - 1);
+      } else {
+        sceneManager->loadScene(sceneManager->sceneCount - 1);
+      }
+      resetPlayer();
+    } else if (buttons.c_right) {
+      if (state->activeScene->id < sceneManager->sceneCount - 1) {
+        sceneManager->loadScene(state->activeScene->id + 1);
+      } else {
+        sceneManager->loadScene(0);
+      }
+      resetPlayer();
+    }
+  } else if (DEBUG.infoMode == AUDIO) {
+    if (buttons.c_up) {
+      playTrack(0);
+    }
+    if (buttons.c_down) {
+      stopTrack(0);
+    }
+  }
+}
+
 int main()
 {
 	debug_init_isviewer();
@@ -44,9 +130,7 @@ int main()
 
   rdpq_init();
   t3d_init((T3DInitParams){});
-
   joypad_init();
-
   pigeonAudioInit();
 
   T3DViewport viewport = t3d_viewport_create_buffered(FB_COUNT);
@@ -76,11 +160,14 @@ int main()
     sceneManager->update();
     frameIdx = (frameIdx + 1) % FB_COUNT;
 
+    joypad_poll();
+    for (int i = 0; i < 10; i += 1) {
+      mixer_try_play();
+    }
     updatePlayer();
-    updateAudio();
     
-    // Grab Actors from the current active scene + apply actor's settings
     State *state = getState();
+    // Grab Actors from the current active scene + apply actor's settings
     Actor* actors = state->activeScene->actors;
     for(int i=0; i < state->activeScene->actorCount; ++i) {
       t3d_mat4fp_from_srt_euler(&actors[i].modelMat[frameIdx], actors[i].scale, actors[i].rot, actors[i].pos);
@@ -121,33 +208,13 @@ int main()
     // we then pop a "singular" matrix
     t3d_matrix_pop(1);
 
-    // debug text
-    // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 210, "camera angle: %f", cameraAngle);
-    // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "camera x: %f", cos(cameraAngle));
-    // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "camera z: %f", sin(cameraAngle));
-    // rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "camera y: %f", cameraY);
-    rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "current scene: %i", (int)state->activeScene->id);
+    // 2D THINGS
+    display_debug();
+    handle_debug_input(sceneManager);
 
+    // end rendering
     rdpq_detach_show();
 
-    // SCENE CHANGE DEBUG
-    joypad_poll();
-    joypad_buttons_t buttons = joypad_get_buttons_pressed(1);
-    if (buttons.l) {
-      if (state->activeScene->id > 0) {
-        sceneManager->loadScene(state->activeScene->id - 1);
-      } else {
-        sceneManager->loadScene(sceneManager->sceneCount - 1);
-      }
-      resetPlayer();
-    } else if (buttons.r) {
-      if (state->activeScene->id < sceneManager->sceneCount - 1) {
-        sceneManager->loadScene(state->activeScene->id + 1);
-      } else {
-        sceneManager->loadScene(0);
-      }
-      resetPlayer();
-    }
   }
 
   t3d_destroy();

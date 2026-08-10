@@ -4,10 +4,23 @@
 #include "scenes/scene.h"   // Because State contains a Scene *
 
 typedef struct {
-    Scene *activeScene;
-    int requestSceneId;
+  Scene *activeScene;
+  int requestSceneId;
 } State;
 
 State *getState(void);
+
+
+enum DebugInfoMode {
+  CAMERA,
+  AUDIO,
+  SCENE,
+  HIDDEN
+}; 
+
+typedef struct {
+  bool debugEnabled;
+  enum DebugInfoMode infoMode;
+} Debug;
 
 #endif
