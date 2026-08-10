@@ -4,6 +4,7 @@
 #include <t3d/t3d.h>
 #include <math.h>
 #include "../utils/pigeon_math.h"
+#include "../utils/pigeon_audio.h"
 
 const float DEFAULT_CAMERA_Y = 20.0f;
 const int8_t stickThreshold = 20;
@@ -98,4 +99,10 @@ void updatePlayer() {
   player->cameraTarget.x = player->position.x + xTarget;
   player->cameraTarget.y = player->cameraY;
   player->cameraTarget.z = player->position.z + zTarget;
+
+
+  joypad_buttons_t pressedButtons = joypad_get_buttons_pressed(0);
+  if (pressedButtons.a) {
+    playSFX(STEP);
+  }
 }

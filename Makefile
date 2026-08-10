@@ -11,10 +11,12 @@ src := $(shell find src -name '*.c')
 assets_png = $(wildcard assets/*.png)
 assets_gltf = $(wildcard assets/*.glb)
 assets_xm = $(wildcard src/resources/audio/*.xm)
+assets_wav = $(wildcard src/resources/audio/*.wav)
 assets_conv = $(addprefix filesystem/,$(notdir $(assets_png:%.png=%.sprite))) \
 			  $(addprefix filesystem/,$(notdir $(assets_ttf:%.ttf=%.font64))) \
 			  $(addprefix filesystem/,$(notdir $(assets_gltf:%.glb=%.t3dm))) \
-			  $(addprefix filesystem/,$(notdir $(assets_xm:%.xm=%.xm64)))
+			  $(addprefix filesystem/,$(notdir $(assets_xm:%.xm=%.xm64))) \
+				$(addprefix filesystem/,$(notdir $(assets_wav:%.wav=%.wav64)))
 
 all: pigeon_grabbing.z64
 
@@ -31,9 +33,13 @@ filesystem/%.t3dm: assets/%.glb
 
 filesystem/%.xm64: src/resources/audio/%.xm
 	@mkdir -p $(dir $@)
-	@echo "     [AUDIO] $@ $<"
-	@echo "$<"
+	@echo "     [AUDIO] $@"
 	@$(N64_AUDIOCONV) $(AUDIOCONV_FLAGS) -o filesystem "$<"
+
+filesystem/%.wav64: src/resources/audio/%.wav
+	@mkdir -p $(dir $@)
+	@echo "    [AUDIO] $@"
+	@$(N64_AUDIOCONV) --wav-compress 3 -o filesystem $<
 
 $(BUILD_DIR)/pigeon_grabbing.dfs: $(assets_conv)
 $(BUILD_DIR)/pigeon_grabbing.elf: $(src:%.c=$(BUILD_DIR)/%.o)
