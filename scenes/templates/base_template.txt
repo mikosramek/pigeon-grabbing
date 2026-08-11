@@ -1,0 +1,63 @@
+/*
+* <UPPERCASE_NAME> SCENE
+* GENERATED ON <DATE>
+*/
+// INCLUDES
+#include "<LOWERCASE_NAME>.h"
+
+#include "../utils/pigeon_utils.h"
+#include "../globals.h"
+#include "scene.h"
+
+#include <libdragon.h>
+#include <t3d/t3d.h>
+#include <t3d/t3dmodel.h>
+
+// DEFINITIONS
+
+static Scene <NAME> = (Scene) {
+  .name = "<NAME>",
+  .actorCount = <ACTOR_COUNT>,
+  .modelCount = <MODEL_COUNT>,
+};
+
+// LOAD FUNCTION
+Scene *create<NAME>(uint32_t scene_id) {
+  <NAME>.id = scene_id;
+  // MODEL IMPORT
+<MODEL_IMPORT>
+
+  T3DModel **models = malloc_uncached(sizeof(T3DModel *) * <NAME>.modelCount);
+<MODELS>
+
+  <NAME>.models = models;
+
+  // make this a global thing?
+  uint32_t startingIndex = 0;
+  float xPositionMultiplier = 6.4f;
+  float yPositionMultiplier = 6.4f;
+  float zPositionMultiplier = 6.4f;
+  float scaleMultiplier = 0.1f;
+
+  // ACTORS
+  Actor *actors = malloc_uncached(sizeof(Actor) * <NAME>.actorCount);
+<ACTORS>
+  <NAME>.actors = actors;
+  
+  return &<NAME>;  
+}
+
+// UNLOAD FUNCTION
+void unload<NAME>(void) {
+  for (int i = 0; i < <NAME>.modelCount; i++) {
+    cleanupModel(<NAME>.models[i]);
+  }
+
+  free_uncached(<NAME>.models);
+
+  for (int i = 0; i < <NAME>.actorCount; i++) {
+    deleteActor(&<NAME>.actors[i]);
+  }
+
+  free_uncached(<NAME>.actors);
+}

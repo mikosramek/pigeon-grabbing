@@ -1,0 +1,1 @@
+ModelData <MODEL> = setupModel("rom:/<MODEL>.t3dm");

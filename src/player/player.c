@@ -16,11 +16,19 @@ static Player player = {
   .cameraAngle = -M_PI / 2,
   .movementSpeed = 2,
   .cameraRotationSpeed = 0.05f,
+  .activeSlot = IS_EMPTY
 };
 
 Player *getPlayer(void)
 {
     return &player;
+}
+
+void initPlayer(bool inventory[]) {
+  player.inventory = inventory;
+  player.inventoryFrame = sprite_load("rom:/inventory_frame.sprite");
+  player.inventoryArrow = sprite_load("rom:/ui_arrow.sprite");
+  player.ui_b = sprite_load("rom:/ui_b.sprite");
 }
 
 void resetPlayer() {
@@ -106,3 +114,22 @@ void updatePlayer() {
     playSFX(STEP);
   }
 }
+
+// RESOLUTION_320x240
+void drawPlayerUI(void) {
+  // base item frame
+  // rdpq_sprite_blit(player.inventoryFrame, 320 - 40, 240-36, NULL);
+  // rdpq_sprite_blit(player.ui_b, 320 - 18, 240-18, &(rdpq_blitparms_t){
+  //   .scale_x = 0.33f, .scale_y = 0.33f,
+  // });
+
+
+  // switch based on activeSlot
+
+  // is there a good way to detect what's the next item?
+}
+
+// todo:
+// - throw seed
+// - pet pigeon
+// - collect golden feathers

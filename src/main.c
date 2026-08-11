@@ -33,7 +33,7 @@ State *getState(void)
 }
 
 static Debug DEBUG = {
-  .debugEnabled = true,
+  .debugEnabled = false,
   .infoMode = HIDDEN
 };
 
@@ -122,6 +122,7 @@ void handle_debug_input(SceneManager *sceneManager) {
 
 int main()
 {
+  // System Init
 	debug_init_isviewer();
   debug_init_usblog();
   asset_init_compression(2);
@@ -133,10 +134,17 @@ int main()
   rdpq_init();
   t3d_init((T3DInitParams){});
   joypad_init();
-  pigeonAudioInit();
-
   T3DViewport viewport = t3d_viewport_create_buffered(FB_COUNT);
 
+  // Game Init
+  pigeonAudioInit();
+  bool inventory[1] = { true };
+  initPlayer(inventory);
+  SceneManager* sceneManager = Scene_Manager_Create(3);
+  Player *player = getPlayer();
+
+
+  // Rendering Setup
   // rendering distance
   float cam_near = 10.0f;
   float cam_far = 250.0f;
@@ -149,11 +157,7 @@ int main()
   fm_vec3_t lightDirVec = {{-1.0f, 1.0f, 1.0f}};
   fm_vec3_norm(&lightDirVec, &lightDirVec);
 
-  
   rdpq_text_register_font(FONT_BUILTIN_DEBUG_MONO, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO));
-
-  SceneManager* sceneManager = Scene_Manager_Create(0);
-  Player *player = getPlayer();
 
   // playTrack(TRANQUIL_WALK);
 
@@ -211,6 +215,9 @@ int main()
     t3d_matrix_pop(1);
 
     // 2D THINGS
+    rdpq_set_mode_standard();
+    rdpq_mode_blender(RDPQ_BLENDER_MULTIPLY);
+    drawPlayerUI();
     display_debug();
     handle_debug_input(sceneManager);
 

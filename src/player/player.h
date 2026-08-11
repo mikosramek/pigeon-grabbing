@@ -7,6 +7,15 @@
 #include "../utils/pigeon_math.h"
 #include "../utils/pigeon_audio.h"
 
+// typedef struct {
+//   bool sunflower;
+// } PlayerInventory;
+
+enum InventorySlot {
+  IS_EMPTY,
+  IS_SUNFLOWER
+};
+
 typedef struct {
   float cameraY;
   float cameraAngle;
@@ -14,13 +23,21 @@ typedef struct {
   fm_vec3_t cameraTarget;
   uint32_t movementSpeed;
   float cameraRotationSpeed;
+  bool inventory;
+  enum InventorySlot activeSlot;
+  sprite_t *inventoryFrame;
+  sprite_t *inventoryArrow;
+  sprite_t *ui_b;
 } Player;
 
 Player *getPlayer(void);
+
+void initPlayer(bool inventory[]);
 
 void resetPlayer(void);
 
 void updatePlayer(void);
 
+void drawPlayerUI(void);
 
 #endif
