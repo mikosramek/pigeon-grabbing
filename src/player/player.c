@@ -14,9 +14,10 @@ static Player player = {
   .position = {{ 0, DEFAULT_CAMERA_Y, 0 }},
   .cameraTarget = {{ 0, DEFAULT_CAMERA_Y, 0 }},
   .cameraAngle = -M_PI / 2,
-  .movementSpeed = 2,
-  .cameraRotationSpeed = 0.05f,
-  .activeSlot = IS_EMPTY
+  .movementSpeed = 0.6f,
+  .cameraRotationSpeed = 0.03f,
+  .activeSlot = IS_EMPTY,
+  .hasStepped = false
 };
 
 Player *getPlayer(void)
@@ -37,6 +38,8 @@ void resetPlayer() {
   player->cameraTarget = (fm_vec3_t){{ 0, DEFAULT_CAMERA_Y, 0 }};
   player->position = (fm_vec3_t){{ 0, DEFAULT_CAMERA_Y, 0 }};
   player->cameraAngle = -M_PI / 2;
+  player->movementTally = 0;
+  player->hasStepped = false;
 }
 
 void updatePlayer() {
@@ -92,27 +95,42 @@ void updatePlayer() {
   // UPDATE CAMERA
 
   // combine forward/back input + forward angle AND left/right input + perp angle
-  float zChange = (inputVector.y * zTarget * player->movementSpeed) + (inputVector.x * perpZTarget * player->movementSpeed);
-  float xChange = (inputVector.y * xTarget * player->movementSpeed) + (inputVector.x * perpXTarget * player->movementSpeed);
+  float zChange = (inputVector.y * zTarget) + (inputVector.x * perpZTarget);
+  float xChange = (inputVector.y * xTarget) + (inputVector.x * perpXTarget);
 
   // normalize input, so angular movement isn't doubled
   fm_vec3_t posChange = {{ xChange, 0, zChange }};
   fm_vec3_norm(&posChange, &posChange);
+
+  // get some sort of camera motion
+  if (posChange.x != 0 || posChange.z != 0) {
+    player->movementTally += 0.01f;
+  }
+  float stepHeight = 0.75f;
+  float yOffset = stepHeight * sin(player->movementTally / 0.1f);
   
   // apply position
-  player->position.z += posChange.z;
-  player->position.x += posChange.x;
+  player->position.z += posChange.z * player->movementSpeed;
+  player->position.x += posChange.x * player->movementSpeed;
+  player->position.y = DEFAULT_CAMERA_Y + yOffset;
 
   // apply camera target
   player->cameraTarget.x = player->position.x + xTarget;
-  player->cameraTarget.y = player->cameraY;
+  player->cameraTarget.y = player->cameraY + yOffset;
   player->cameraTarget.z = player->position.z + zTarget;
 
 
-  joypad_buttons_t pressedButtons = joypad_get_buttons_pressed(0);
-  if (pressedButtons.a) {
-    playSFX(STEP);
+  if (yOffset <= stepHeight * -0.9f && !player->hasStepped) {
+    // playSFX(STEP);
+    player->hasStepped = true;
+  } else if (yOffset >= stepHeight * -.9f && player->hasStepped) {
+    player->hasStepped = false;
   }
+
+
+  // joypad_buttons_t pressedButtons = joypad_get_buttons_pressed(0);
+  // if (pressedButtons.a) {
+  // }
 }
 
 // RESOLUTION_320x240

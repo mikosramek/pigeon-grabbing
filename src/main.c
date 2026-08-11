@@ -33,8 +33,8 @@ State *getState(void)
 }
 
 static Debug DEBUG = {
-  .debugEnabled = false,
-  .infoMode = HIDDEN
+  .debugEnabled = true,
+  .infoMode = CAMERA
 };
 
 void display_debug(void) {
@@ -44,6 +44,7 @@ void display_debug(void) {
   switch (DEBUG.infoMode) {
     case CAMERA:
       Player *player = getPlayer();
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 180, "camera y: %f", player->position.y);
       rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 190, "camera angle: %f", player->cameraAngle);
       rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 200, "camera x: %f", cos(player->cameraAngle));
       rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 210, "camera z: %f", sin(player->cameraAngle));

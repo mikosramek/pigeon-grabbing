@@ -18,16 +18,19 @@ enum InventorySlot {
 
 typedef struct {
   float cameraY;
+  float cameraTargetY;
   float cameraAngle;
   fm_vec3_t position;
   fm_vec3_t cameraTarget;
-  uint32_t movementSpeed;
+  float movementSpeed;
   float cameraRotationSpeed;
   bool inventory;
   enum InventorySlot activeSlot;
   sprite_t *inventoryFrame;
   sprite_t *inventoryArrow;
   sprite_t *ui_b;
+  float movementTally;
+  bool hasStepped;
 } Player;
 
 Player *getPlayer(void);
