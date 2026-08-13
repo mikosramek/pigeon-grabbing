@@ -8,6 +8,8 @@
 #include "../utils/pigeon_utils.h"
 #include "../globals.h"
 #include "scene.h"
+#include "../entities/entity.h"
+#include "../entities/feather.h"
 
 #include <libdragon.h>
 #include <t3d/t3d.h>
@@ -19,6 +21,7 @@ static Scene Park = (Scene) {
   .name = "Park",
   .actorCount = 71,
   .modelCount = 12,
+	.entityCount = 1,
 };
 
 // LOAD FUNCTION
@@ -138,6 +141,15 @@ Scene *createPark(uint32_t scene_id) {
 	actors[70] = setupActor(startingIndex + 70, two_cube.dpl, (float[3]){ -7.9592485427856445f * xPositionMultiplier, -0.19999998807907104f * yPositionMultiplier, -28.003936767578125f * zPositionMultiplier }, (float[3]){ 0.0f, -0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
 
   Park.actors = actors;
+
+	// Entities
+	struct Entity *entities = malloc_uncached(sizeof(struct Entity) * Park.entityCount);
+	entities[0] = (struct Entity) {
+		.update = *updateFeather,
+		.actor = &actors[63],
+	};
+
+	Park.entities = entities;
   
   return &Park;  
 }
@@ -155,4 +167,6 @@ void unloadPark(void) {
   }
 
   free_uncached(Park.actors);
+
+	free_uncached(Park.entities);
 }

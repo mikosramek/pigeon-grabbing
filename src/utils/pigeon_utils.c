@@ -27,6 +27,7 @@ Actor setupActor(uint32_t id, rspq_block_t *dpl, const float pos[3], const float
   Actor actor = (Actor) {
     .id = id,
     .pos = {pos[0], pos[1], pos[2]},
+    .staticPos = {pos[0], pos[1], pos[2]},
     .rot = {rot[0], rot[1], rot[2]},
     .scale = {scale[0], scale[1], scale[2]},
     .dpl = dpl,

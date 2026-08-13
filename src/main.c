@@ -14,6 +14,7 @@
 #include "utils/pigeon_utils.h"
 #include "utils/pigeon_math.h"
 #include "utils/pigeon_audio.h"
+#include "entities/entity.h"
 
 // SCENES
 #include "sceneManager.h"
@@ -163,8 +164,11 @@ int main()
 
   // playTrack(TRANQUIL_WALK);
 
+  uint32_t time = 0;
+
   for(;;) {
     // UPDATE
+    time += 1;
     sceneManager->update();
     frameIdx = (frameIdx + 1) % FB_COUNT;
 
@@ -173,12 +177,20 @@ int main()
       mixer_try_play();
     }
     updatePlayer();
+    handlePlayerInput();
+    handle_debug_input(sceneManager);
     
     State *state = getState();
     // Grab Actors from the current active scene + apply actor's settings
     Actor* actors = state->activeScene->actors;
     for(int i=0; i < state->activeScene->actorCount; ++i) {
       t3d_mat4fp_from_srt_euler(&actors[i].modelMat[frameIdx], actors[i].scale, actors[i].rot, actors[i].pos);
+    }
+
+    struct Entity *entities = state->activeScene->entities;
+    // entities[0].update(&entities[0], time);
+    for(int i = 0; i < state->activeScene->entityCount; i++) {
+      entities[i].update(&entities[i], time);
     }
 
     // set camera
@@ -221,7 +233,6 @@ int main()
     rdpq_mode_blender(RDPQ_BLENDER_MULTIPLY);
     drawPlayerUI();
     display_debug();
-    handle_debug_input(sceneManager);
 
     // end rendering
     rdpq_detach_show();

@@ -35,7 +35,7 @@ void initPlayer(bool inventory[]);
 void resetPlayer(void);
 
 void updatePlayer(void);
-
+void handlePlayerInput(void);
 void drawPlayerUI(void);
 
 #endif

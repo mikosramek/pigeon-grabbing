@@ -44,7 +44,6 @@ void resetPlayer() {
 }
 
 void updatePlayer() {
-
   Player *player = getPlayer();
   
   joypad_inputs_t input = joypad_get_inputs(0);
@@ -129,6 +128,11 @@ void updatePlayer() {
   }
 
 
+
+}
+
+void handlePlayerInput(void) {
+  Player *player = getPlayer();
   joypad_buttons_t pressedButtons = joypad_get_buttons_pressed(0);
   if (pressedButtons.b) {
     player->currentItem = getNextUnlockedItem(player->currentItem);
