@@ -5,6 +5,7 @@
 #include <math.h>
 #include "../utils/pigeon_math.h"
 #include "../utils/pigeon_audio.h"
+#include "inventory.h"
 
 const float DEFAULT_CAMERA_Y = 20.0f;
 const int8_t stickThreshold = 20;
@@ -30,6 +31,8 @@ void initPlayer(bool inventory[]) {
   player.inventoryFrame = sprite_load("rom:/inventory_frame.sprite");
   player.inventoryArrow = sprite_load("rom:/ui_arrow.sprite");
   player.ui_b = sprite_load("rom:/ui_b.sprite");
+
+  player.currentItem = init_inventory();
 }
 
 void resetPlayer() {
@@ -128,21 +131,22 @@ void updatePlayer() {
   }
 
 
-  // joypad_buttons_t pressedButtons = joypad_get_buttons_pressed(0);
-  // if (pressedButtons.a) {
-  // }
+  joypad_buttons_t pressedButtons = joypad_get_buttons_pressed(0);
+  if (pressedButtons.b) {
+    player->currentItem = getNextUnlockedItem(player->currentItem);
+  }
 }
 
 // RESOLUTION_320x240
 void drawPlayerUI(void) {
+
+  // active item
+  rdpq_sprite_blit(player.currentItem->sprite, 320 - 32, 240 - 28, &(rdpq_blitparms_t){
+    .scale_x = 0.5f, .scale_y = 0.5f,
+  });
+
   // base item frame
-  // rdpq_sprite_blit(player.inventoryFrame, 320 - 40, 240-36, NULL);
-  // rdpq_sprite_blit(player.ui_b, 320 - 18, 240-18, &(rdpq_blitparms_t){
-  //   .scale_x = 0.33f, .scale_y = 0.33f,
-  // });
-
-
-  // switch based on activeSlot
+  rdpq_sprite_blit(player.inventoryFrame, 320 - 40, 240-36, NULL);
 
   // is there a good way to detect what's the next item?
 }

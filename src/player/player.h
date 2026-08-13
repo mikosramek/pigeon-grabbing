@@ -6,6 +6,7 @@
 #include <math.h>
 #include "../utils/pigeon_math.h"
 #include "../utils/pigeon_audio.h"
+#include "inventory.h"
 
 // typedef struct {
 //   bool sunflower;
@@ -31,6 +32,7 @@ typedef struct {
   sprite_t *ui_b;
   float movementTally;
   bool hasStepped;
+  struct InventoryItem *currentItem;
 } Player;
 
 Player *getPlayer(void);
