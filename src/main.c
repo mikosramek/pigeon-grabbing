@@ -35,7 +35,7 @@ State *getState(void)
 
 static Debug DEBUG = {
   .debugEnabled = true,
-  .infoMode = CAMERA
+  .infoMode = SCENE
 };
 
 void display_debug(void) {
@@ -177,8 +177,6 @@ int main()
       mixer_try_play();
     }
     updatePlayer();
-    handlePlayerInput();
-    handle_debug_input(sceneManager);
     
     State *state = getState();
     // Grab Actors from the current active scene + apply actor's settings
@@ -188,7 +186,6 @@ int main()
     }
 
     struct Entity *entities = state->activeScene->entities;
-    // entities[0].update(&entities[0], time);
     for(int i = 0; i < state->activeScene->entityCount; i++) {
       entities[i].update(&entities[i], time);
     }
@@ -237,6 +234,8 @@ int main()
     // end rendering
     rdpq_detach_show();
 
+    handlePlayerInput();
+    handle_debug_input(sceneManager);
   }
 
   t3d_destroy();

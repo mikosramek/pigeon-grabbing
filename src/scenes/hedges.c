@@ -21,6 +21,7 @@ static Scene Hedges = (Scene) {
   .name = "Hedges",
   .actorCount = HEDGES_ACTOR_COUNT,
   .modelCount = 2,
+  .entityCount = 0,
 };
 
 // LOAD FUNCTION

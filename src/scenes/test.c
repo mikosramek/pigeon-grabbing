@@ -21,6 +21,7 @@ static Scene Test = (Scene) {
   .name = "Test",
   .actorCount = TEST_ACTOR_COUNT,
   .modelCount = 9,
+	.entityCount = 0,
 };
 
 // LOAD FUNCTION

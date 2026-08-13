@@ -35,9 +35,9 @@ void initPlayer(bool inventory[]) {
 
 void resetPlayer() {
   Player *player = getPlayer();
-  player->cameraY = 20.0f;
-  player->cameraTarget = (fm_vec3_t){{ 0, DEFAULT_CAMERA_Y, 0 }};
+  player->cameraY = DEFAULT_CAMERA_Y;
   player->position = (fm_vec3_t){{ 0, DEFAULT_CAMERA_Y, 0 }};
+  player->cameraTarget = (fm_vec3_t){{ 0, DEFAULT_CAMERA_Y, 0 }};
   player->cameraAngle = -M_PI / 2;
   player->movementTally = 0;
   player->hasStepped = false;
@@ -126,9 +126,6 @@ void updatePlayer() {
   } else if (yOffset >= stepHeight * -.9f && player->hasStepped) {
     player->hasStepped = false;
   }
-
-
-
 }
 
 void handlePlayerInput(void) {

@@ -21,6 +21,7 @@ static Scene Pond = (Scene) {
   .name = "Pond",
   .actorCount = POND_ACTOR_COUNT,
   .modelCount = 9,
+	.entityCount = 0,
 };
 
 // LOAD FUNCTION
