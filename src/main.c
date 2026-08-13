@@ -139,7 +139,8 @@ int main()
 
   // Game Init
   pigeonAudioInit();
-  bool inventory[1] = { true };
+  // empty, sunflower, safflower
+  bool inventory[3] = { true, true, false };
   initPlayer(inventory);
   SceneManager* sceneManager = Scene_Manager_Create(3);
   Player *player = getPlayer();

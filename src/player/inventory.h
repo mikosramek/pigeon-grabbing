@@ -17,6 +17,6 @@ struct InventoryItem{
 struct InventoryItem* getNextUnlockedItem(struct InventoryItem *current);
 struct InventoryItem* getPreviousUnlockedItem(struct InventoryItem *current);
 
-struct InventoryItem* init_inventory(void);
+struct InventoryItem* init_inventory(bool inventory[]);
 
 #endif

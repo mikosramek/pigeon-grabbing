@@ -18,7 +18,7 @@ struct InventoryItem* getPreviousUnlockedItem(struct InventoryItem *current) {
   return getPreviousUnlockedItem(previous);
 }
 
-struct InventoryItem* init_inventory(void) {
+struct InventoryItem* init_inventory(bool inventory[]) {
   struct InventoryItem *empty = NULL;
   struct InventoryItem *sunflowerSeed = NULL;
   struct InventoryItem *safflowerSeed = NULL;
@@ -29,22 +29,22 @@ struct InventoryItem* init_inventory(void) {
 
   empty->id = 0;
   empty->name = "";
-  empty->isOwned = true;
-  empty->sprite = sprite_load("rom:/ui_a.sprite");
+  empty->isOwned = inventory[0];
+  empty->sprite = NULL;
   empty->nextItem = sunflowerSeed;
   empty->previousItem = sunflowerSeed;
 
   sunflowerSeed->id = 1;
   sunflowerSeed->name = "Sunflower Seed";
-  sunflowerSeed->isOwned = true;
-  sunflowerSeed->sprite = sprite_load("rom:/ui_b.sprite");
+  sunflowerSeed->isOwned = inventory[1];
+  sunflowerSeed->sprite = sprite_load("rom:/sunflower.sprite");
   sunflowerSeed->nextItem = safflowerSeed;
   sunflowerSeed->previousItem = empty;
 
   safflowerSeed->id = 2;
   safflowerSeed->name = "Safflower Seed";
-  safflowerSeed->isOwned = true;
-  safflowerSeed->sprite = sprite_load("rom:/ui_arrow.sprite");
+  safflowerSeed->isOwned = inventory[2];
+  safflowerSeed->sprite = sprite_load("rom:/safflower.sprite");
   safflowerSeed->nextItem = empty;
   safflowerSeed->previousItem = sunflowerSeed;
 

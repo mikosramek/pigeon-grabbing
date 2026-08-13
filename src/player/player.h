@@ -12,11 +12,6 @@
 //   bool sunflower;
 // } PlayerInventory;
 
-enum InventorySlot {
-  IS_EMPTY,
-  IS_SUNFLOWER
-};
-
 typedef struct {
   float cameraY;
   float cameraTargetY;
@@ -25,8 +20,6 @@ typedef struct {
   fm_vec3_t cameraTarget;
   float movementSpeed;
   float cameraRotationSpeed;
-  bool inventory;
-  enum InventorySlot activeSlot;
   sprite_t *inventoryFrame;
   sprite_t *inventoryArrow;
   sprite_t *ui_b;

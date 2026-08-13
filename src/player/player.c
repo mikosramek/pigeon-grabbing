@@ -17,7 +17,6 @@ static Player player = {
   .cameraAngle = -M_PI / 2,
   .movementSpeed = 0.6f,
   .cameraRotationSpeed = 0.03f,
-  .activeSlot = IS_EMPTY,
   .hasStepped = false
 };
 
@@ -27,12 +26,11 @@ Player *getPlayer(void)
 }
 
 void initPlayer(bool inventory[]) {
-  player.inventory = inventory;
   player.inventoryFrame = sprite_load("rom:/inventory_frame.sprite");
   player.inventoryArrow = sprite_load("rom:/ui_arrow.sprite");
   player.ui_b = sprite_load("rom:/ui_b.sprite");
 
-  player.currentItem = init_inventory();
+  player.currentItem = init_inventory(inventory);
 }
 
 void resetPlayer() {
@@ -141,9 +139,11 @@ void updatePlayer() {
 void drawPlayerUI(void) {
 
   // active item
-  rdpq_sprite_blit(player.currentItem->sprite, 320 - 32, 240 - 28, &(rdpq_blitparms_t){
-    .scale_x = 0.5f, .scale_y = 0.5f,
-  });
+  if (player.currentItem->sprite) {
+    rdpq_sprite_blit(player.currentItem->sprite, 320 - 32, 240 - 28, &(rdpq_blitparms_t){
+      .scale_x = 0.5f, .scale_y = 0.5f,
+    });
+  }
 
   // base item frame
   rdpq_sprite_blit(player.inventoryFrame, 320 - 40, 240-36, NULL);
