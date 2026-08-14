@@ -5,9 +5,13 @@
 // INCLUDES
 #include "<LOWERCASE_NAME>.h"
 
-#include "../utils/pigeon_utils.h"
-#include "../globals.h"
 #include "scene.h"
+#include "../globals.h"
+#include "../utils/pigeon_utils.h"
+#include "../entities/entity.h"
+
+// ENTITIES
+<ENTITY_IMPORTS>
 
 #include <libdragon.h>
 #include <t3d/t3d.h>
@@ -19,6 +23,7 @@ static Scene <NAME> = (Scene) {
   .name = "<NAME>",
   .actorCount = <ACTOR_COUNT>,
   .modelCount = <MODEL_COUNT>,
+  .entityCount = <ENTITY_COUNT>,
 };
 
 // LOAD FUNCTION
@@ -42,7 +47,13 @@ Scene *create<NAME>(uint32_t scene_id) {
   // ACTORS
   Actor *actors = malloc_uncached(sizeof(Actor) * <NAME>.actorCount);
 <ACTORS>
+	// Entity Actors
+<ENTITY_ACTORS>
   <NAME>.actors = actors;
+
+  struct Entity *entities = malloc_uncached(sizeof(struct Entity) * <NAME>.entityCount);
+<ENTITIES>
+  <NAME>.entities = entities;
   
   return &<NAME>;  
 }
@@ -60,4 +71,5 @@ void unload<NAME>(void) {
   }
 
   free_uncached(<NAME>.actors);
+  free_uncached(Park.entities);
 }
