@@ -22,12 +22,13 @@ typedef struct {
   float scale[3];
 
   rspq_block_t *dpl;
+  T3DModel *model;
   T3DMat4FP *modelMat;
 
   bool skip;
 } Actor;
 
-Actor setupActor(uint32_t id, rspq_block_t *dpl, const float pos[3], const float rot[3], const float scale[3], uint32_t fbCount);
+Actor setupActor(uint32_t id, ModelData *modelData, const float pos[3], const float rot[3], const float scale[3], uint32_t fbCount);
 
 void deleteActor(Actor *actor);
 

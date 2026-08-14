@@ -1,1 +1,1 @@
-actors[<INDEX>] = setupActor(startingIndex + <INDEX>, <MODEL>.dpl, <POSITION>, <ROTATION>, <SCALE>, FB_COUNT);
+actors[<INDEX>] = setupActor(startingIndex + <INDEX>, &<MODEL>, <POSITION>, <ROTATION>, <SCALE>, FB_COUNT);

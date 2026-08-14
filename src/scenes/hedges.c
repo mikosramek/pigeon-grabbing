@@ -45,12 +45,12 @@ Scene *createHedges(uint32_t scene_id) {
 
   // ACTORS
   Actor *actors = malloc_uncached(sizeof(Actor) * HEDGES_ACTOR_COUNT);
-  actors[0] = setupActor(startingIndex + 0, test_plane.dpl, (float[3]){ 0.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, 0.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[1] = setupActor(startingIndex + 1, hedge.dpl, (float[3]){ 0.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, -6.80f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[2] = setupActor(startingIndex + 2, hedge.dpl, (float[3]){ -3.11f * xPositionMultiplier, 0.00f * yPositionMultiplier, -6.80f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[3] = setupActor(startingIndex + 3, hedge.dpl, (float[3]){ -6.40f * xPositionMultiplier, 0.00f * yPositionMultiplier, -6.80f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[4] = setupActor(startingIndex + 4, hedge.dpl, (float[3]){ 3.35f * xPositionMultiplier, 0.00f * yPositionMultiplier, -6.80f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[5] = setupActor(startingIndex + 5, hedge.dpl, (float[3]){ 6.65f * xPositionMultiplier, 0.00f * yPositionMultiplier, -6.80f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
+  actors[0] = setupActor(startingIndex + 0, &test_plane, (float[3]){ 0.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, 0.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
+	actors[1] = setupActor(startingIndex + 1, &hedge, (float[3]){ 0.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, -6.80f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
+	actors[2] = setupActor(startingIndex + 2, &hedge, (float[3]){ -3.11f * xPositionMultiplier, 0.00f * yPositionMultiplier, -6.80f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
+	actors[3] = setupActor(startingIndex + 3, &hedge, (float[3]){ -6.40f * xPositionMultiplier, 0.00f * yPositionMultiplier, -6.80f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
+	actors[4] = setupActor(startingIndex + 4, &hedge, (float[3]){ 3.35f * xPositionMultiplier, 0.00f * yPositionMultiplier, -6.80f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
+	actors[5] = setupActor(startingIndex + 5, &hedge, (float[3]){ 6.65f * xPositionMultiplier, 0.00f * yPositionMultiplier, -6.80f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
 
   Hedges.actors = actors;
   
