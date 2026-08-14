@@ -5,6 +5,8 @@
 #include <math.h>
 #include "../utils/pigeon_math.h"
 #include "../utils/pigeon_audio.h"
+#include "../entities/entity.h"
+#include "../state.h"
 #include "inventory.h"
 
 const float DEFAULT_CAMERA_Y = 20.0f;
@@ -17,7 +19,8 @@ static Player player = {
   .cameraAngle = -M_PI / 2,
   .movementSpeed = 0.6f,
   .cameraRotationSpeed = 0.03f,
-  .hasStepped = false
+  .hasStepped = false,
+  .closestEntity = NULL,
 };
 
 Player *getPlayer(void)
@@ -131,6 +134,15 @@ void updatePlayer() {
 void handlePlayerInput(void) {
   Player *player = getPlayer();
   joypad_buttons_t pressedButtons = joypad_get_buttons_pressed(0);
+
+  if (player->closestEntity != NULL) {
+    if (pressedButtons.a) {
+      player->closestEntity->interact(player->closestEntity);
+    }
+  } else {
+    // handle using item
+  }
+
   if (pressedButtons.b) {
     player->currentItem = getNextUnlockedItem(player->currentItem);
   }
@@ -149,7 +161,27 @@ void drawPlayerUI(void) {
   // base item frame
   rdpq_sprite_blit(player.inventoryFrame, 320 - 40, 240-36, NULL);
 
+  if (player.closestEntity != NULL) {
+    player.closestEntity->interactionUI();
+  }
+
   // is there a good way to detect what's the next item?
+}
+
+void handleEntities (void) {
+  State *state = getState();
+
+  // float closestDistance = 1000;
+  struct Entity *closestEntity = NULL;
+
+  struct Entity *entities = state->activeScene->entities;
+  for (int i = 0; i < state->activeScene->entityCount; i++) {
+    // move distance logic here
+    if (entities[i].canInteract(&entities[i])) {
+      closestEntity = &entities[i];
+    }
+  }
+  player.closestEntity = closestEntity;
 }
 
 // todo:

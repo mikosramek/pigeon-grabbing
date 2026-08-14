@@ -6,6 +6,8 @@
 #include <math.h>
 #include "../utils/pigeon_math.h"
 #include "../utils/pigeon_audio.h"
+#include "../entities/entity.h"
+#include "../state.h"
 #include "inventory.h"
 
 // typedef struct {
@@ -26,6 +28,7 @@ typedef struct {
   float movementTally;
   bool hasStepped;
   struct InventoryItem *currentItem;
+  struct Entity *closestEntity;
 } Player;
 
 Player *getPlayer(void);
@@ -37,5 +40,6 @@ void resetPlayer(void);
 void updatePlayer(void);
 void handlePlayerInput(void);
 void drawPlayerUI(void);
+void handleEntities (void);
 
 #endif

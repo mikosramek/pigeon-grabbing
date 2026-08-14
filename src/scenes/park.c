@@ -144,10 +144,7 @@ Scene *createPark(uint32_t scene_id) {
 
 	// Entities
 	struct Entity *entities = malloc_uncached(sizeof(struct Entity) * Park.entityCount);
-	entities[0] = (struct Entity) {
-		.update = *updateFeather,
-		.actor = &actors[63],
-	};
+	entities[0] = createFeather(&actors[63]);
 
 	Park.entities = entities;
   

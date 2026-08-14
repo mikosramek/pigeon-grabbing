@@ -14,6 +14,7 @@
 #include "utils/pigeon_utils.h"
 #include "utils/pigeon_math.h"
 #include "utils/pigeon_audio.h"
+#include "utils/pigeon_ui.h"
 #include "entities/entity.h"
 
 // SCENES
@@ -139,6 +140,7 @@ int main()
   T3DViewport viewport = t3d_viewport_create_buffered(FB_COUNT);
 
   // Game Init
+  init_ui_sprites();
   pigeonAudioInit();
   // empty, sunflower, safflower
   bool inventory[3] = { true, true, false };
@@ -149,7 +151,7 @@ int main()
 
   // Rendering Setup
   // rendering distance
-  float cam_near = 10.0f;
+  float cam_near = 5.0f;
   float cam_far = 250.0f;
 
   // basic lighting
@@ -230,6 +232,10 @@ int main()
     rdpq_mode_blender(RDPQ_BLENDER_MULTIPLY);
     drawPlayerUI();
     display_debug();
+    handleEntities();
+    // for(int i = 0; i < state->activeScene->entityCount; i++) {
+    //   entities[i].handleInteraction(&entities[i]);
+    // }
 
     // end rendering
     rdpq_detach_show();
