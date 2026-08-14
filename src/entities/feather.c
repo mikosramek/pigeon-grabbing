@@ -4,10 +4,9 @@
 #include "../globals.h"
 #include "../player/player.h"
 #include "../utils/pigeon_ui.h"
+#include "../utils/pigeon_utils.h"
 
 #include "math.h"
-
-
 
 void updateFeather(struct Entity *feather, uint32_t time) {
   if (feather->skip) {
@@ -17,16 +16,6 @@ void updateFeather(struct Entity *feather, uint32_t time) {
   float yOffset = sin(time / 10.0f) * 0.75f;
   feather->actor->pos[1] = feather->actor->staticPos[1] + yOffset;
 }
-
-// bool canInteract(struct Entity *feather, Player *player) {
-//   if (feather->skip) {
-//     return false;
-//   }
-//   fm_vec3_t myPos = {{ feather->actor->pos[0], feather->actor->pos[1], feather->actor->pos[2] }};
-//   float playerDist = fm_vec3_distance(&player->position, &myPos);
-
-//   return playerDist < 20.0f;
-// };
 
 bool canInteract(struct Entity *feather) {
   Player *player = getPlayer();
@@ -41,6 +30,7 @@ bool canInteract(struct Entity *feather) {
 
 void interact(struct Entity *feather) {
   feather->skip = true;
+  deleteActor(feather->actor);
   // TODO: handling actual collection
 }
 

@@ -31,11 +31,13 @@ Actor setupActor(uint32_t id, rspq_block_t *dpl, const float pos[3], const float
     .rot = {rot[0], rot[1], rot[2]},
     .scale = {scale[0], scale[1], scale[2]},
     .dpl = dpl,
-    .modelMat = malloc_uncached(sizeof(T3DMat4FP) * fbCount)
+    .modelMat = malloc_uncached(sizeof(T3DMat4FP) * fbCount),
+    .skip = false,
   };
   return actor;
 }
 
 void deleteActor(Actor *actor) {
   free_uncached(actor->modelMat);
+  actor->skip = true;
 }

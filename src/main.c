@@ -219,10 +219,12 @@ int main()
     // we say we'd like to take a "single" matrix
     t3d_matrix_push_pos(1);
     for(int i=0; i < state->activeScene->actorCount; ++i) {
-      // actor_draw(&actors[i]);
-      // we set a matrix (the model's material / transform + dpl) with doMultiply as true, it just push+pops it by itself
-      t3d_matrix_set(&actors[i].modelMat[frameIdx], true);
-      rspq_block_run(actors[i].dpl);
+      if (!actors[i].skip) {
+        // actor_draw(&actors[i]);
+        // we set a matrix (the model's material / transform + dpl) with doMultiply as true, it just push+pops it by itself
+        t3d_matrix_set(&actors[i].modelMat[frameIdx], true);
+        rspq_block_run(actors[i].dpl);
+      }
     }
     // we then pop a "singular" matrix
     t3d_matrix_pop(1);
