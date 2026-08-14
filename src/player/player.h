@@ -18,6 +18,7 @@ typedef struct {
   float cameraY;
   float cameraTargetY;
   float cameraAngle;
+  float cameraFOV;
   fm_vec3_t position;
   fm_vec3_t cameraTarget;
   float movementSpeed;

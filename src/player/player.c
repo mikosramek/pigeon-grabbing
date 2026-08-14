@@ -10,9 +10,11 @@
 #include "inventory.h"
 
 const float DEFAULT_CAMERA_Y = 20.0f;
+const float DEFAULT_CAMERA_FOV = 85.0f;
 const int8_t stickThreshold = 20;
 
 static Player player = {
+  .cameraFOV = DEFAULT_CAMERA_FOV,
   .cameraY = DEFAULT_CAMERA_Y,
   .position = {{ 0, DEFAULT_CAMERA_Y, 0 }},
   .cameraTarget = {{ 0, DEFAULT_CAMERA_Y, 0 }},
@@ -39,6 +41,7 @@ void initPlayer(bool inventory[]) {
 void resetPlayer() {
   Player *player = getPlayer();
   player->cameraY = DEFAULT_CAMERA_Y;
+  player->cameraFOV = DEFAULT_CAMERA_FOV;
   player->position = (fm_vec3_t){{ 0, DEFAULT_CAMERA_Y, 0 }};
   player->cameraTarget = (fm_vec3_t){{ 0, DEFAULT_CAMERA_Y, 0 }};
   player->cameraAngle = -M_PI / 2;

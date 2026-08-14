@@ -26,7 +26,7 @@ static int frameIdx = 0;
 
 static State state = {
   .activeScene = NULL,
-  .requestSceneId = -1
+  .requestSceneId = -1,
 };
 
 State *getState(void)
@@ -36,7 +36,7 @@ State *getState(void)
 
 static Debug DEBUG = {
   .debugEnabled = true,
-  .infoMode = SCENE
+  .infoMode = CAMERA
 };
 
 void display_debug(void) {
@@ -46,12 +46,11 @@ void display_debug(void) {
   switch (DEBUG.infoMode) {
     case CAMERA:
       Player *player = getPlayer();
-      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 180, "camera y: %f", player->position.y);
-      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 190, "camera angle: %f", player->cameraAngle);
-      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 200, "camera x: %f", cos(player->cameraAngle));
-      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 210, "camera z: %f", sin(player->cameraAngle));
-      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "camera y: %f", player->cameraY);
-      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "n/a");
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 190, "camera y pos: %f", player->position.y);
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 200, "camera rotation: %f", player->cameraAngle);
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 210, "camera target: %f/%f/%f", cos(player->cameraAngle), sin(player->cameraAngle), player->cameraY);
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "fov: %f", player->cameraFOV);
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "d_up/d_down: change FOV");
       break;
     case AUDIO:
       PigeonAudio *pigeonAudio = getPigeonAudio();
@@ -73,6 +72,7 @@ void display_debug(void) {
 
 void handle_debug_input(SceneManager *sceneManager) {
   joypad_buttons_t buttons = joypad_get_buttons_pressed(1);
+  joypad_buttons_t heldButtons = joypad_get_buttons(1);
   if (buttons.start) {
     DEBUG.debugEnabled = !DEBUG.debugEnabled;
   }
@@ -119,6 +119,13 @@ void handle_debug_input(SceneManager *sceneManager) {
     }
     if (buttons.c_down) {
       stopTrack(TRANQUIL_WALK);
+    }
+  } else if (DEBUG.infoMode == CAMERA) {
+    Player *player = getPlayer();
+    if (heldButtons.d_up) {
+      player->cameraFOV += 0.5f;
+    } else if (heldButtons.d_down) {
+      player->cameraFOV -= 0.5f;
     }
   }
 }
@@ -193,7 +200,7 @@ int main()
     }
 
     // set camera
-    t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(85.0f), cam_near, cam_far);
+    t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(player->cameraFOV), cam_near, cam_far);
     t3d_viewport_look_at(&viewport, &player->position, &player->cameraTarget, &(fm_vec3_t){{0,1,0}});
 
     // DRAW
