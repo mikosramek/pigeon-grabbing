@@ -4,6 +4,7 @@
 #include "../utils/pigeon_utils.h"
 
 struct Entity {
+  int entityId;
   Actor *actor;
   bool skip; // ie the item has been collected. each entity should determine what skip means for it
   void (*update)(struct Entity *entity, uint32_t time);

@@ -6,6 +6,7 @@
 typedef struct {
   Scene *activeScene;
   int requestSceneId;
+  int feathersCollected;
 } State;
 
 State *getState(void);

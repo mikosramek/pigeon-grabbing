@@ -30,12 +30,12 @@ Player *getPlayer(void)
     return &player;
 }
 
-void initPlayer(bool inventory[]) {
+void player_init(bool inventory[]) {
   player.inventoryFrame = sprite_load("rom:/inventory_frame.sprite");
   player.inventoryArrow = sprite_load("rom:/ui_arrow.sprite");
   player.ui_b = sprite_load("rom:/ui_b.sprite");
 
-  player.currentItem = init_inventory(inventory);
+  player.currentItem = inventory_init(inventory);
 }
 
 void resetPlayer() {
@@ -49,7 +49,12 @@ void resetPlayer() {
   player->hasStepped = false;
 }
 
-void updatePlayer() {
+void player_update() {
+  player_handle_movement();
+  player_handle_interaction();
+}
+
+void player_handle_movement(void) {
   Player *player = getPlayer();
   
   joypad_inputs_t input = joypad_get_inputs(0);
@@ -127,14 +132,14 @@ void updatePlayer() {
 
 
   if (yOffset <= stepHeight * -0.9f && !player->hasStepped) {
-    // playSFX(STEP);
+    // p_audio_play_SFX(STEP);
     player->hasStepped = true;
   } else if (yOffset >= stepHeight * -.9f && player->hasStepped) {
     player->hasStepped = false;
   }
 }
 
-void handlePlayerInput(void) {
+void player_handle_interaction(void) {
   Player *player = getPlayer();
   joypad_buttons_t pressedButtons = joypad_get_buttons_pressed(0);
 
@@ -147,12 +152,12 @@ void handlePlayerInput(void) {
   }
 
   if (pressedButtons.b) {
-    player->currentItem = getNextUnlockedItem(player->currentItem);
+    player->currentItem = inventory_get_next_unlocked_item(player->currentItem);
   }
 }
 
 // RESOLUTION_320x240
-void drawPlayerUI(void) {
+void player_draw_ui(void) {
 
   // active item
   if (player.currentItem->sprite) {
@@ -171,7 +176,7 @@ void drawPlayerUI(void) {
   // is there a good way to detect what's the next item?
 }
 
-void handleEntities (void) {
+void player_handle_entities (void) {
   State *state = getState();
 
   // float closestDistance = 1000;

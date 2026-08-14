@@ -1,6 +1,7 @@
 #include "feather.h"
 
 #include "entity.h"
+#include "../state.h"
 #include "../globals.h"
 #include "../player/player.h"
 #include "../utils/pigeon_ui.h"
@@ -28,19 +29,25 @@ bool canInteract(struct Entity *feather) {
 }
 
 void interact(struct Entity *feather) {
+  State *state = getState();
   feather->skip = true;
   deleteActor(feather->actor);
   // TODO: handling actual collection
+  state->feathersCollected += 1;
 }
 
 void interactionUI(void) {
   UI *ui = getUI();
   // TODO: figure out this ui
-  rdpq_sprite_blit(ui->a_button, 320/2, 240/2, NULL);
+  rdpq_sprite_blit(ui->a_button, 8, 230 - 12, &(rdpq_blitparms_t){
+    .scale_x = 0.5f, .scale_y = 0.5f,
+  });
+  rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 26, 230, "collect feather");
 }
 
 struct Entity createFeather(Actor *actor) {
   struct Entity newFeather = (struct Entity) {
+    .entityId = 0,
 		.update = *updateFeather,
     .canInteract = *canInteract,
     .interact = *interact,

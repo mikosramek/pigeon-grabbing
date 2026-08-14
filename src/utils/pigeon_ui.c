@@ -10,6 +10,6 @@ UI *getUI(void)
 }
 
 
-void init_ui_sprites(void) {
+void ui_init_sprites(void) {
   ui.a_button = sprite_load("rom:/ui_a.sprite");
 }

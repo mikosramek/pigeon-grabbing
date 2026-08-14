@@ -27,6 +27,7 @@ static int frameIdx = 0;
 static State state = {
   .activeScene = NULL,
   .requestSceneId = -1,
+  .feathersCollected = 0,
 };
 
 State *getState(void)
@@ -35,7 +36,7 @@ State *getState(void)
 }
 
 static Debug DEBUG = {
-  .debugEnabled = true,
+  .debugEnabled = false,
   .infoMode = CAMERA
 };
 
@@ -115,10 +116,10 @@ void handle_debug_input(SceneManager *sceneManager) {
     }
   } else if (DEBUG.infoMode == AUDIO) {
     if (buttons.c_up) {
-      playTrack(TRANQUIL_WALK);
+      p_audio_play_track(TRANQUIL_WALK);
     }
     if (buttons.c_down) {
-      stopTrack(TRANQUIL_WALK);
+      p_audio_stop_track(TRANQUIL_WALK);
     }
   } else if (DEBUG.infoMode == CAMERA) {
     Player *player = getPlayer();
@@ -128,6 +129,17 @@ void handle_debug_input(SceneManager *sceneManager) {
       player->cameraFOV -= 0.5f;
     }
   }
+}
+
+void handle_game_ui(void) {
+  State *state = getState();
+  int totalFeathers = 0;
+  for(int i=0; i < state->activeScene->entityCount; ++i) {
+    if (state->activeScene->entities[i].entityId == 0) {
+      totalFeathers += 1;
+    }
+  }
+  rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 290, 16, "%i/%i", state->feathersCollected, totalFeathers);
 }
 
 int main()
@@ -147,12 +159,12 @@ int main()
   T3DViewport viewport = t3d_viewport_create_buffered(FB_COUNT);
 
   // Game Init
-  init_ui_sprites();
-  pigeonAudioInit();
+  ui_init_sprites();
+  p_audio_init();
   // empty, sunflower, safflower
   bool inventory[3] = { true, true, false };
-  initPlayer(inventory);
-  SceneManager* sceneManager = Scene_Manager_Create(3);
+  player_init(inventory);
+  SceneManager* sceneManager = scene_manager_create(3);
   Player *player = getPlayer();
 
 
@@ -171,7 +183,7 @@ int main()
 
   rdpq_text_register_font(FONT_BUILTIN_DEBUG_MONO, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO));
 
-  // playTrack(TRANQUIL_WALK);
+  // p_audio_play_track(TRANQUIL_WALK);
 
   uint32_t time = 0;
 
@@ -182,10 +194,11 @@ int main()
     frameIdx = (frameIdx + 1) % FB_COUNT;
 
     joypad_poll();
+    player_update();
+    player_handle_entities();
     for (int i = 0; i < 10; i += 1) {
       mixer_try_play();
     }
-    updatePlayer();
     
     State *state = getState();
     // Grab Actors from the current active scene + apply actor's settings
@@ -204,7 +217,8 @@ int main()
     t3d_viewport_look_at(&viewport, &player->position, &player->cameraTarget, &(fm_vec3_t){{0,1,0}});
 
     // DRAW
-    rdpq_attach(display_get(), display_get_zbuf());
+    surface_t *surface = display_get();
+    rdpq_attach(surface, display_get_zbuf());
     t3d_frame_start();
     t3d_viewport_attach(&viewport);
 
@@ -226,6 +240,13 @@ int main()
     // we say we'd like to take a "single" matrix
     t3d_matrix_push_pos(1);
     for(int i=0; i < state->activeScene->actorCount; ++i) {
+      // T3DFrustum fr = viewport.viewFrustum;
+      // t3d_frustum_scale(&fr, 0.);
+      // bool isVisible = t3d_frustum_vs_aabb_s16(&fr, actors[i].model->aabbMin, actors[i].model->aabbMax);
+      // if (i == state->activeScene->actorCount - 2) {
+      //   uint16_t *buff = (uint16_t*)surface->buffer;
+      //   debugDrawAABB(buff, actors[i].model->aabbMin, actors[i].model->aabbMax, &viewport, 0.1f, 0x037f);
+      // }
       if (!actors[i].skip) {
         // actor_draw(&actors[i]);
         // we set a matrix (the model's material / transform + dpl) with doMultiply as true, it just push+pops it by itself
@@ -239,17 +260,13 @@ int main()
     // 2D THINGS
     rdpq_set_mode_standard();
     rdpq_mode_blender(RDPQ_BLENDER_MULTIPLY);
-    drawPlayerUI();
+    player_draw_ui();
+    handle_game_ui();
     display_debug();
-    handleEntities();
-    // for(int i = 0; i < state->activeScene->entityCount; i++) {
-    //   entities[i].handleInteraction(&entities[i]);
-    // }
-
+    
     // end rendering
     rdpq_detach_show();
-
-    handlePlayerInput();
+  
     handle_debug_input(sceneManager);
   }
 

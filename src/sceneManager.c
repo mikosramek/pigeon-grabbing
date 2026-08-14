@@ -60,7 +60,7 @@ static void update_impl() {
 }
 
 // Constructor mapping
-SceneManager* Scene_Manager_Create(int initial_scene_id) {
+SceneManager* scene_manager_create(int initial_scene_id) {
     struct SceneManagerImpl* impl = malloc_uncached(sizeof(struct SceneManager));
     if (!impl) return NULL;
 
@@ -76,6 +76,6 @@ SceneManager* Scene_Manager_Create(int initial_scene_id) {
     return (SceneManager*)impl;
 }
 
-void Scene_Manager_Destroy(SceneManager* self) {
+void scene_manager_destroy(SceneManager* self) {
     free_uncached(self); // Frees the entire SceneManagerImpl structure
 }

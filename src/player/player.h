@@ -34,13 +34,14 @@ typedef struct {
 
 Player *getPlayer(void);
 
-void initPlayer(bool inventory[]);
+void player_init(bool inventory[]);
 
 void resetPlayer(void);
 
-void updatePlayer(void);
-void handlePlayerInput(void);
-void drawPlayerUI(void);
-void handleEntities (void);
+void player_update(void);
+void player_handle_movement(void);
+void player_handle_interaction(void);
+void player_draw_ui(void);
+void player_handle_entities (void);
 
 #endif

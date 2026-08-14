@@ -2,23 +2,23 @@
 #include "inventory.h"
 #include <libdragon.h>
 
-struct InventoryItem* getNextUnlockedItem(struct InventoryItem *current) {
+struct InventoryItem* inventory_get_next_unlocked_item(struct InventoryItem *current) {
   struct InventoryItem *next = current->nextItem;
   if (next->isOwned) {
     return next;
   }
-  return getNextUnlockedItem(next);
+  return inventory_get_next_unlocked_item(next);
 }
 
-struct InventoryItem* getPreviousUnlockedItem(struct InventoryItem *current) {
+struct InventoryItem* inventory_get_previous_unlocked_item(struct InventoryItem *current) {
   struct InventoryItem *previous = current->previousItem;
   if (previous->isOwned) {
     return previous;
   }
-  return getPreviousUnlockedItem(previous);
+  return inventory_get_previous_unlocked_item(previous);
 }
 
-struct InventoryItem* init_inventory(bool inventory[]) {
+struct InventoryItem* inventory_init(bool inventory[]) {
   struct InventoryItem *empty = NULL;
   struct InventoryItem *sunflowerSeed = NULL;
   struct InventoryItem *safflowerSeed = NULL;

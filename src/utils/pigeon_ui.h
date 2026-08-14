@@ -9,6 +9,6 @@ typedef struct {
 
 UI *getUI(void);
 
-void init_ui_sprites(void);
+void ui_init_sprites(void);
 
 #endif

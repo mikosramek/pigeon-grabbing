@@ -21,7 +21,7 @@ PigeonAudio *getPigeonAudio(void)
 
 // use sm64 for background music
 // use wav64 for sfx
-void pigeonAudioInit(void) {
+void p_audio_init(void) {
   audio_init(FREQUENCY, AUDIO_BUFFERS);
   mixer_init(MIXER_CHANNELS);
 
@@ -38,7 +38,7 @@ void pigeonAudioInit(void) {
 
 // TODO: probably refactor this to take in a xm64player_t that each scene holds + loads, rather than have them all defined here at once
 // only track the current / next track, so they can be transitioned to/from
-void playTrack(BackgroundMusic trackToPlay) {
+void p_audio_play_track(BackgroundMusic trackToPlay) {
   PigeonAudio *pA = getPigeonAudio();
 
   switch(trackToPlay) {
@@ -48,11 +48,11 @@ void playTrack(BackgroundMusic trackToPlay) {
       }
       break;
     default:
-      assertf(false, "Audio track isn't handled in playTrack (%i)", (int)trackToPlay);
+      assertf(false, "Audio track isn't handled in p_audio_play_track (%i)", (int)trackToPlay);
   }
 }
 
-void playSFX(SFX sfx) {
+void p_audio_play_SFX(SFX sfx) {
   PigeonAudio *pA = getPigeonAudio();
 
   switch (sfx) {
@@ -60,19 +60,19 @@ void playSFX(SFX sfx) {
       wav64_play(&pA->step, CHANNEL_SFX1);
       break;
     default:
-      assertf(false, "SFX to play isn't handled in playSFX (%i)", (int)sfx);
+      assertf(false, "SFX to play isn't handled in p_audio_play_SFX (%i)", (int)sfx);
       break;
   }
 }
 
-void stopTrack(BackgroundMusic trackToStop) {
+void p_audio_stop_track(BackgroundMusic trackToStop) {
   PigeonAudio *pA = getPigeonAudio();
   switch(trackToStop) {
     case TRANQUIL_WALK:
       xm64player_stop(&pA->tranquilWalk);
       break;
     default:
-      assertf(false, "Audio track isn't handled in stopTrack (%i)", (int)trackToStop);
+      assertf(false, "Audio track isn't handled in p_audio_stop_track (%i)", (int)trackToStop);
   }
 }
 
@@ -83,7 +83,7 @@ void stopTrack(BackgroundMusic trackToStop) {
 // TODO: figure out some sort of crossfade / transition between tracks
 
 // TODO: unload tracks when needed (probably get called in unload scene functions)
-void clearTrack(void) {
+void p_audio_clear_track(void) {
   // void xm64player_stop(xm64player_t *player);
   // void xm64player_close(xm64player_t *player);
 }

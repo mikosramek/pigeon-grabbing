@@ -19,12 +19,12 @@ typedef struct {
 
 PigeonAudio *getPigeonAudio(void);
 
-void pigeonAudioInit(void);
-void playTrack(BackgroundMusic trackToPlay);
-void stopTrack(BackgroundMusic trackToPlay);
-void clearTrack(void);
+void p_audio_init(void);
+void p_audio_play_track(BackgroundMusic trackToPlay);
+void p_audio_stop_track(BackgroundMusic trackToPlay);
+void p_audio_clear_track(void);
 
-void playSFX(SFX sfx);
+void p_audio_play_SFX(SFX sfx);
 
 // void updateAudio(void);
 

@@ -17,8 +17,8 @@ struct SceneManager
   void (*loadScene)(int sceneId);
 };
 
-SceneManager* Scene_Manager_Create(int initial_scene_id);
-void Scene_Manager_Destroy(SceneManager* self);
+SceneManager* scene_manager_create(int initial_scene_id);
+void scene_manager_destroy(SceneManager* self);
 
 
 #endif
