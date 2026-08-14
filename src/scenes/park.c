@@ -5,9 +5,9 @@
 // INCLUDES
 #include "park.h"
 
-#include "../utils/pigeon_utils.h"
-#include "../globals.h"
 #include "scene.h"
+#include "../globals.h"
+#include "../utils/pigeon_utils.h"
 #include "../entities/entity.h"
 #include "../entities/feather.h"
 
@@ -68,6 +68,7 @@ Scene *createPark(uint32_t scene_id) {
 
   // ACTORS
   Actor *actors = malloc_uncached(sizeof(Actor) * Park.actorCount);
+	// Static Actors
 	actors[0] = setupActor(startingIndex + 0, stump.dpl, (float[3]){ 16.94610023498535f * xPositionMultiplier, -0.7952721118927002f * yPositionMultiplier, -48.10932159423828f * zPositionMultiplier }, (float[3]){ 0.0f, -0.0f, 0.0f }, (float[3]){ 1.434630f * scaleMultiplier, 1.434630f * scaleMultiplier, 1.434630f * scaleMultiplier}, FB_COUNT);
 	actors[1] = setupActor(startingIndex + 1, stump.dpl, (float[3]){ 38.109256744384766f * xPositionMultiplier, -0.22443218529224396f * yPositionMultiplier, -35.16277313232422f * zPositionMultiplier }, (float[3]){ 0.0f, -5.930153846740723f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
 	actors[2] = setupActor(startingIndex + 2, rock_wall.dpl, (float[3]){ -10.551423072814941f * xPositionMultiplier, 0.0f * yPositionMultiplier, -26.7858829498291f * zPositionMultiplier }, (float[3]){ 0.0f, 1.4720983505249023f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
@@ -131,20 +132,22 @@ Scene *createPark(uint32_t scene_id) {
 	actors[60] = setupActor(startingIndex + 60, park_ground_nw.dpl, (float[3]){ -2.9592504501342773f * xPositionMultiplier, 0.0f * yPositionMultiplier, -53.003936767578125f * zPositionMultiplier }, (float[3]){ 0.0f, -0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
 	actors[61] = setupActor(startingIndex + 61, park_ground_se.dpl, (float[3]){ 37.04075241088867f * xPositionMultiplier, 0.0f * yPositionMultiplier, -13.003935813903809f * zPositionMultiplier }, (float[3]){ 0.0f, -0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
 	actors[62] = setupActor(startingIndex + 62, park_ground_sw.dpl, (float[3]){ -2.9592485427856445f * xPositionMultiplier, 0.0f * yPositionMultiplier, -13.003936767578125f * zPositionMultiplier }, (float[3]){ 0.0f, -0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
-	actors[63] = setupActor(startingIndex + 63, feather.dpl, (float[3]){ -9.483036041259766f * xPositionMultiplier, 2.288670539855957f * yPositionMultiplier, 0.505250871181488f * zPositionMultiplier }, (float[3]){ 0.0f, -0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+	actors[63] = setupActor(startingIndex + 63, two_cube.dpl, (float[3]){ -7.9592485427856445f * xPositionMultiplier, -0.19999998807907104f * yPositionMultiplier, -28.003936767578125f * zPositionMultiplier }, (float[3]){ 0.0f, -0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
 	actors[64] = setupActor(startingIndex + 64, plant.dpl, (float[3]){ 4.16594123840332f * xPositionMultiplier, 0.0f * yPositionMultiplier, 1.810686707496643f * zPositionMultiplier }, (float[3]){ 0.0f, -0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
 	actors[65] = setupActor(startingIndex + 65, plant.dpl, (float[3]){ 6.112770080566406f * xPositionMultiplier, -0.7689685225486755f * yPositionMultiplier, 0.027228355407714844f * zPositionMultiplier }, (float[3]){ 0.0f, 1.0718343257904053f, -0.0f }, (float[3]){ 1.965320f * scaleMultiplier, 1.965320f * scaleMultiplier, 1.965320f * scaleMultiplier}, FB_COUNT);
 	actors[66] = setupActor(startingIndex + 66, stump.dpl, (float[3]){ -9.475857734680176f * xPositionMultiplier, -0.18513472378253937f * yPositionMultiplier, 0.5029782056808472f * zPositionMultiplier }, (float[3]){ 0.0f, -4.6874308586120605f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
 	actors[67] = setupActor(startingIndex + 67, plant.dpl, (float[3]){ 6.112770080566406f * xPositionMultiplier, -0.2794775664806366f * yPositionMultiplier, 0.027228355407714844f * zPositionMultiplier }, (float[3]){ 0.0f, 2.1444804668426514f, 0.0f }, (float[3]){ 1.726222f * scaleMultiplier, 1.726222f * scaleMultiplier, 1.726222f * scaleMultiplier}, FB_COUNT);
 	actors[68] = setupActor(startingIndex + 68, plant.dpl, (float[3]){ -8.3148775100708f * xPositionMultiplier, 0.0f * yPositionMultiplier, -0.667122483253479f * zPositionMultiplier }, (float[3]){ 0.0f, -0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
 	actors[69] = setupActor(startingIndex + 69, two_cube.dpl, (float[3]){ -7.9592485427856445f * xPositionMultiplier, -0.19999998807907104f * yPositionMultiplier, -4.003936767578125f * zPositionMultiplier }, (float[3]){ 0.0f, -0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
-	actors[70] = setupActor(startingIndex + 70, two_cube.dpl, (float[3]){ -7.9592485427856445f * xPositionMultiplier, -0.19999998807907104f * yPositionMultiplier, -28.003936767578125f * zPositionMultiplier }, (float[3]){ 0.0f, -0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+	
+	// Entity Actors
+	actors[70] = setupActor(startingIndex + 70, feather.dpl, (float[3]){ -9.483036041259766f * xPositionMultiplier, 2.288670539855957f * yPositionMultiplier, 0.505250871181488f * zPositionMultiplier }, (float[3]){ 0.0f, -0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
 
   Park.actors = actors;
 
 	// Entities
 	struct Entity *entities = malloc_uncached(sizeof(struct Entity) * Park.entityCount);
-	entities[0] = createFeather(&actors[63]);
+	entities[0] = createFeather(&actors[70]);
 
 	Park.entities = entities;
   
