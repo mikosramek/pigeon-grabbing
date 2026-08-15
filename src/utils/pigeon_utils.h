@@ -18,7 +18,7 @@ typedef struct {
   uint32_t id;
   float pos[3];
   float staticPos[3];
-  float rot[3];
+  float rot[4];
   float scale[3];
 
   rspq_block_t *dpl;
@@ -28,7 +28,7 @@ typedef struct {
   bool skip;
 } Actor;
 
-Actor setupActor(uint32_t id, ModelData *modelData, const float pos[3], const float rot[3], const float scale[3], uint32_t fbCount);
+Actor setupActor(uint32_t id, ModelData *modelData, const float pos[3], const float rot[4], const float scale[3], uint32_t fbCount);
 
 void deleteActor(Actor *actor);
 

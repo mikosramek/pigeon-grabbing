@@ -36,8 +36,8 @@ State *getState(void)
 }
 
 static Debug DEBUG = {
-  .debugEnabled = false,
-  .infoMode = CAMERA
+  .debugEnabled = true,
+  .infoMode = SCENE
 };
 
 void display_debug(void) {
@@ -164,7 +164,7 @@ int main()
   // empty, sunflower, safflower
   bool inventory[3] = { true, true, false };
   player_init(inventory);
-  SceneManager* sceneManager = scene_manager_create(3);
+  SceneManager* sceneManager = scene_manager_create(0);
   Player *player = getPlayer();
 
 
@@ -204,7 +204,8 @@ int main()
     // Grab Actors from the current active scene + apply actor's settings
     Actor* actors = state->activeScene->actors;
     for(int i=0; i < state->activeScene->actorCount; ++i) {
-      t3d_mat4fp_from_srt_euler(&actors[i].modelMat[frameIdx], actors[i].scale, actors[i].rot, actors[i].pos);
+      // t3d_mat4fp_from_srt_euler(&actors[i].modelMat[frameIdx], actors[i].scale, actors[i].rot, actors[i].pos);
+      t3d_mat4fp_from_srt(&actors[i].modelMat[frameIdx], actors[i].scale, actors[i].rot, actors[i].pos);
     }
 
     struct Entity *entities = state->activeScene->entities;

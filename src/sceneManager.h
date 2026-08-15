@@ -4,8 +4,6 @@
 #include <libdragon.h>
 #include "state.h"
 #include "scenes/park.h"
-#include "scenes/hedges.h"
-#include "scenes/pond.h"
 #include "scenes/test.h"
 
 typedef struct SceneManager SceneManager;

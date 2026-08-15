@@ -2,11 +2,9 @@
 #include "state.h"
 #include "sceneManager.h"
 #include "scenes/park.h"
-#include "scenes/hedges.h"
-#include "scenes/pond.h"
 #include "scenes/test.h"
 
-const int SCENE_COUNT = 4;
+const int SCENE_COUNT = 2;
 
 struct SceneManagerImpl {
   SceneManager public_struct; // Must be the first element
@@ -31,10 +29,6 @@ static void update_impl() {
           case 0:
             unloadTest(); break;
           case 1:
-            unloadHedges(); break;
-          case 2:
-            unloadPond(); break;
-          case 3:
             unloadPark(); break;
           default:
             assertf(false, "Current scene doesn't have an unload: %d", (int)state->activeScene->id);
@@ -46,11 +40,7 @@ static void update_impl() {
         case 0:
           state->activeScene = createTest(0); break;
         case 1:
-          state->activeScene = createHedges(1); break;
-        case 2:
-          state->activeScene = createPond(2); break;
-        case 3:
-          state->activeScene = createPark(3); break;
+          state->activeScene = createPark(1); break;
         default:
           assertf(false, "Invalid scene-id: %d", sceneId);
       }

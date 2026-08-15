@@ -9,7 +9,7 @@
 #include "../state.h"
 #include "inventory.h"
 
-const float DEFAULT_CAMERA_Y = 20.0f;
+const float DEFAULT_CAMERA_Y = 10.0f;
 const float DEFAULT_CAMERA_FOV = 85.0f;
 const int8_t stickThreshold = 20;
 
@@ -90,7 +90,7 @@ void player_handle_movement(void) {
   } else if (input.cstick_y < 0) {
     player->cameraY += 0.5f * player->cameraRotationSpeed;
   }
-  player->cameraY = clamp(player->cameraY, 19.0f, 20.6f);
+  player->cameraY = clamp(player->cameraY, DEFAULT_CAMERA_Y - 1.0f, DEFAULT_CAMERA_Y + 0.6f);
 
   fm_vec3_t inputVector = {{ xInput, yInput, 0.0f }};
   fm_vec3_norm(&inputVector, &inputVector);

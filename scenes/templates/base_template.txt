@@ -71,5 +71,5 @@ void unload<NAME>(void) {
   }
 
   free_uncached(<NAME>.actors);
-  free_uncached(Park.entities);
+  free_uncached(<NAME>.entities);
 }

@@ -1,56 +1,47 @@
 /*
-* TEST SCENE (.c)
-* GENERATED ON 05/08/2026
+* TEST SCENE
+* GENERATED ON 2026-08-15
 */
 // INCLUDES
 #include "test.h"
 
-
-#include "../utils/pigeon_utils.h"
-#include "../globals.h"
 #include "scene.h"
+#include "../globals.h"
+#include "../utils/pigeon_utils.h"
+#include "../entities/entity.h"
+
+// ENTITIES
+
 
 #include <libdragon.h>
 #include <t3d/t3d.h>
 #include <t3d/t3dmodel.h>
 
 // DEFINITIONS
-#define TEST_ACTOR_COUNT 19
 
 static Scene Test = (Scene) {
   .name = "Test",
-  .actorCount = TEST_ACTOR_COUNT,
-  .modelCount = 9,
-	.entityCount = 0,
+  .actorCount = 9,
+  .modelCount = 2,
+  .entityCount = 0,
 };
 
 // LOAD FUNCTION
 Scene *createTest(uint32_t scene_id) {
   Test.id = scene_id;
   // MODEL IMPORT
-  ModelData test_plane = setupModel("rom:/test_plane.t3dm");
 	ModelData two_cube = setupModel("rom:/two_cube.t3dm");
-	ModelData rock_wall = setupModel("rom:/rock_wall.t3dm");
-	ModelData rock_post = setupModel("rom:/rock_post.t3dm");
-	ModelData stump = setupModel("rom:/stump.t3dm");
-	ModelData stump2 = setupModel("rom:/stump2.t3dm");
-	ModelData hedge = setupModel("rom:/hedge.t3dm");
-	ModelData gate = setupModel("rom:/gate.t3dm");
-	ModelData hand = setupModel("rom:/hand.t3dm");
+	ModelData test_plane = setupModel("rom:/test_plane.t3dm");
 
-  T3DModel **models = malloc_uncached(sizeof(T3DModel *) * 9);
-  models[0] = test_plane.model;
-	models[1] = two_cube.model;
-	models[2] = rock_wall.model;
-	models[3] = rock_post.model;
-	models[4] = stump.model;
-	models[5] = stump2.model;
-	models[6] = hedge.model;
-	models[7] = gate.model;
-	models[8] = hand.model;
+
+  T3DModel **models = malloc_uncached(sizeof(T3DModel *) * Test.modelCount);
+	models[0] = two_cube.model;
+	models[1] = test_plane.model;
+
 
   Test.models = models;
 
+  // make this a global thing?
   uint32_t startingIndex = 0;
   float xPositionMultiplier = 6.4f;
   float yPositionMultiplier = 6.4f;
@@ -58,28 +49,24 @@ Scene *createTest(uint32_t scene_id) {
   float scaleMultiplier = 0.1f;
 
   // ACTORS
-  Actor *actors = malloc_uncached(sizeof(Actor) * TEST_ACTOR_COUNT);
-  actors[0] = setupActor(startingIndex + 0, &test_plane, (float[3]){ 0.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, 0.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[1] = setupActor(startingIndex + 1, &two_cube, (float[3]){ 30.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, -30.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[2] = setupActor(startingIndex + 2, &two_cube, (float[3]){ 20.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, -20.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[3] = setupActor(startingIndex + 3, &two_cube, (float[3]){ 10.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, -10.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[4] = setupActor(startingIndex + 4, &two_cube, (float[3]){ 0.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, 0.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[5] = setupActor(startingIndex + 5, &two_cube, (float[3]){ 0.00f * xPositionMultiplier, 2.00f * yPositionMultiplier, 0.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[6] = setupActor(startingIndex + 6, &two_cube, (float[3]){ 30.00f * xPositionMultiplier, 2.00f * yPositionMultiplier, -30.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[7] = setupActor(startingIndex + 7, &two_cube, (float[3]){ 10.00f * xPositionMultiplier, 2.00f * yPositionMultiplier, -10.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[8] = setupActor(startingIndex + 8, &two_cube, (float[3]){ 20.00f * xPositionMultiplier, 2.00f * yPositionMultiplier, -20.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[9] = setupActor(startingIndex + 9, &rock_wall, (float[3]){ 0.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, 30.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[10] = setupActor(startingIndex + 10, &two_cube, (float[3]){ 10.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, -11.99f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[11] = setupActor(startingIndex + 11, &two_cube, (float[3]){ 12.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, -10.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[12] = setupActor(startingIndex + 12, &rock_post, (float[3]){ 3.75f * xPositionMultiplier, 0.00f * yPositionMultiplier, 30.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[13] = setupActor(startingIndex + 13, &rock_post, (float[3]){ -3.75f * xPositionMultiplier, 0.00f * yPositionMultiplier, 30.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[14] = setupActor(startingIndex + 14, &stump, (float[3]){ -15.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, 0.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[15] = setupActor(startingIndex + 15, &stump2, (float[3]){ -15.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, 10.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[16] = setupActor(startingIndex + 16, &hedge, (float[3]){ -15.00f * xPositionMultiplier, 0.00f * yPositionMultiplier, -10.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[17] = setupActor(startingIndex + 17, &gate, (float[3]){ -11.12f * xPositionMultiplier, 0.00f * yPositionMultiplier, 30.00f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
-	actors[18] = setupActor(startingIndex + 18, &hand, (float[3]){ 7.62f * xPositionMultiplier, 2.91f * yPositionMultiplier, 20.09f * zPositionMultiplier }, (float[3]){ 0.00f, 0.00f, 0.00f }, (float[3]){ 1.00f * scaleMultiplier, 1.00f * scaleMultiplier, 1.00f * scaleMultiplier}, FB_COUNT);
+  Actor *actors = malloc_uncached(sizeof(Actor) * Test.actorCount);
+	actors[0] = setupActor(startingIndex + 0, &test_plane, (float[3]){ 0.0f * xPositionMultiplier, 0.0f * yPositionMultiplier, -0.0f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+	actors[1] = setupActor(startingIndex + 1, &two_cube, (float[3]){ 10.409882545471191f * xPositionMultiplier, 0.0f * yPositionMultiplier, -0.2506256401538849f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+	actors[2] = setupActor(startingIndex + 2, &two_cube, (float[3]){ 10.409882545471191f * xPositionMultiplier, 2.0f * yPositionMultiplier, -0.2506256401538849f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+	actors[3] = setupActor(startingIndex + 3, &two_cube, (float[3]){ 10.409882545471191f * xPositionMultiplier, 4.0f * yPositionMultiplier, -0.2506256699562073f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+	actors[4] = setupActor(startingIndex + 4, &two_cube, (float[3]){ 10.409882545471191f * xPositionMultiplier, 4.0f * yPositionMultiplier, 1.7493743896484375f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+	actors[5] = setupActor(startingIndex + 5, &two_cube, (float[3]){ 8.409882545471191f * xPositionMultiplier, 4.0f * yPositionMultiplier, -0.2506256401538849f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+	actors[6] = setupActor(startingIndex + 6, &two_cube, (float[3]){ -3.0f * xPositionMultiplier, 0.0f * yPositionMultiplier, -7.0f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+	actors[7] = setupActor(startingIndex + 7, &two_cube, (float[3]){ 3.0f * xPositionMultiplier, 0.0f * yPositionMultiplier, -7.0f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+	actors[8] = setupActor(startingIndex + 8, &two_cube, (float[3]){ 0.4834599196910858f * xPositionMultiplier, 1.0249347686767578f * yPositionMultiplier, -7.0f * zPositionMultiplier }, (float[4]){ 0.8535534739494324f, 0.1464466005563736f, -0.3535533845424652f, 0.35355332493782043f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+
+	// Entity Actors
 
   Test.actors = actors;
+
+  struct Entity *entities = malloc_uncached(sizeof(struct Entity) * Test.entityCount);
+
+  Test.entities = entities;
   
   return &Test;  
 }
@@ -97,4 +84,5 @@ void unloadTest(void) {
   }
 
   free_uncached(Test.actors);
+  free_uncached(Test.entities);
 }
