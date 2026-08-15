@@ -21,8 +21,8 @@
 
 static Scene Park = (Scene) {
   .name = "Park",
-  .actorCount = 78,
-  .modelCount = 15,
+  .actorCount = 75,
+  .modelCount = 12,
   .entityCount = 2,
 };
 
@@ -31,7 +31,6 @@ Scene *createPark(uint32_t scene_id) {
   Park.id = scene_id;
   // MODEL IMPORT
 	ModelData rock_post = setupModel("rom:/rock_post.t3dm");
-	ModelData tree_long_leaves = setupModel("rom:/tree_long_leaves.t3dm");
 	ModelData park_ground_se = setupModel("rom:/park_ground_se.t3dm");
 	ModelData stump = setupModel("rom:/stump.t3dm");
 	ModelData rock_wall = setupModel("rom:/rock_wall.t3dm");
@@ -40,29 +39,24 @@ Scene *createPark(uint32_t scene_id) {
 	ModelData park_ground_nw = setupModel("rom:/park_ground_nw.t3dm");
 	ModelData plant = setupModel("rom:/plant.t3dm");
 	ModelData gate = setupModel("rom:/gate.t3dm");
-	ModelData tree_trunk_one = setupModel("rom:/tree_trunk_one.t3dm");
 	ModelData park_ground_sw = setupModel("rom:/park_ground_sw.t3dm");
 	ModelData water = setupModel("rom:/water.t3dm");
 	ModelData tree_one = setupModel("rom:/tree_one.t3dm");
-	ModelData tree_branch_offshoot = setupModel("rom:/tree_branch_offshoot.t3dm");
 
 
   T3DModel **models = malloc_uncached(sizeof(T3DModel *) * Park.modelCount);
 	models[0] = rock_post.model;
-	models[1] = tree_long_leaves.model;
-	models[2] = park_ground_se.model;
-	models[3] = stump.model;
-	models[4] = rock_wall.model;
-	models[5] = feather.model;
-	models[6] = park_ground_ne.model;
-	models[7] = park_ground_nw.model;
-	models[8] = plant.model;
-	models[9] = gate.model;
-	models[10] = tree_trunk_one.model;
-	models[11] = park_ground_sw.model;
-	models[12] = water.model;
-	models[13] = tree_one.model;
-	models[14] = tree_branch_offshoot.model;
+	models[1] = park_ground_se.model;
+	models[2] = stump.model;
+	models[3] = rock_wall.model;
+	models[4] = feather.model;
+	models[5] = park_ground_ne.model;
+	models[6] = park_ground_nw.model;
+	models[7] = plant.model;
+	models[8] = gate.model;
+	models[9] = park_ground_sw.model;
+	models[10] = water.model;
+	models[11] = tree_one.model;
 
 
   Park.models = models;
@@ -140,28 +134,25 @@ Scene *createPark(uint32_t scene_id) {
 	actors[61] = setupActor(startingIndex + 61, &plant, (float[3]){ 6.112770080566406f * xPositionMultiplier, -0.7689685225486755f * yPositionMultiplier, 0.027228355407714844f * zPositionMultiplier }, (float[4]){ 0.8598006367683411f, 0.0f, 0.0f, -0.5106298327445984f }, (float[3]){ 1.965320f * scaleMultiplier, 1.965320f * scaleMultiplier, 1.965320f * scaleMultiplier}, FB_COUNT);
 	actors[62] = setupActor(startingIndex + 62, &plant, (float[3]){ 6.112770080566406f * xPositionMultiplier, -0.2794775664806366f * yPositionMultiplier, 0.027228355407714844f * zPositionMultiplier }, (float[4]){ 0.4781578779220581f, 0.0f, -0.0f, -0.8782739043235779f }, (float[3]){ 1.726222f * scaleMultiplier, 1.726222f * scaleMultiplier, 1.726222f * scaleMultiplier}, FB_COUNT);
 	actors[63] = setupActor(startingIndex + 63, &plant, (float[3]){ -8.3148775100708f * xPositionMultiplier, 0.0f * yPositionMultiplier, -0.667122483253479f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
-	actors[64] = setupActor(startingIndex + 64, &stump, (float[3]){ 16.94610023498535f * xPositionMultiplier, -0.7952721118927002f * yPositionMultiplier, -48.10932159423828f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 1.434630f * scaleMultiplier, 1.434630f * scaleMultiplier, 1.434630f * scaleMultiplier}, FB_COUNT);
-	actors[65] = setupActor(startingIndex + 65, &stump, (float[3]){ 38.109256744384766f * xPositionMultiplier, -0.22443218529224396f * yPositionMultiplier, -35.16277313232422f * zPositionMultiplier }, (float[4]){ -0.9844614863395691f, 0.0f, 0.0f, 0.17560051381587982f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
-	actors[66] = setupActor(startingIndex + 66, &stump, (float[3]){ -9.475857734680176f * xPositionMultiplier, -0.18513472378253937f * yPositionMultiplier, 0.5029782056808472f * zPositionMultiplier }, (float[4]){ -0.6982279419898987f, 0.0f, 0.0f, 0.715875506401062f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+	actors[64] = setupActor(startingIndex + 64, &stump, (float[3]){ 16.94610023498535f * xPositionMultiplier, -0.23953300714492798f * yPositionMultiplier, -48.10932159423828f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 0.858223f * scaleMultiplier, 0.858223f * scaleMultiplier, 0.858223f * scaleMultiplier}, FB_COUNT);
+	actors[65] = setupActor(startingIndex + 65, &stump, (float[3]){ 38.109256744384766f * xPositionMultiplier, -0.22443218529224396f * yPositionMultiplier, -35.16277313232422f * zPositionMultiplier }, (float[4]){ -0.9844614863395691f, 0.0f, 0.0f, 0.17560051381587982f }, (float[3]){ 0.674030f * scaleMultiplier, 0.674030f * scaleMultiplier, 0.674030f * scaleMultiplier}, FB_COUNT);
+	actors[66] = setupActor(startingIndex + 66, &stump, (float[3]){ -8.413824081420898f * xPositionMultiplier, -0.22218048572540283f * yPositionMultiplier, 0.4646286964416504f * zPositionMultiplier }, (float[4]){ -0.6982279419898987f, 0.0f, 0.0f, 0.715875506401062f }, (float[3]){ 0.636081f * scaleMultiplier, 0.636081f * scaleMultiplier, 0.636081f * scaleMultiplier}, FB_COUNT);
 	actors[67] = setupActor(startingIndex + 67, &gate, (float[3]){ 0.033120155334472656f * xPositionMultiplier, -0.5225858688354492f * yPositionMultiplier, 5.499626159667969f * zPositionMultiplier }, (float[4]){ 0.999998152256012f, 0.0f, 0.0f, 0.0019165462581440806f }, (float[3]){ 1.119576f * scaleMultiplier, 1.119576f * scaleMultiplier, 1.119576f * scaleMultiplier}, FB_COUNT);
-	actors[68] = setupActor(startingIndex + 68, &tree_trunk_one, (float[3]){ 10.163851737976074f * xPositionMultiplier, -0.2748469114303589f * yPositionMultiplier, -5.375678062438965f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
-	actors[69] = setupActor(startingIndex + 69, &tree_one, (float[3]){ 2.1000072956085205f * xPositionMultiplier, -0.1134377121925354f * yPositionMultiplier, -18.10460662841797f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
-	actors[70] = setupActor(startingIndex + 70, &tree_long_leaves, (float[3]){ -0.48663297295570374f * xPositionMultiplier, 0.0f * yPositionMultiplier, -6.189970970153809f * zPositionMultiplier }, (float[4]){ 0.9936973452568054f, 0.0f, 0.0f, 0.11209634691476822f }, (float[3]){ 0.711747f * scaleMultiplier, 0.711747f * scaleMultiplier, 0.711747f * scaleMultiplier}, FB_COUNT);
-	actors[71] = setupActor(startingIndex + 71, &tree_long_leaves, (float[3]){ -1.1219536066055298f * xPositionMultiplier, 3.8792734146118164f * yPositionMultiplier, -18.470605850219727f * zPositionMultiplier }, (float[4]){ 0.19489486515522003f, 0.11252260953187943f, -0.48717421293258667f, -0.8438103795051575f }, (float[3]){ 0.711747f * scaleMultiplier, 0.711747f * scaleMultiplier, 0.711747f * scaleMultiplier}, FB_COUNT);
-	actors[72] = setupActor(startingIndex + 72, &tree_long_leaves, (float[3]){ 0.14271152019500732f * xPositionMultiplier, 3.794527769088745f * yPositionMultiplier, -17.90998077392578f * zPositionMultiplier }, (float[4]){ 0.7519791126251221f, 0.4341553747653961f, -0.24801038205623627f, -0.42956653237342834f }, (float[3]){ 0.785489f * scaleMultiplier, 0.785489f * scaleMultiplier, 0.785489f * scaleMultiplier}, FB_COUNT);
-	actors[73] = setupActor(startingIndex + 73, &tree_long_leaves, (float[3]){ 1.1281208992004395f * xPositionMultiplier, 3.74989652633667f * yPositionMultiplier, -18.30158042907715f * zPositionMultiplier }, (float[4]){ 0.19461148977279663f, 0.11235900968313217f, -0.4872119724750519f, -0.8438757658004761f }, (float[3]){ 0.668601f * scaleMultiplier, 0.668601f * scaleMultiplier, 0.668601f * scaleMultiplier}, FB_COUNT);
-	actors[74] = setupActor(startingIndex + 74, &tree_branch_offshoot, (float[3]){ -0.31144511699676514f * xPositionMultiplier, 0.0f * yPositionMultiplier, -6.209436416625977f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
-	actors[75] = setupActor(startingIndex + 75, &tree_long_leaves, (float[3]){ -0.2615143358707428f * xPositionMultiplier, -0.06231442838907242f * yPositionMultiplier, -6.1988091468811035f * zPositionMultiplier }, (float[4]){ 0.5853869915008545f, -0.0762460008263588f, -0.06102100759744644f, 0.8048509955406189f }, (float[3]){ 0.711747f * scaleMultiplier, 0.711747f * scaleMultiplier, 0.711747f * scaleMultiplier}, FB_COUNT);
+	actors[68] = setupActor(startingIndex + 68, &tree_one, (float[3]){ 2.1000072956085205f * xPositionMultiplier, -0.1134377121925354f * yPositionMultiplier, -18.10460662841797f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+	actors[69] = setupActor(startingIndex + 69, &tree_one, (float[3]){ 33.416961669921875f * xPositionMultiplier, -0.1134377121925354f * yPositionMultiplier, -13.458985328674316f * zPositionMultiplier }, (float[4]){ 0.19537891447544098f, 0.0f, 0.0f, -0.9807278513908386f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+	actors[70] = setupActor(startingIndex + 70, &tree_one, (float[3]){ 44.33235168457031f * xPositionMultiplier, 0.33988791704177856f * yPositionMultiplier, -13.050040245056152f * zPositionMultiplier }, (float[4]){ 0.763994574546814f, 0.0f, 0.0f, -0.6452227234840393f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+	actors[71] = setupActor(startingIndex + 71, &tree_one, (float[3]){ -1.8505887985229492f * xPositionMultiplier, 0.33988791704177856f * yPositionMultiplier, -49.5045051574707f * zPositionMultiplier }, (float[4]){ 0.9494704008102417f, 0.0f, 0.0f, 0.31385692954063416f }, (float[3]){ 1.251489f * scaleMultiplier, 1.251489f * scaleMultiplier, 1.251489f * scaleMultiplier}, FB_COUNT);
+	actors[72] = setupActor(startingIndex + 72, &tree_one, (float[3]){ 37.644168853759766f * xPositionMultiplier, 0.33988791704177856f * yPositionMultiplier, -0.8111222982406616f * zPositionMultiplier }, (float[4]){ 0.2532416880130768f, 0.0f, 0.0f, -0.9674031138420105f }, (float[3]){ 0.737890f * scaleMultiplier, 0.737890f * scaleMultiplier, 0.737890f * scaleMultiplier}, FB_COUNT);
 
 	// Entity Actors
-	actors[76] = setupActor(startingIndex + 76, &feather, (float[3]){ -9.483036041259766f * xPositionMultiplier, 2.288670539855957f * yPositionMultiplier, 0.505250871181488f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
-	actors[77] = setupActor(startingIndex + 77, &feather, (float[3]){ 39.782440185546875f * xPositionMultiplier, -0.04391884803771973f * yPositionMultiplier, -36.12669372558594f * zPositionMultiplier }, (float[4]){ 0.972390353679657f, 0.0f, 0.0f, 0.23336024582386017f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+	actors[73] = setupActor(startingIndex + 73, &feather, (float[3]){ -8.416725158691406f * xPositionMultiplier, 1.0269938707351685f * yPositionMultiplier, 0.45775556564331055f * zPositionMultiplier }, (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
+	actors[74] = setupActor(startingIndex + 74, &feather, (float[3]){ 39.782440185546875f * xPositionMultiplier, -0.04391884803771973f * yPositionMultiplier, -36.12669372558594f * zPositionMultiplier }, (float[4]){ 0.972390353679657f, 0.0f, 0.0f, 0.23336024582386017f }, (float[3]){ 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier, 1.000000f * scaleMultiplier}, FB_COUNT);
 
   Park.actors = actors;
 
   struct Entity *entities = malloc_uncached(sizeof(struct Entity) * Park.entityCount);
-	entities[0] = createFeather(&actors[76]);
-	entities[1] = createFeather(&actors[77]);
+	entities[0] = createFeather(&actors[73]);
+	entities[1] = createFeather(&actors[74]);
 
   Park.entities = entities;
   

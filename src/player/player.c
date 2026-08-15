@@ -11,6 +11,7 @@
 
 const float DEFAULT_CAMERA_Y = 10.0f;
 const float DEFAULT_CAMERA_FOV = 85.0f;
+const float DEFAULT_PLAYER_SPEED = 0.6f;
 const int8_t stickThreshold = 20;
 
 static Player player = {
@@ -19,7 +20,7 @@ static Player player = {
   .position = {{ 0, DEFAULT_CAMERA_Y, 0 }},
   .cameraTarget = {{ 0, DEFAULT_CAMERA_Y, 0 }},
   .cameraAngle = -M_PI / 2,
-  .movementSpeed = 0.6f,
+  .movementSpeed = DEFAULT_PLAYER_SPEED,
   .cameraRotationSpeed = 0.03f,
   .hasStepped = false,
   .closestEntity = NULL,

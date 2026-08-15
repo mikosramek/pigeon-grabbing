@@ -171,7 +171,7 @@ int main()
   // Rendering Setup
   // rendering distance
   float cam_near = 5.0f;
-  float cam_far = 250.0f;
+  float cam_far = 150.0f;
 
   // basic lighting
   uint8_t colorAmbient[4] = {69, 69, 69, 0x22};
@@ -196,7 +196,7 @@ int main()
     joypad_poll();
     player_update();
     player_handle_entities();
-    for (int i = 0; i < 10; i += 1) {
+    for (int i = 0; i < 3; i += 1) {
       mixer_try_play();
     }
     
