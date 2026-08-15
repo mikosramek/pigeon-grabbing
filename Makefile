@@ -51,7 +51,7 @@ clean:
 	rm -rf $(BUILD_DIR) *.z64
 
 build_lib:
-	rm -rf $(BUILD_DIR) *.z64
+	rm -rf $(BUILD_DIR) *.z64 filesystem
 	make -C $(T3D_INST)
 	make all
 
