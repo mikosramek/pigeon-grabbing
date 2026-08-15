@@ -48,10 +48,10 @@ pigeon_grabbing.z64: N64_ROM_TITLE="Pigeon Grabbing"
 pigeon_grabbing.z64: $(BUILD_DIR)/pigeon_grabbing.dfs
 
 clean:
-	rm -rf $(BUILD_DIR) *.z64
+	rm -rf $(BUILD_DIR) *.z64 filesystem
 
 build_lib:
-	rm -rf $(BUILD_DIR) *.z64 filesystem
+	rm -rf $(BUILD_DIR) *.z64
 	make -C $(T3D_INST)
 	make all
 

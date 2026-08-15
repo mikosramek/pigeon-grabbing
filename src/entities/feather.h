@@ -14,6 +14,8 @@ void interact(struct Entity *feather);
 // bool canInteract(struct Entity *feather, Player *player);
 void interactionUI(void);
 
+float getPlayerDist(struct Entity *feather);
+
 struct Entity createFeather(Actor *actor);
 
 #endif

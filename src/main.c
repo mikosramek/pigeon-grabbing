@@ -164,26 +164,26 @@ int main()
   // empty, sunflower, safflower
   bool inventory[3] = { true, true, false };
   player_init(inventory);
-  SceneManager* sceneManager = scene_manager_create(0);
+  SceneManager* sceneManager = scene_manager_create(1);
   Player *player = getPlayer();
 
 
   // Rendering Setup
   // rendering distance
   float cam_near = 5.0f;
-  float cam_far = 150.0f;
+  float cam_far = 250.0f;
 
   // basic lighting
   uint8_t colorAmbient[4] = {69, 69, 69, 0x22};
   uint8_t colorDir[4]     = {0xFF, 0xFF, 0xFF, 0x22};
-  // color_t fogColor = (color_t){50, 50, 20, 0xFF};
+  color_t fogColor = (color_t){90, 90, 90, 0xff};
 
   fm_vec3_t lightDirVec = {{-1.0f, 1.0f, 1.0f}};
   fm_vec3_norm(&lightDirVec, &lightDirVec);
 
   rdpq_text_register_font(FONT_BUILTIN_DEBUG_MONO, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO));
 
-  // p_audio_play_track(TRANQUIL_WALK);
+  p_audio_play_track(TRANQUIL_WALK);
 
   uint32_t time = 0;
 
@@ -225,7 +225,7 @@ int main()
 
     // rdpq_set_prim_color(RGBA32(0, 0, 0, 0xFF));
 
-    t3d_screen_clear_color(RGBA32(100, 80, 80, 0xFF)); // clears the screen 
+    t3d_screen_clear_color(fogColor); //RGBA32(100, 80, 80, 0xFF)); // clears the screen 
     t3d_screen_clear_depth(); // clears the depth buffer
 
     t3d_light_set_ambient(colorAmbient);
@@ -236,19 +236,19 @@ int main()
     // rdpq_mode_fog(RDPQ_FOG_STANDARD);
     // rdpq_set_fog_color(fogColor);
     // t3d_fog_set_enabled(true);
-    // t3d_fog_set_range(-200.0f, 1250.0f);
+    // t3d_fog_set_range(25.0f, 50.0f);
 
     // we say we'd like to take a "single" matrix
     t3d_matrix_push_pos(1);
     for(int i=0; i < state->activeScene->actorCount; ++i) {
       // T3DFrustum fr = viewport.viewFrustum;
-      // t3d_frustum_scale(&fr, 0.);
-      // bool isVisible = t3d_frustum_vs_aabb_s16(&fr, actors[i].model->aabbMin, actors[i].model->aabbMax);
+      // t3d_frustum_scale(&fr, 6.40f);
+      bool isVisible = true; //t3d_frustum_vs_aabb_s16(&fr, actors[i].model->aabbMin, actors[i].model->aabbMax);
       // if (i == state->activeScene->actorCount - 2) {
       //   uint16_t *buff = (uint16_t*)surface->buffer;
       //   debugDrawAABB(buff, actors[i].model->aabbMin, actors[i].model->aabbMax, &viewport, 0.1f, 0x037f);
       // }
-      if (!actors[i].skip) {
+      if (!actors[i].skip && isVisible) {
         // actor_draw(&actors[i]);
         // we set a matrix (the model's material / transform + dpl) with doMultiply as true, it just push+pops it by itself
         t3d_matrix_set(&actors[i].modelMat[frameIdx], true);
@@ -263,12 +263,12 @@ int main()
     rdpq_mode_blender(RDPQ_BLENDER_MULTIPLY);
     player_draw_ui();
     handle_game_ui();
-    display_debug();
+    // display_debug();
+    // handle_debug_input(sceneManager);
     
     // end rendering
     rdpq_detach_show();
   
-    handle_debug_input(sceneManager);
   }
 
   t3d_destroy();

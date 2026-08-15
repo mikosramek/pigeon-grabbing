@@ -17,8 +17,8 @@ const int8_t stickThreshold = 20;
 static Player player = {
   .cameraFOV = DEFAULT_CAMERA_FOV,
   .cameraY = DEFAULT_CAMERA_Y,
-  .position = {{ 0, DEFAULT_CAMERA_Y, 0 }},
-  .cameraTarget = {{ 0, DEFAULT_CAMERA_Y, 0 }},
+  .position = {{ 0.0f, DEFAULT_CAMERA_Y, 0.0f }},
+  .cameraTarget = {{ 0.0f, DEFAULT_CAMERA_Y, 0.0f }},
   .cameraAngle = -M_PI / 2,
   .movementSpeed = DEFAULT_PLAYER_SPEED,
   .cameraRotationSpeed = 0.03f,
@@ -127,9 +127,9 @@ void player_handle_movement(void) {
   player->position.y = DEFAULT_CAMERA_Y + yOffset;
 
   // apply camera target
-  player->cameraTarget.x = player->position.x + xTarget;
+  player->cameraTarget.x = player->position.x + (xTarget * 2.0f);
   player->cameraTarget.y = player->cameraY + yOffset;
-  player->cameraTarget.z = player->position.z + zTarget;
+  player->cameraTarget.z = player->position.z + (zTarget * 2.0f);
 
 
   if (yOffset <= stepHeight * -0.9f && !player->hasStepped) {
