@@ -24,7 +24,16 @@ void cleanupModel(T3DModel *model) {
 };
 
 // create an Actor struct, applying base pos/rot/scale + draw block and model material
-Actor setupActor(uint32_t id, ModelData *modelData, const float pos[3], const float rot[4], const float scale[3], uint32_t fbCount) {
+Actor setupActor(
+  uint32_t id,
+  ModelData *modelData,
+  const float pos[3],
+  const float rot[4],
+  const float scale[3],
+  bool skip,
+  bool skipCulling,
+  uint32_t fbCount
+) {
   Actor actor = (Actor) {
     .id = id,
     .pos = {pos[0], pos[1], pos[2]},
@@ -34,7 +43,8 @@ Actor setupActor(uint32_t id, ModelData *modelData, const float pos[3], const fl
     .dpl = modelData->dpl,
     .modelMat = malloc_uncached(sizeof(T3DMat4FP) * fbCount),
     .model = modelData->model,
-    .skip = false,
+    .skip = skip,
+    .skipCulling = skipCulling,
   };
   return actor;
 }
@@ -45,6 +55,10 @@ void deleteActor(Actor *actor) {
 }
 
 bool shouldCull(Actor *actor, fm_vec3_t playerPosition, float cameraAngle) {
+  if (actor->skipCulling) {
+    return false;
+  }
+  
   fm_vec3_t actorPosition = {{ actor->pos[0], actor->pos[1], actor->pos[2] }};
   if (fabsf(fm_vec3_distance(&actorPosition, &playerPosition)) < 50.0f) {
     return false;

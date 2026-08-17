@@ -1,1 +1,10 @@
-actors[<INDEX>] = setupActor(startingIndex + <INDEX>, &<MODEL>, <POSITION>, <ROTATION>, <SCALE>, FB_COUNT);
+actors[<INDEX>] = setupActor(
+    /* ACTOR INDEX  */ startingIndex + <INDEX>,
+    /* MODEL DATA   */ &<MODEL>,
+    /* POSITION     */ <POSITION>,
+    /* ROTATION     */ <ROTATION>,
+    /* SCALE        */ <SCALE>,
+    /* SKIP         */ <SKIP>,
+    /* SKIP CULLING */ <SKIP_CULLING>,
+    FB_COUNT
+  );

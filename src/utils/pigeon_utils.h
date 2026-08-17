@@ -26,9 +26,19 @@ typedef struct {
   T3DMat4FP *modelMat;
 
   bool skip;
+  bool skipCulling;
 } Actor;
 
-Actor setupActor(uint32_t id, ModelData *modelData, const float pos[3], const float rot[4], const float scale[3], uint32_t fbCount);
+Actor setupActor(
+  uint32_t id,
+  ModelData *modelData,
+  const float pos[3],
+  const float rot[4],
+  const float scale[3],
+  bool skip,
+  bool skipCulling,
+  uint32_t fbCount
+);
 
 void deleteActor(Actor *actor);
 
