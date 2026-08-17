@@ -47,10 +47,11 @@ void display_debug(void) {
   switch (DEBUG.infoMode) {
     case CAMERA:
       Player *player = getPlayer();
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 180, "fov: %f", player->cameraFOV);
       rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 190, "camera y pos: %f", player->position.y);
       rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 200, "camera rotation: %f", player->cameraAngle);
-      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 210, "camera target: %f/%f/%f", cos(player->cameraAngle), sin(player->cameraAngle), player->cameraY);
-      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "fov: %f", player->cameraFOV);
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 210, "camera target (x, z, y): %f/%f/%f", cos(player->cameraAngle), sin(player->cameraAngle), player->cameraY);
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "camera pos (x, z, y): %f/%f/%f", player->position.x, player->position.y, player->position.z);
       rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "d_up/d_down: change FOV");
       break;
     case AUDIO:
@@ -171,7 +172,7 @@ int main()
   // Rendering Setup
   // rendering distance
   float cam_near = 5.0f;
-  float cam_far = 250.0f;
+  float cam_far = 200.0f;
 
   // basic lighting
   uint8_t colorAmbient[4] = {69, 69, 69, 0x22};
@@ -243,12 +244,10 @@ int main()
     for(int i=0; i < state->activeScene->actorCount; ++i) {
       // T3DFrustum fr = viewport.viewFrustum;
       // t3d_frustum_scale(&fr, 6.40f);
-      bool isVisible = true; //t3d_frustum_vs_aabb_s16(&fr, actors[i].model->aabbMin, actors[i].model->aabbMax);
-      // if (i == state->activeScene->actorCount - 2) {
-      //   uint16_t *buff = (uint16_t*)surface->buffer;
-      //   debugDrawAABB(buff, actors[i].model->aabbMin, actors[i].model->aabbMax, &viewport, 0.1f, 0x037f);
-      // }
-      if (!actors[i].skip && isVisible) {
+      // bool isVisible = true; //t3d_frustum_vs_aabb_s16(&fr, actors[i].model->aabbMin, actors[i].model->aabbMax);
+
+      bool cull = shouldCull(&actors[i], player->position, player->cameraAngle);
+      if (!actors[i].skip && !cull) {
         // actor_draw(&actors[i]);
         // we set a matrix (the model's material / transform + dpl) with doMultiply as true, it just push+pops it by itself
         t3d_matrix_set(&actors[i].modelMat[frameIdx], true);

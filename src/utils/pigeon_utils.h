@@ -32,4 +32,6 @@ Actor setupActor(uint32_t id, ModelData *modelData, const float pos[3], const fl
 
 void deleteActor(Actor *actor);
 
+bool shouldCull(Actor *actor, fm_vec3_t playerPosition, float cameraAngle);
+
 #endif

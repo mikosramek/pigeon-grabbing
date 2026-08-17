@@ -43,3 +43,25 @@ void deleteActor(Actor *actor) {
   free_uncached(actor->modelMat);
   actor->skip = true;
 }
+
+bool shouldCull(Actor *actor, fm_vec3_t playerPosition, float cameraAngle) {
+  fm_vec3_t actorPosition = {{ actor->pos[0], actor->pos[1], actor->pos[2] }};
+  if (fabsf(fm_vec3_distance(&actorPosition, &playerPosition)) < 50.0f) {
+    return false;
+  }
+  fm_vec3_sub(&actorPosition, &actorPosition, &playerPosition);
+  fm_vec3_norm(&actorPosition, &actorPosition);
+
+  float angleDiff = atan2(actorPosition.z, actorPosition.x) - cameraAngle;
+
+  if (angleDiff > T3D_DEG_TO_RAD(180)) {
+    angleDiff -= T3D_DEG_TO_RAD(360);
+  }
+
+  if (angleDiff < T3D_DEG_TO_RAD(-180)) {
+    angleDiff += T3D_DEG_TO_RAD(360); 
+  }
+
+  // bool isVisible = angle > leftThreshold && angle < rightThreshold;
+  return fabsf(angleDiff) > T3D_DEG_TO_RAD(90);
+}
