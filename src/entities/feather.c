@@ -22,7 +22,7 @@ void updateFeather(struct Entity *feather, uint32_t time) {
     return;
   }
 
-  float yOffset = sin(time / 10.0f) * 0.75f;
+  float yOffset = sin(time / 20.0f) * 0.75f;
   feather->actor->pos[1] = feather->actor->staticPos[1] + yOffset;
 }
 

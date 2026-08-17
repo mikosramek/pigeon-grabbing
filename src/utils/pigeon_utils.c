@@ -9,6 +9,7 @@ ModelData setupModel (const char *modelPath) {
   T3DModel *model = t3d_model_load(modelPath);
 
   rspq_block_begin();
+  // rdpq_mode_alphacompare(10);
   t3d_model_draw(model);
   rspq_block_t *envDPL = rspq_block_end();
 

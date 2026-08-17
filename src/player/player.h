@@ -23,6 +23,7 @@ typedef struct {
   fm_vec3_t cameraTarget;
   float movementSpeed;
   float cameraRotationSpeed;
+  float verticalCameraSpeed;
   sprite_t *inventoryFrame;
   sprite_t *inventoryArrow;
   sprite_t *ui_b;

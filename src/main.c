@@ -36,7 +36,7 @@ State *getState(void)
 }
 
 static Debug DEBUG = {
-  .debugEnabled = true,
+  .debugEnabled = false,
   .infoMode = SCENE
 };
 
@@ -176,7 +176,7 @@ int main()
   // basic lighting
   uint8_t colorAmbient[4] = {69, 69, 69, 0x22};
   uint8_t colorDir[4]     = {0xFF, 0xFF, 0xFF, 0x22};
-  color_t fogColor = (color_t){90, 90, 90, 0xff};
+  color_t fogColor = (color_t){0x87, 0xCE, 0xEB, 0xff};
 
   fm_vec3_t lightDirVec = {{-1.0f, 1.0f, 1.0f}};
   fm_vec3_norm(&lightDirVec, &lightDirVec);
@@ -263,8 +263,8 @@ int main()
     rdpq_mode_blender(RDPQ_BLENDER_MULTIPLY);
     player_draw_ui();
     handle_game_ui();
-    // display_debug();
-    // handle_debug_input(sceneManager);
+    display_debug();
+    handle_debug_input(sceneManager);
     
     // end rendering
     rdpq_detach_show();

@@ -11,7 +11,7 @@
 
 const float DEFAULT_CAMERA_Y = 10.0f;
 const float DEFAULT_CAMERA_FOV = 85.0f;
-const float DEFAULT_PLAYER_SPEED = 0.6f;
+const float DEFAULT_PLAYER_SPEED = 0.8f;
 const int8_t stickThreshold = 20;
 
 static Player player = {
@@ -22,6 +22,7 @@ static Player player = {
   .cameraAngle = -M_PI / 2,
   .movementSpeed = DEFAULT_PLAYER_SPEED,
   .cameraRotationSpeed = 0.03f,
+  .verticalCameraSpeed = 0.1f,
   .hasStepped = false,
   .closestEntity = NULL,
 };
@@ -87,9 +88,9 @@ void player_handle_movement(void) {
   player->cameraAngle = fmod(player->cameraAngle, M_PI * 2.0f);
 
   if (input.cstick_y > 0) {
-    player->cameraY -= 0.5f * player->cameraRotationSpeed;
+    player->cameraY -= 0.5f * player->verticalCameraSpeed;
   } else if (input.cstick_y < 0) {
-    player->cameraY += 0.5f * player->cameraRotationSpeed;
+    player->cameraY += 0.5f * player->verticalCameraSpeed;
   }
   player->cameraY = clamp(player->cameraY, DEFAULT_CAMERA_Y - 1.0f, DEFAULT_CAMERA_Y + 0.6f);
 
