@@ -12,6 +12,7 @@
 const float DEFAULT_CAMERA_Y = 10.0f;
 const float DEFAULT_CAMERA_FOV = 85.0f;
 const float DEFAULT_PLAYER_SPEED = 0.8f;
+const float stepHeight = 0.75f;
 const int8_t stickThreshold = 20;
 
 static Player player = {
@@ -19,7 +20,7 @@ static Player player = {
   .cameraY = DEFAULT_CAMERA_Y,
   .position = {{ 0.0f, DEFAULT_CAMERA_Y, 0.0f }},
   .cameraTarget = {{ 0.0f, DEFAULT_CAMERA_Y, 0.0f }},
-  .cameraAngle = -M_PI / 2,
+  .cameraAngle = -M_PI * 0.5f,
   .movementSpeed = DEFAULT_PLAYER_SPEED,
   .cameraRotationSpeed = 0.03f,
   .verticalCameraSpeed = 0.1f,
@@ -46,7 +47,7 @@ void resetPlayer() {
   player->cameraFOV = DEFAULT_CAMERA_FOV;
   player->position = (fm_vec3_t){{ 0, DEFAULT_CAMERA_Y, 0 }};
   player->cameraTarget = (fm_vec3_t){{ 0, DEFAULT_CAMERA_Y, 0 }};
-  player->cameraAngle = -M_PI / 2;
+  player->cameraAngle = -M_PI * 0.5f;
   player->movementTally = 0;
   player->hasStepped = false;
 }
@@ -102,8 +103,8 @@ void player_handle_movement(void) {
   float zTarget = sin(player->cameraAngle);
 
   // get perpendicular angle
-  float perpXTarget = cos(player->cameraAngle + M_PI / 2.0f);
-  float perpZTarget = sin(player->cameraAngle + M_PI / 2.0f);
+  float perpXTarget = cos(player->cameraAngle + M_PI * 0.5f);
+  float perpZTarget = sin(player->cameraAngle + M_PI * 0.5f);
 
   // UPDATE CAMERA
 
@@ -119,8 +120,7 @@ void player_handle_movement(void) {
   if (posChange.x != 0 || posChange.z != 0) {
     player->movementTally += 0.01f;
   }
-  float stepHeight = 0.75f;
-  float yOffset = stepHeight * sin(player->movementTally / 0.1f);
+  float yOffset = stepHeight * sin(player->movementTally * 10.0f);
   
   // apply position
   player->position.z += posChange.z * player->movementSpeed;
@@ -174,11 +174,9 @@ void player_draw_ui(void) {
   if (player.closestEntity != NULL) {
     player.closestEntity->interactionUI();
   }
-
-  // is there a good way to detect what's the next item?
 }
 
-void player_handle_entities (void) {
+void player_detect_closest_entity (void) {
   State *state = getState();
 
   // float closestDistance = 1000;

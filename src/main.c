@@ -148,6 +148,8 @@ int main()
   // System Init
 	debug_init_isviewer();
   debug_init_usblog();
+  console_set_debug(true);
+
   asset_init_compression(2);
 
   dfs_init(DFS_DEFAULT_LOCATION);
@@ -172,7 +174,7 @@ int main()
   // Rendering Setup
   // rendering distance
   float cam_near = 5.0f;
-  float cam_far = 200.0f;
+  float cam_far = 100.0f;
 
   // basic lighting
   uint8_t colorAmbient[4] = {69, 69, 69, 0x22};
@@ -184,9 +186,10 @@ int main()
 
   rdpq_text_register_font(FONT_BUILTIN_DEBUG_MONO, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO));
 
-  p_audio_play_track(TRANQUIL_WALK);
+  p_audio_play_track(TITLE);
 
   uint32_t time = 0;
+
 
   for(;;) {
     // UPDATE
@@ -196,7 +199,7 @@ int main()
 
     joypad_poll();
     player_update();
-    player_handle_entities();
+    player_detect_closest_entity();
     for (int i = 0; i < 3; i += 1) {
       mixer_try_play();
     }
@@ -211,7 +214,9 @@ int main()
 
     struct Entity *entities = state->activeScene->entities;
     for(int i = 0; i < state->activeScene->entityCount; i++) {
-      entities[i].update(&entities[i], time);
+      if (!entities[i].skip) {
+        entities[i].update(&entities[i], time);
+      }
     }
 
     // set camera
@@ -234,20 +239,23 @@ int main()
     t3d_light_set_count(1); // 0-7 lights in addition to the ambient light
 
     // fog settings
-    // rdpq_mode_fog(RDPQ_FOG_STANDARD);
-    // rdpq_set_fog_color(fogColor);
-    // t3d_fog_set_enabled(true);
-    // t3d_fog_set_range(25.0f, 50.0f);
+    rdpq_mode_fog(RDPQ_FOG_STANDARD);
+    rdpq_set_fog_color(fogColor);
+    t3d_fog_set_enabled(true);
+    t3d_fog_set_range(80.0f, 110.0f);
 
     // we say we'd like to take a "single" matrix
     t3d_matrix_push_pos(1);
     for(int i=0; i < state->activeScene->actorCount; ++i) {
       // T3DFrustum fr = viewport.viewFrustum;
       // t3d_frustum_scale(&fr, 6.40f);
-      // bool isVisible = true; //t3d_frustum_vs_aabb_s16(&fr, actors[i].model->aabbMin, actors[i].model->aabbMax);
+      // int16_t min[3] = { actors[i].model->aabbMin[0] + actors[i].pos[0], actors[i].model->aabbMin[1] + actors[i].pos[1], actors[i].model->aabbMin[2] + actors[i].pos[2] };
+      // int16_t max[3] = { actors[i].model->aabbMax[0] + actors[i].pos[0], actors[i].model->aabbMax[1] + actors[i].pos[1], actors[i].model->aabbMax[2] + actors[i].pos[2] };
+      // int16_t min[3] = { 0, 0, 0 };
+      // int16_t max[3] = {{ actors[i].model->aabbMax[0], actors[i].model->aabbMax[1], actors[i].model->aabbMax[2] }};
+      // bool isVisible = t3d_frustum_vs_aabb_s16(&fr, min, max);
 
-      bool cull = shouldCull(&actors[i], player->position, player->cameraAngle);
-      if (!actors[i].skip && !cull) {
+      if (!actors[i].skip && !shouldCull(&actors[i], player->position, player->cameraAngle)) {
         // actor_draw(&actors[i]);
         // we set a matrix (the model's material / transform + dpl) with doMultiply as true, it just push+pops it by itself
         t3d_matrix_set(&actors[i].modelMat[frameIdx], true);
@@ -267,7 +275,6 @@ int main()
     
     // end rendering
     rdpq_detach_show();
-  
   }
 
   t3d_destroy();

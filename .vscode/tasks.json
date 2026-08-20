@@ -6,7 +6,7 @@
     {
       "label": "build",
       "type": "shell",
-      "command": "make && open -a ares ./pigeon_grabbing.z64 "
+      "command": "make && /Applications/ares.app/Contents/MacOS/ares ./pigeon_grabbing.z64 --args --terminal"
     },
     {
       "label": "clean",

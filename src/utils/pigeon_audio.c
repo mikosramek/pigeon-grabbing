@@ -31,6 +31,12 @@ void p_audio_init(void) {
   xm64player_open(&pA->tranquilWalk, "rom:/tranquil_walk_no_melody.xm64");
   xm64player_set_loop(&pA->tranquilWalk, true);
   xm64player_set_vol(&pA->tranquilWalk, 0.5f);
+  
+  xm64player_open(&pA->title, "rom:/title.xm64");
+  xm64player_set_loop(&pA->title, true);
+  xm64player_set_vol(&pA->title, 0.5f);
+  
+  pA->currentTrack = NULL;
 
   wav64_open(&pA->step, "rom:/laser.wav64");
   wav64_set_loop(&pA->step, false);
@@ -41,10 +47,21 @@ void p_audio_init(void) {
 void p_audio_play_track(BackgroundMusic trackToPlay) {
   PigeonAudio *pA = getPigeonAudio();
 
+  if (pA->currentTrack && pA->currentTrack->playing) {
+    xm64player_stop(pA->currentTrack);
+  }
+
   switch(trackToPlay) {
+    case TITLE:
+      if (!pA->title.playing) {
+        xm64player_play(&pA->title, CHANNEL_MUSIC);
+        pA->currentTrack = &pA->title;
+      }
+      break;
     case TRANQUIL_WALK:
       if (!pA->tranquilWalk.playing) {
         xm64player_play(&pA->tranquilWalk, CHANNEL_MUSIC);
+        pA->currentTrack = &pA->tranquilWalk;
       }
       break;
     default:
@@ -65,15 +82,20 @@ void p_audio_play_SFX(SFX sfx) {
   }
 }
 
+// this might be unnecessary, and currentTrack can just be stopped when changing to a new track
 void p_audio_stop_track(BackgroundMusic trackToStop) {
   PigeonAudio *pA = getPigeonAudio();
   switch(trackToStop) {
+    case TITLE:
+      xm64player_stop(&pA->title);
+      break;
     case TRANQUIL_WALK:
       xm64player_stop(&pA->tranquilWalk);
       break;
     default:
       assertf(false, "Audio track isn't handled in p_audio_stop_track (%i)", (int)trackToStop);
   }
+  pA->currentTrack = NULL;
 }
 
 // void updateAudio(void) {

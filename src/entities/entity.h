@@ -11,6 +11,8 @@ struct Entity {
   bool (*canInteract)(struct Entity *entity);
   void (*interact)(struct Entity *entity);
   void (*interactionUI)(void);
+  int max[3];
+  int min[3];
 };
 
 #endif

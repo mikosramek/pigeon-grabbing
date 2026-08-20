@@ -8,12 +8,15 @@ typedef enum SFX {
 } SFX;
 
 typedef enum BackgroundMusic {
+  TITLE,
   TRANQUIL_WALK
 } BackgroundMusic;
 
 typedef struct {
   int currentTrackId;
+  xm64player_t title;
   xm64player_t tranquilWalk;
+  xm64player_t *currentTrack;
   wav64_t step;
 } PigeonAudio;
 
