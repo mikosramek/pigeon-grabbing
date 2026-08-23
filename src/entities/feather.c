@@ -22,7 +22,7 @@ void updateFeather(struct Entity *feather, uint32_t time) {
   //   return;
   // }
 
-  float yOffset = sin(time / 20.0f) * 0.75f;
+  float yOffset = sin(time * 0.05f) * 0.75f;
   feather->actor->pos[1] = feather->actor->staticPos[1] + yOffset;
 }
 
@@ -33,8 +33,8 @@ bool canInteract(struct Entity *feather) {
   // see if player is within AABB bounds
   Player *player = getPlayer();
   // aabb
-  bool xAligned = player->position.x >= feather->min[0] && player->position.x <= feather->max[0];
-  bool zAligned = player->position.z >= feather->min[2] && player->position.z <= feather->max[2];
+  bool xAligned = player->position.x >= feather->interactionMin[0] && player->position.x <= feather->interactionMax[0];
+  bool zAligned = player->position.z >= feather->interactionMin[2] && player->position.z <= feather->interactionMax[2];
   return xAligned && zAligned;
 }
 
@@ -65,17 +65,16 @@ struct Entity createFeather(Actor *actor) {
     .interactionUI = *interactionUI,
 		.actor = actor,
     .skip = false,
-    // don;t have this uniform, as it somewhat follows the scaling of the model
-    .min = {
-      (int)(actor->model->aabbMin[0] - aabbScale + actor->staticPos[0]),
-      (int)(actor->model->aabbMin[1] - aabbScale + actor->staticPos[1]),
-      (int)(actor->model->aabbMin[2] - aabbScale + actor->staticPos[2]) 
+    .interactionMin = {
+      (int)(actor->staticPos[0] - aabbScale),
+      (int)(actor->staticPos[1] - aabbScale),
+      (int)(actor->staticPos[2] - aabbScale),
     },
-    .max = {
-      (int)(actor->model->aabbMax[0] + aabbScale + actor->staticPos[0]),
-      (int)(actor->model->aabbMax[1] + aabbScale + actor->staticPos[1]),
-      (int)(actor->model->aabbMax[2] + aabbScale + actor->staticPos[2])
-    },
+    .interactionMax = {
+      (int)(actor->staticPos[0] + aabbScale),
+      (int)(actor->staticPos[1] + aabbScale),
+      (int)(actor->staticPos[2] + aabbScale),
+    }
 	};
   return newFeather;
 }

@@ -21,6 +21,9 @@ typedef struct {
   float rot[4];
   float scale[3];
 
+  int16_t worldMin[3];
+  int16_t worldMax[3];
+
   rspq_block_t *dpl;
   T3DModel *model;
   T3DMat4FP *modelMat;

@@ -34,6 +34,7 @@ Actor setupActor(
   bool skipCulling,
   uint32_t fbCount
 ) {
+  T3DModel *model = modelData->model;
   Actor actor = (Actor) {
     .id = id,
     .pos = {pos[0], pos[1], pos[2]},
@@ -42,9 +43,19 @@ Actor setupActor(
     .scale = {scale[0], scale[1], scale[2]},
     .dpl = modelData->dpl,
     .modelMat = malloc_uncached(sizeof(T3DMat4FP) * fbCount),
-    .model = modelData->model,
+    .model = model,
     .skip = skip,
     .skipCulling = skipCulling,
+    .worldMin = {
+      (int16_t)(pos[0] + model->aabbMin[0]),
+      (int16_t)(pos[1] + model->aabbMin[1]),
+      (int16_t)(pos[2] + model->aabbMin[2]),
+    },
+    .worldMax = {
+      (int16_t)(pos[0] + model->aabbMax[0]),
+      (int16_t)(pos[1] + model->aabbMax[1]),
+      (int16_t)(pos[2] + model->aabbMax[2]),
+    }
   };
   return actor;
 }

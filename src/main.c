@@ -1,3 +1,12 @@
+/* 
+**** TODOS ****
+  - create a "level" struct that contains all the scenes for the level
+  - register how many feathers are in each scene ahead of time
+  - add spawns to each scene
+  - add basic aabb collision
+    - add oob collision for closer objects
+*/
+
 #include <libdragon.h>
 #include <t3d/t3d.h>
 #include <t3d/t3dmodel.h>
@@ -134,6 +143,7 @@ void handle_debug_input(SceneManager *sceneManager) {
 
 void handle_game_ui(void) {
   State *state = getState();
+  // todo: replace this with a statically generated number
   int totalFeathers = 0;
   for(int i=0; i < state->activeScene->entityCount; ++i) {
     if (state->activeScene->entities[i].entityId == 0) {
@@ -190,7 +200,6 @@ int main()
 
   uint32_t time = 0;
 
-
   for(;;) {
     // UPDATE
     time += 1;
@@ -199,6 +208,7 @@ int main()
 
     joypad_poll();
     player_update();
+    handle_debug_input(sceneManager);
     player_detect_closest_entity();
     for (int i = 0; i < 3; i += 1) {
       mixer_try_play();
@@ -208,7 +218,6 @@ int main()
     // Grab Actors from the current active scene + apply actor's settings
     Actor* actors = state->activeScene->actors;
     for(int i=0; i < state->activeScene->actorCount; ++i) {
-      // t3d_mat4fp_from_srt_euler(&actors[i].modelMat[frameIdx], actors[i].scale, actors[i].rot, actors[i].pos);
       t3d_mat4fp_from_srt(&actors[i].modelMat[frameIdx], actors[i].scale, actors[i].rot, actors[i].pos);
     }
 
@@ -222,7 +231,6 @@ int main()
     // set camera
     t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(player->cameraFOV), cam_near, cam_far);
     t3d_viewport_look_at(&viewport, &player->position, &player->cameraTarget, &(fm_vec3_t){{0,1,0}});
-
     // DRAW
     surface_t *surface = display_get();
     rdpq_attach(surface, display_get_zbuf());
@@ -244,18 +252,14 @@ int main()
     t3d_fog_set_enabled(true);
     t3d_fog_set_range(80.0f, 110.0f);
 
+    T3DFrustum fr = viewport.viewFrustum;
+    // t3d_frustum_scale(&fr, 6.4f); // don't seem to need to scale this
+
     // we say we'd like to take a "single" matrix
     t3d_matrix_push_pos(1);
     for(int i=0; i < state->activeScene->actorCount; ++i) {
-      // T3DFrustum fr = viewport.viewFrustum;
-      // t3d_frustum_scale(&fr, 6.40f);
-      // int16_t min[3] = { actors[i].model->aabbMin[0] + actors[i].pos[0], actors[i].model->aabbMin[1] + actors[i].pos[1], actors[i].model->aabbMin[2] + actors[i].pos[2] };
-      // int16_t max[3] = { actors[i].model->aabbMax[0] + actors[i].pos[0], actors[i].model->aabbMax[1] + actors[i].pos[1], actors[i].model->aabbMax[2] + actors[i].pos[2] };
-      // int16_t min[3] = { 0, 0, 0 };
-      // int16_t max[3] = {{ actors[i].model->aabbMax[0], actors[i].model->aabbMax[1], actors[i].model->aabbMax[2] }};
-      // bool isVisible = t3d_frustum_vs_aabb_s16(&fr, min, max);
-
-      if (!actors[i].skip && !shouldCull(&actors[i], player->position, player->cameraAngle)) {
+      bool isVisible = t3d_frustum_vs_aabb_s16(&fr, actors[i].worldMin, actors[i].worldMax);
+      if (!actors[i].skip && isVisible) {
         // actor_draw(&actors[i]);
         // we set a matrix (the model's material / transform + dpl) with doMultiply as true, it just push+pops it by itself
         t3d_matrix_set(&actors[i].modelMat[frameIdx], true);
@@ -271,7 +275,6 @@ int main()
     player_draw_ui();
     handle_game_ui();
     display_debug();
-    handle_debug_input(sceneManager);
     
     // end rendering
     rdpq_detach_show();
@@ -280,3 +283,6 @@ int main()
   t3d_destroy();
   return 0;
 }
+
+
+// TPX particle system for bill-boarded items, which would also use the microcode and batch everything together
