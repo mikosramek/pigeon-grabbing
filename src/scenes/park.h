@@ -11,7 +11,9 @@
 #include <t3d/t3d.h>
 #include <t3d/t3dmodel.h>
 
-Scene *createPark(uint32_t scene_id);
+Scene *getBasePark(void);
+
+Scene *createPark(void);
 
 void unloadPark(void);
 

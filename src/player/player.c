@@ -178,8 +178,8 @@ void player_detect_closest_entity (void) {
   // float closestDistance = 1000;
   struct Entity *closestEntity = NULL;
 
-  struct Entity *entities = state->activeScene->entities;
-  for (int i = 0; i < state->activeScene->entityCount; i++) {
+  struct Entity *entities = state->activeLevel->activeScene->entities;
+  for (int i = 0; i < state->activeLevel->activeScene->entityCount; i++) {
     // move distance logic here
     if (entities[i].canInteract(&entities[i])) {
       closestEntity = &entities[i];

@@ -1,9 +1,11 @@
 #ifndef STATE_H
 #define STATE_H
 
+#include "level.h"
 #include "scenes/scene.h"   // Because State contains a Scene *
 
 typedef struct {
+  struct Level *activeLevel;
   Scene *activeScene;
   int requestSceneId;
   int feathersCollected;

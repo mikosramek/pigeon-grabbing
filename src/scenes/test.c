@@ -20,15 +20,19 @@
 // DEFINITIONS
 
 static Scene Test = (Scene) {
+  .id = 1,
   .name = "Test",
   .actorCount = 9,
   .modelCount = 2,
   .entityCount = 0,
 };
 
+Scene *getBaseTest() {
+  return &Test;
+}
+
 // LOAD FUNCTION
-Scene *createTest(uint32_t scene_id) {
-  Test.id = scene_id;
+Scene *createTest() {
   // MODEL IMPORT
 	ModelData two_cube = setupModel("rom:/two_cube.t3dm");
 	ModelData test_plane = setupModel("rom:/test_plane.t3dm");

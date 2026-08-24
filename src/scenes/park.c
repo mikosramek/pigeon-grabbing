@@ -20,15 +20,44 @@
 // DEFINITIONS
 
 static Scene Park = (Scene) {
+  .id = 0,
   .name = "Park",
   .actorCount = 44,
   .modelCount = 11,
   .entityCount = 1,
 };
 
+Scene *getBasePark() {
+  return &Park;
+}
+
 // LOAD FUNCTION
-Scene *createPark(uint32_t scene_id) {
-  Park.id = scene_id;
+Scene *createPark() {
+  SpawnPoint southSpawn = {
+    .id = 0,
+    .rotationAngle = -1.63f,
+    .spawn = (fm_vec3_t){{ 5.7f, 0, 123.0f }},
+  };
+  SpawnPoint northSpawn = {
+    .id = 1,
+    .rotationAngle = -4.78f,
+    .spawn = (fm_vec3_t){{ -0.32f, 0, -253.21f }},
+  };
+
+  SpawnPoint *spawns = malloc_uncached(sizeof(SpawnPoint) * 2);
+  spawns[0] = southSpawn;
+  spawns[1] = northSpawn;
+  Park.spawns = spawns;
+
+  Door northDoor = {
+    .targetSpawnPointID = 2,
+    .aabbMin = (fm_vec3_t){{ -19.0f, 0, -259.0f }},
+    .aabbMax = (fm_vec3_t){{ 22.0f, 0, -289.0f }},
+  };
+  Door *doors = malloc_uncached(sizeof(Door) * 1);
+  doors[0] = northDoor;
+  Park.doors = doors;
+
   // MODEL IMPORT
 	ModelData rock_post = setupModel("rom:/rock_post.t3dm");
 	ModelData tree_line = setupModel("rom:/tree_line.t3dm");
@@ -535,4 +564,6 @@ void unloadPark(void) {
 
   free_uncached(Park.actors);
   free_uncached(Park.entities);
+  free_uncached(Park.spawns);
+  free_uncached(Park.doors);
 }

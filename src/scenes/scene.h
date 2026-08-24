@@ -5,6 +5,18 @@
 #include "../entities/entity.h"
 
 typedef struct {
+  uint32_t id;
+  fm_vec3_t spawn; // Player position (y is ignored)
+  float rotationAngle; // Player rotation in radians
+} SpawnPoint;
+
+typedef struct {
+  fm_vec3_t aabbMin;
+  fm_vec3_t aabbMax;
+  uint32_t targetSpawnPointID;
+} Door;
+
+typedef struct {
   char *name;
   uint32_t id;
   Actor *actors;
@@ -15,6 +27,9 @@ typedef struct {
 
   T3DModel **models;
   uint32_t modelCount;
+
+  SpawnPoint *spawns;
+  Door *doors;
 } Scene;
 
 #endif

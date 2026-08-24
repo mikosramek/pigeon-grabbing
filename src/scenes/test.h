@@ -13,7 +13,9 @@
 #include <t3d/t3d.h>
 #include <t3d/t3dmodel.h>
 
-Scene *createTest(uint32_t scene_id);
+Scene *getBaseTest(void);
+
+Scene *createTest(void);
 
 void unloadTest(void);
 

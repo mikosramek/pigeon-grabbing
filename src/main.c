@@ -27,8 +27,10 @@
 #include "entities/entity.h"
 
 // SCENES
+#include "level.h"
 #include "sceneManager.h"
 #include "scenes/scene.h"
+#include "levels/park_level.h"
 
 
 static int frameIdx = 0;
@@ -145,8 +147,8 @@ void handle_game_ui(void) {
   State *state = getState();
   // todo: replace this with a statically generated number
   int totalFeathers = 0;
-  for(int i=0; i < state->activeScene->entityCount; ++i) {
-    if (state->activeScene->entities[i].entityId == 0) {
+  for(int i=0; i < state->activeLevel->activeScene->entityCount; ++i) {
+    if (state->activeLevel->activeScene->entities[i].entityId == 0) {
       totalFeathers += 1;
     }
   }
@@ -177,8 +179,9 @@ int main()
   // empty, sunflower, safflower
   bool inventory[3] = { true, true, false };
   player_init(inventory);
-  SceneManager* sceneManager = scene_manager_create(1);
+  // SceneManager* sceneManager = scene_manager_create(1);
   Player *player = getPlayer();
+  registerParkLevel();
 
 
   // Rendering Setup
@@ -199,30 +202,32 @@ int main()
   p_audio_play_track(TITLE);
 
   uint32_t time = 0;
+  State *state = getState();
+  state->activeLevel = loadParkLevel();
 
   for(;;) {
     // UPDATE
     time += 1;
-    sceneManager->update();
+    // sceneManager->update();
     frameIdx = (frameIdx + 1) % FB_COUNT;
 
     joypad_poll();
     player_update();
-    handle_debug_input(sceneManager);
+    // handle_debug_input(sceneManager);
     player_detect_closest_entity();
     for (int i = 0; i < 3; i += 1) {
       mixer_try_play();
     }
     
-    State *state = getState();
+    
     // Grab Actors from the current active scene + apply actor's settings
-    Actor* actors = state->activeScene->actors;
-    for(int i=0; i < state->activeScene->actorCount; ++i) {
+    Actor* actors = state->activeLevel->activeScene->actors;
+    for(int i=0; i < state->activeLevel->activeScene->actorCount; ++i) {
       t3d_mat4fp_from_srt(&actors[i].modelMat[frameIdx], actors[i].scale, actors[i].rot, actors[i].pos);
     }
 
-    struct Entity *entities = state->activeScene->entities;
-    for(int i = 0; i < state->activeScene->entityCount; i++) {
+    struct Entity *entities = state->activeLevel->activeScene->entities;
+    for(int i = 0; i < state->activeLevel->activeScene->entityCount; i++) {
       if (!entities[i].skip) {
         entities[i].update(&entities[i], time);
       }
@@ -257,7 +262,7 @@ int main()
 
     // we say we'd like to take a "single" matrix
     t3d_matrix_push_pos(1);
-    for(int i=0; i < state->activeScene->actorCount; ++i) {
+    for(int i=0; i < state->activeLevel->activeScene->actorCount; ++i) {
       bool isVisible = t3d_frustum_vs_aabb_s16(&fr, actors[i].worldMin, actors[i].worldMax);
       if (!actors[i].skip && isVisible) {
         // actor_draw(&actors[i]);

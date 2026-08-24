@@ -38,9 +38,9 @@ static void update_impl() {
       // create new scene
       switch(sceneId) {
         case 0:
-          state->activeScene = createTest(0); break;
+          state->activeScene = createTest(); break;
         case 1:
-          state->activeScene = createPark(1); break;
+          state->activeScene = createPark(); break;
         default:
           assertf(false, "Invalid scene-id: %d", sceneId);
       }
