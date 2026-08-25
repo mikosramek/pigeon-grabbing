@@ -9,6 +9,6 @@ void registerParkLevel(void);
 struct Level *loadParkLevel(void);
 void unloadParkLevel(void);
 
-void changeParkScene(uint32_t sceneID);
+void changeParkScene(uint32_t sceneID, uint32_t spawnPointID);
 
 #endif

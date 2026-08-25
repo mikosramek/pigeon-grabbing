@@ -25,6 +25,8 @@ static Scene Park = (Scene) {
   .actorCount = 44,
   .modelCount = 11,
   .entityCount = 1,
+  .doorCount = 1,
+  .spawnCount = 2,
 };
 
 Scene *getBasePark() {
@@ -51,8 +53,9 @@ Scene *createPark() {
 
   Door northDoor = {
     .targetSpawnPointID = 2,
-    .aabbMin = (fm_vec3_t){{ -19.0f, 0, -259.0f }},
-    .aabbMax = (fm_vec3_t){{ 22.0f, 0, -289.0f }},
+    .targetSceneID = 1,
+    .aabbMin = (fm_vec3_t){{ -19.0f, 0, -289.0f }},
+    .aabbMax = (fm_vec3_t){{ 22.0f, 0, -259.0f }},
   };
   Door *doors = malloc_uncached(sizeof(Door) * 1);
   doors[0] = northDoor;

@@ -25,6 +25,8 @@ static Scene Test = (Scene) {
   .actorCount = 9,
   .modelCount = 2,
   .entityCount = 0,
+  .spawnCount = 1,
+  .doorCount = 0,
 };
 
 Scene *getBaseTest() {

@@ -20,15 +20,28 @@
 // DEFINITIONS
 
 static Scene <NAME> = (Scene) {
+  .id = <SCENE_ID>,
   .name = "<NAME>",
   .actorCount = <ACTOR_COUNT>,
   .modelCount = <MODEL_COUNT>,
   .entityCount = <ENTITY_COUNT>,
+  .doorCount = <DOOR_COUNT>,
+  .spawnCount = <SPAWN_COUNT>,
 };
 
 // LOAD FUNCTION
-Scene *create<NAME>(uint32_t scene_id) {
-  <NAME>.id = scene_id;
+Scene *create<NAME>(void) {
+  // SPAWN POINT SETUP
+  SpawnPoint *spawns = malloc_uncached(sizeof(SpawnPoint) * <NAME>.spawnCount);
+<SPAWNS>
+  <NAME>.spawns = spawns;
+
+  // DOOR SETUP
+  Door *doors = malloc_uncached(sizeof(Door) * <NAME>.doorCount);
+<DOORS>
+  <NAME>.doors = doors;
+
+
   // MODEL IMPORT
 <MODEL_IMPORT>
 
@@ -72,4 +85,6 @@ void unload<NAME>(void) {
 
   free_uncached(<NAME>.actors);
   free_uncached(<NAME>.entities);
+  free_uncached(<NAME>.spawns);
+  free_uncached(<NAME>.doors);
 }

@@ -13,6 +13,7 @@ typedef struct {
 typedef struct {
   fm_vec3_t aabbMin;
   fm_vec3_t aabbMax;
+  uint32_t targetSceneID;
   uint32_t targetSpawnPointID;
 } Door;
 
@@ -29,7 +30,10 @@ typedef struct {
   uint32_t modelCount;
 
   SpawnPoint *spawns;
+  uint32_t spawnCount;
+  
   Door *doors;
+  uint32_t doorCount;
 } Scene;
 
 #endif

@@ -1,0 +1,5 @@
+  spawns[<INDEX>] = {
+    .id = <SPAWN_ID>,
+    .rotationAngle = <SPAWN_ANGLE>,
+    .spawn = (fm_vec3_t){{ <SPAWN_X>, 0, <SPAWN_Z> }},
+  };

@@ -24,6 +24,7 @@
 #include "utils/pigeon_math.h"
 #include "utils/pigeon_audio.h"
 #include "utils/pigeon_ui.h"
+#include "utils/doors.h"
 #include "entities/entity.h"
 
 // SCENES
@@ -47,8 +48,8 @@ State *getState(void)
 }
 
 static Debug DEBUG = {
-  .debugEnabled = false,
-  .infoMode = SCENE
+  .debugEnabled = true,
+  .infoMode = CAMERA
 };
 
 void display_debug(void) {
@@ -62,7 +63,7 @@ void display_debug(void) {
       rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 190, "camera y pos: %f", player->position.y);
       rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 200, "camera rotation: %f", player->cameraAngle);
       rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 210, "camera target (x, z, y): %f/%f/%f", cos(player->cameraAngle), sin(player->cameraAngle), player->cameraY);
-      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "camera pos (x, z, y): %f/%f/%f", player->position.x, player->position.y, player->position.z);
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "camera pos (x, y, z): %f/%f/%f", player->position.x, player->position.y, player->position.z);
       rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "d_up/d_down: change FOV");
       break;
     case AUDIO:
@@ -203,7 +204,7 @@ int main()
 
   uint32_t time = 0;
   State *state = getState();
-  state->activeLevel = loadParkLevel();
+  state->activeLevel = loadParkLevel(); // todo: turn this into the menu
 
   for(;;) {
     // UPDATE
@@ -215,6 +216,7 @@ int main()
     player_update();
     // handle_debug_input(sceneManager);
     player_detect_closest_entity();
+    handle_doors();
     for (int i = 0; i < 3; i += 1) {
       mixer_try_play();
     }

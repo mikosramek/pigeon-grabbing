@@ -10,7 +10,7 @@ struct Level {
   uint32_t startingSpawnID;
   Scene *activeScene;
   Scene *scenes[5];
-  void (*loadScene)(uint32_t sceneID);
+  void (*loadScene)(uint32_t sceneID, uint32_t spawnPointID);
 };
 
 // struct Entity {

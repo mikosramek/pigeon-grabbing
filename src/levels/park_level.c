@@ -36,7 +36,7 @@ struct Level *loadParkLevel() {
   return &ParkLevel;
 }
 
-void changeParkScene(uint32_t sceneID) {
+void changeParkScene(uint32_t sceneID, uint32_t spawnPointID) {
   // Scene *nextScene = NULL;
   // for (int i = 0; i < len(ParkLevel.scenes); i += 1) {
   //   if (ParkLevel.scenes[i]->id == sceneID) {
@@ -50,11 +50,15 @@ void changeParkScene(uint32_t sceneID) {
     default: assertf(false, "Current scene doesn't have an unload: %d", (int)ParkLevel.activeScene->id);
   }
 
+  debugf("%d", (int)sceneID);
+
   switch (sceneID) {
     case 0: ParkLevel.activeScene = createPark(); break;
     case 1: ParkLevel.activeScene = createTest(); break;
     default: assertf(false, "Trying to load a scene that doesn't exist: %d", (int)sceneID);
   }
+
+  // move player to spawnPoint
 }
 
 
