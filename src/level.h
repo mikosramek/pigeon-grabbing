@@ -6,8 +6,7 @@
 
 struct Level {
   uint32_t id;
-  uint32_t startingSceneID;
-  uint32_t startingSpawnID;
+  uint32_t totalFeatherCount;
   Scene *activeScene;
   Scene *scenes[5];
   void (*loadScene)(uint32_t sceneID, uint32_t spawnPointID);

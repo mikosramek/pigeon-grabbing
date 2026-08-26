@@ -16,6 +16,6 @@ void interactionUI(void);
 
 // float getPlayerDist(struct Entity *feather);
 
-struct Entity createFeather(Actor *actor);
+struct Entity createFeather(uint32_t entityId, Actor *actor);
 
 #endif

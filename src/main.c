@@ -48,7 +48,7 @@ State *getState(void)
 }
 
 static Debug DEBUG = {
-  .debugEnabled = true,
+  .debugEnabled = false,
   .infoMode = CAMERA
 };
 
@@ -146,14 +146,7 @@ void handle_debug_input(SceneManager *sceneManager) {
 
 void handle_game_ui(void) {
   State *state = getState();
-  // todo: replace this with a statically generated number
-  int totalFeathers = 0;
-  for(int i=0; i < state->activeLevel->activeScene->entityCount; ++i) {
-    if (state->activeLevel->activeScene->entities[i].entityId == 0) {
-      totalFeathers += 1;
-    }
-  }
-  rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 290, 16, "%i/%i", state->feathersCollected, totalFeathers);
+  rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 290, 16, "%i/%i", state->feathersCollected, (int)state->activeLevel->totalFeatherCount);
 }
 
 int main()
@@ -202,6 +195,19 @@ int main()
 
   p_audio_play_track(TITLE);
 
+  // Load Game Stuff
+  // entityState *state_dmap = NULL;
+  // int key = -1;
+  // dmap_insert(state_dmap, &key, (entityState){.id = -1, .state = ACTIVE });
+  // key = 0;
+  // dmap_insert(state_dmap, &key, (entityState){.id = 0, .state = ACTIVE });
+  // key = 1;
+  // dmap_insert(state_dmap, &key, (entityState){.id = 1, .state = INACTIVE });
+
+  // bool entity_states[3] = { true, false, false };
+  // state.entityState = entity_state_init(entity_states);
+
+  // SETUP STATE + STARTING LEVEL
   uint32_t time = 0;
   State *state = getState();
   state->activeLevel = loadParkLevel(); // todo: turn this into the menu
@@ -220,6 +226,12 @@ int main()
     for (int i = 0; i < 3; i += 1) {
       mixer_try_play();
     }
+    
+    // joypad_buttons_t buttons = joypad_get_buttons_pressed(0);
+    
+    // if (buttons.a) {
+    //   handle_doors();
+    // }
     
     
     // Grab Actors from the current active scene + apply actor's settings

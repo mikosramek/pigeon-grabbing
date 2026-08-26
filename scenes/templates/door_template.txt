@@ -1,4 +1,4 @@
-  doors[<INDEX>] = {
+  doors[<INDEX>] = (Door){
     .targetSpawnPointID = <TARGET_SPAWN_ID>,
     .targetSceneID = <TARGET_SCENE_ID>,
     .aabbMin = (fm_vec3_t){{ <MIN_X>, 0, <MIN_Z> }},

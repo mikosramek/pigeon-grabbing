@@ -3,7 +3,7 @@
 * GENERATED ON <DATE>
 */
 // INCLUDES
-#include "<LOWERCASE_NAME>.h"
+#include "<CAMELCASE_NAME>.h"
 
 #include "scene.h"
 #include "../globals.h"
@@ -29,8 +29,17 @@ static Scene <NAME> = (Scene) {
   .spawnCount = <SPAWN_COUNT>,
 };
 
+Scene *getBase<NAME>() {
+  return &<NAME>;
+}
+
 // LOAD FUNCTION
 Scene *create<NAME>(void) {
+  float xPositionMultiplier = 6.4f;
+  float yPositionMultiplier = 6.4f;
+  float zPositionMultiplier = 6.4f;
+  float scaleMultiplier = 0.1f;
+
   // SPAWN POINT SETUP
   SpawnPoint *spawns = malloc_uncached(sizeof(SpawnPoint) * <NAME>.spawnCount);
 <SPAWNS>
@@ -52,10 +61,6 @@ Scene *create<NAME>(void) {
 
   // make this a global thing?
   uint32_t startingIndex = 0;
-  float xPositionMultiplier = 6.4f;
-  float yPositionMultiplier = 6.4f;
-  float zPositionMultiplier = 6.4f;
-  float scaleMultiplier = 0.1f;
 
   // ACTORS
   Actor *actors = malloc_uncached(sizeof(Actor) * <NAME>.actorCount);

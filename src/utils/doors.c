@@ -11,8 +11,13 @@ void handle_doors(void) {
   for (int i = 0; i < state->activeLevel->activeScene->doorCount; i += 1) {
     bool xAligned = pos.x >= doors[i].aabbMin.x && pos.x <= doors[i].aabbMax.x;
     bool zAligned = pos.z >= doors[i].aabbMin.z && pos.z <= doors[i].aabbMax.z;
+
+    // debugf("p: %f / %f\n", pos.x, pos.z);
+    // debugf("x: %f / %f\n", doors[i].aabbMin.x, doors[i].aabbMax.x);
+    // debugf("z: %f / %f\n", doors[i].aabbMin.z, doors[i].aabbMax.z);
+
     if(xAligned && zAligned) {
-      state->activeLevel->loadScene(1, 0);
+      state->activeLevel->loadScene(doors[i].targetSceneID, doors[i].targetSpawnPointID);
     }
   }
 };

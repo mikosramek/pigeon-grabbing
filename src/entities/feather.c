@@ -41,7 +41,8 @@ bool canInteract(struct Entity *feather) {
 void interact(struct Entity *feather) {
   State *state = getState();
   feather->skip = true;
-  deleteActor(feather->actor);
+  feather->actor->skip = true;
+  // update_entity_state(feather->id, INACTIVE);
   // TODO: handling actual collection
   state->feathersCollected += 1;
 }
@@ -55,10 +56,11 @@ void interactionUI(void) {
   rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 26, 230, "collect feather");
 }
 
-struct Entity createFeather(Actor *actor) {
+struct Entity createFeather(uint32_t entityId, Actor *actor) {
+  // enum EntityState state = find_state(entityId)->state;
   int aabbScale = 10;
   struct Entity newFeather = (struct Entity) {
-    .entityId = 0,
+    .id = entityId,
 		.update = *updateFeather,
     .canInteract = *canInteract,
     .interact = *interact,
@@ -76,5 +78,11 @@ struct Entity createFeather(Actor *actor) {
       (int)(actor->staticPos[2] + aabbScale),
     }
 	};
+  
+  // if (state == INACTIVE) {
+     // TODO it's a bit redundant to call this which updates the state to inactive when we know it's inactive
+    // interact(&newFeather);
+  // }
+
   return newFeather;
 }

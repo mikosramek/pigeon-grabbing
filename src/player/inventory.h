@@ -4,7 +4,7 @@
 
 #include <libdragon.h>
 
-struct InventoryItem{
+struct InventoryItem {
   uint32_t id;
   char *name;
   sprite_t *sprite;

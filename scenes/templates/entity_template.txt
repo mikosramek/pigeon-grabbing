@@ -1,1 +1,1 @@
-entities[<INDEX>] = create<ENTITY>(&actors[<ACTOR_INDEX>]);
+entities[<INDEX>] = create<ENTITY>(<ID>, &actors[<ACTOR_INDEX>]);

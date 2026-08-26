@@ -3,19 +3,21 @@
 #include <libdragon.h>
 #include "../level.h"
 #include "../scenes/scene.h"
-#include "../scenes/park.h"
 #include "../scenes/test.h"
+#include "../scenes/park.h"
+#include "../scenes/parkNorth.h"
+#include "../player/player.h"
 
 static struct Level ParkLevel = {
   .id = 1,
-  .startingSceneID = 0,
-  .startingSpawnID = 0, // will I ever need to change this???
+  .totalFeatherCount = 3,
 };
 
 
 void registerParkLevel() {
   ParkLevel.scenes[0] = getBasePark();
-  ParkLevel.scenes[1] = getBaseTest();
+  ParkLevel.scenes[1] = getBaseParkNorth();
+  ParkLevel.scenes[2] = getBaseTest();
   ParkLevel.loadScene = changeParkScene;
 }
 
@@ -31,7 +33,8 @@ struct Level *loadParkLevel() {
 
   
   // createPark loads in the park
-  ParkLevel.activeScene = createPark();
+  // ParkLevel.activeScene = createParkNorth();
+  changeParkScene(-1, -1);
 
   return &ParkLevel;
 }
@@ -44,21 +47,37 @@ void changeParkScene(uint32_t sceneID, uint32_t spawnPointID) {
   //   }
   // }
   // assertf(nextScene != NULL, "Next scene with id of %d doesn't exist!", sceneID);
-  switch (ParkLevel.activeScene->id) {
-    case 0: unloadPark(); break;
-    case 1: unloadTest(); break;
-    default: assertf(false, "Current scene doesn't have an unload: %d", (int)ParkLevel.activeScene->id);
+  if (ParkLevel.activeScene != NULL) {
+    switch (ParkLevel.activeScene->id) {
+      case -1: unloadTest(); break;
+      case 0: unloadPark(); break;
+      case 1: unloadParkNorth(); break;
+      default: assertf(false, "Current scene doesn't have an unload: %d", (int)ParkLevel.activeScene->id);
+    }
   }
 
-  debugf("%d", (int)sceneID);
-
   switch (sceneID) {
+    case -1: ParkLevel.activeScene = createTest(); break;
     case 0: ParkLevel.activeScene = createPark(); break;
-    case 1: ParkLevel.activeScene = createTest(); break;
+    case 1: ParkLevel.activeScene = createParkNorth(); break;
     default: assertf(false, "Trying to load a scene that doesn't exist: %d", (int)sceneID);
   }
 
+  SpawnPoint *spawn = NULL;
+  for (int i = 0; i < ParkLevel.activeScene->spawnCount; i += 1) {
+    uint32_t id = ParkLevel.activeScene->spawns[i].id;
+    if (id == spawnPointID) {
+      spawn = &ParkLevel.activeScene->spawns[i];
+    }
+  }
+
+  assertf(spawn != NULL, "NO SPAWN FOUND!");
+  
   // move player to spawnPoint
+  Player *p = getPlayer();
+  p->position = spawn->spawn;
+  p->cameraAngle = spawn->angle;
+
 }
 
 

@@ -7,7 +7,7 @@
 typedef struct {
   uint32_t id;
   fm_vec3_t spawn; // Player position (y is ignored)
-  float rotationAngle; // Player rotation in radians
+  float angle; // Player z rotation in radians
 } SpawnPoint;
 
 typedef struct {

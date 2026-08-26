@@ -3,7 +3,11 @@
 
 #include <libdragon.h>
 #include "../level.h"
+#include "../scenes/test.h"
 #include "../scenes/scene.h"
+#include "../scenes/park.h"
+#include "../scenes/parkNorth.h"
+#include "../player/player.h"
 
 void registerParkLevel(void);
 struct Level *loadParkLevel(void);
