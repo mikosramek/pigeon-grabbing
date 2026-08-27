@@ -128,10 +128,10 @@ void handle_debug_input() {
     // }
   } else if (DEBUG.infoMode == AUDIO) {
     if (buttons.c_up) {
-      p_audio_play_track(TRANQUIL_WALK);
+      p_audio_play_track(BGM_TRANQUIL_WALK);
     }
     if (buttons.c_down) {
-      p_audio_stop_track(TRANQUIL_WALK);
+      p_audio_stop_track(BGM_TRANQUIL_WALK);
     }
   } else if (DEBUG.infoMode == CAMERA) {
     Player *player = getPlayer();
@@ -191,11 +191,19 @@ int main()
 
   rdpq_text_register_font(FONT_BUILTIN_DEBUG_MONO, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO));
 
-  p_audio_play_track(TITLE);
+  p_audio_play_track(BGM_TITLE);
 
   // SETUP STATE + STARTING LEVEL
   uint32_t time = 0;
+  // TODO: replace this with mem values
+  bool entities[3] = { true, false, true }; // true is ACTIVE (uncollected)
+  int feathersCollected = 0;
+  for (int i = 0; i < 3; i++) {
+    feathersCollected += entities[i] ? 0 : 1;
+  }
   State *state = getState();
+  state->entityState = entity_state_init(entities);
+  state->feathersCollected = feathersCollected;
   state->activeLevel = loadParkLevel(); // todo: turn this into the menu
 
   for(;;) {

@@ -78,18 +78,18 @@ Scene *create<NAME>(void) {
 
 // UNLOAD FUNCTION
 void unload<NAME>(void) {
-  for (int i = 0; i < <NAME>.modelCount; i++) {
-    cleanupModel(<NAME>.models[i]);
-  }
+  // for (int i = 0; i < <NAME>.modelCount; i++) {
+  //   cleanupModel(<NAME>.models[i]);
+  // }
 
-  free_uncached(<NAME>.models);
+  // free_uncached(<NAME>.models);
 
   for (int i = 0; i < <NAME>.actorCount; i++) {
     deleteActor(&<NAME>.actors[i]);
   }
 
-  free_uncached(<NAME>.actors);
-  free_uncached(<NAME>.entities);
-  free_uncached(<NAME>.spawns);
-  free_uncached(<NAME>.doors);
+  // free_uncached(<NAME>.actors);
+  // free_uncached(<NAME>.entities);
+  // free_uncached(<NAME>.spawns);
+  // free_uncached(<NAME>.doors);
 }

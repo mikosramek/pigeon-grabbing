@@ -52,13 +52,13 @@ void p_audio_play_track(BackgroundMusic trackToPlay) {
   }
 
   switch(trackToPlay) {
-    case TITLE:
+    case BGM_TITLE:
       if (!pA->title.playing) {
         xm64player_play(&pA->title, CHANNEL_MUSIC);
         pA->currentTrack = &pA->title;
       }
       break;
-    case TRANQUIL_WALK:
+    case BGM_TRANQUIL_WALK:
       if (!pA->tranquilWalk.playing) {
         xm64player_play(&pA->tranquilWalk, CHANNEL_MUSIC);
         pA->currentTrack = &pA->tranquilWalk;
@@ -73,7 +73,7 @@ void p_audio_play_SFX(SFX sfx) {
   PigeonAudio *pA = getPigeonAudio();
 
   switch (sfx) {
-    case STEP:
+    case SFX_STEP:
       wav64_play(&pA->step, CHANNEL_SFX1);
       break;
     default:
@@ -86,10 +86,10 @@ void p_audio_play_SFX(SFX sfx) {
 void p_audio_stop_track(BackgroundMusic trackToStop) {
   PigeonAudio *pA = getPigeonAudio();
   switch(trackToStop) {
-    case TITLE:
+    case BGM_TITLE:
       xm64player_stop(&pA->title);
       break;
-    case TRANQUIL_WALK:
+    case BGM_TRANQUIL_WALK:
       xm64player_stop(&pA->tranquilWalk);
       break;
     default:

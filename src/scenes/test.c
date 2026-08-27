@@ -236,9 +236,9 @@ Scene *createTest(void) {
 
 // UNLOAD FUNCTION
 void unloadTest(void) {
-  for (int i = 0; i < Test.modelCount; i++) {
+  // for (int i = 0; i < Test.modelCount; i++) {
     // cleanupModel(Test.models[i]);
-  }
+  // }
 
   // free_uncached(Test.models);
 

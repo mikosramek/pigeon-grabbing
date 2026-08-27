@@ -707,9 +707,9 @@ Scene *createPark(void) {
 
 // UNLOAD FUNCTION
 void unloadPark(void) {
-  for (int i = 0; i < Park.modelCount; i++) {
+  // for (int i = 0; i < Park.modelCount; i++) {
     // cleanupModel(Park.models[i]);
-  }
+  // }
 
   // free_uncached(Park.models);
 

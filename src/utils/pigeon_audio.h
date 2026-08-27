@@ -4,12 +4,12 @@
 #include <libdragon.h>
 
 typedef enum SFX {
-  STEP
+  SFX_STEP
 } SFX;
 
 typedef enum BackgroundMusic {
-  TITLE,
-  TRANQUIL_WALK
+  BGM_TITLE,
+  BGM_TRANQUIL_WALK
 } BackgroundMusic;
 
 typedef struct {

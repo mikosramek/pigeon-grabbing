@@ -131,7 +131,7 @@ void player_handle_movement(void) {
 
 
   if (yOffset <= stepHeight * -0.9f && !player.hasStepped) {
-    // p_audio_play_SFX(STEP);
+    // p_audio_play_SFX(SFX_STEP);
     player.hasStepped = true;
   } else if (yOffset >= stepHeight * -.9f && player.hasStepped) {
     player.hasStepped = false;
