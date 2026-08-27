@@ -40,36 +40,36 @@ Scene *create<NAME>(void) {
   float zPositionMultiplier = 6.4f;
   float scaleMultiplier = 0.1f;
 
-  // SPAWN POINT SETUP
   SpawnPoint *spawns = malloc_uncached(sizeof(SpawnPoint) * <NAME>.spawnCount);
+  Door *doors = malloc_uncached(sizeof(Door) * <NAME>.doorCount);
+  T3DModel **models = malloc_uncached(sizeof(T3DModel *) * <NAME>.modelCount);
+  Actor *actors = malloc_uncached(sizeof(Actor) * <NAME>.actorCount);
+  struct Entity *entities = malloc_uncached(sizeof(struct Entity) * <NAME>.entityCount);
+
+  // SPAWN POINT SETUP
 <SPAWNS>
   <NAME>.spawns = spawns;
 
   // DOOR SETUP
-  Door *doors = malloc_uncached(sizeof(Door) * <NAME>.doorCount);
 <DOORS>
   <NAME>.doors = doors;
-
 
   // MODEL IMPORT
 <MODEL_IMPORT>
 
-  T3DModel **models = malloc_uncached(sizeof(T3DModel *) * <NAME>.modelCount);
 <MODELS>
-
   <NAME>.models = models;
 
   // make this a global thing?
   uint32_t startingIndex = 0;
 
   // ACTORS
-  Actor *actors = malloc_uncached(sizeof(Actor) * <NAME>.actorCount);
 <ACTORS>
 	// Entity Actors
 <ENTITY_ACTORS>
   <NAME>.actors = actors;
 
-  struct Entity *entities = malloc_uncached(sizeof(struct Entity) * <NAME>.entityCount);
+  // Entities
 <ENTITIES>
   <NAME>.entities = entities;
   

@@ -40,8 +40,13 @@ Scene *createTest(void) {
   float zPositionMultiplier = 6.4f;
   float scaleMultiplier = 0.1f;
 
-  // SPAWN POINT SETUP
   SpawnPoint *spawns = malloc_uncached(sizeof(SpawnPoint) * Test.spawnCount);
+  Door *doors = malloc_uncached(sizeof(Door) * Test.doorCount);
+  T3DModel **models = malloc_uncached(sizeof(T3DModel *) * Test.modelCount);
+  Actor *actors = malloc_uncached(sizeof(Actor) * Test.actorCount);
+  struct Entity *entities = malloc_uncached(sizeof(struct Entity) * Test.entityCount);
+
+  // SPAWN POINT SETUP
   spawns[0] = (SpawnPoint){
     .id = -1,
     .angle = 0.0,
@@ -51,16 +56,14 @@ Scene *createTest(void) {
   Test.spawns = spawns;
 
   // DOOR SETUP
-  Door *doors = malloc_uncached(sizeof(Door) * Test.doorCount);
   doors[0] = (Door){
-    .targetSpawnPointID = 0,
+    .targetSpawnPointID = 1,
     .targetSceneID = 0,
-    .aabbMin = (fm_vec3_t){{ (-23.867591857910156f * xPositionMultiplier) - (1.0 * xPositionMultiplier), 0, (-0.0f * zPositionMultiplier) - (2.7918701171875 * zPositionMultiplier) }},
-    .aabbMax = (fm_vec3_t){{ (-23.867591857910156f * xPositionMultiplier) + (1.0 * xPositionMultiplier), 0, (-0.0f * zPositionMultiplier) + (2.7918701171875 * zPositionMultiplier) }},
+    .aabbMin = (fm_vec3_t){{ (-6.32f * xPositionMultiplier) - (1.0 * xPositionMultiplier), 0, (-0.0f * zPositionMultiplier) - (2.79 * zPositionMultiplier) }},
+    .aabbMax = (fm_vec3_t){{ (-6.32f * xPositionMultiplier) + (1.0 * xPositionMultiplier), 0, (-0.0f * zPositionMultiplier) + (2.79 * zPositionMultiplier) }},
   };
 
   Test.doors = doors;
-
 
   // MODEL IMPORT
 	ModelData two_cube = setupModel("rom:/two_cube.t3dm");
@@ -68,11 +71,9 @@ Scene *createTest(void) {
 	ModelData feather = setupModel("rom:/feather.t3dm");
 
 
-  T3DModel **models = malloc_uncached(sizeof(T3DModel *) * Test.modelCount);
 	models[0] = two_cube.model;
 	models[1] = test_plane.model;
 	models[2] = feather.model;
-
 
   Test.models = models;
 
@@ -80,7 +81,6 @@ Scene *createTest(void) {
   uint32_t startingIndex = 0;
 
   // ACTORS
-  Actor *actors = malloc_uncached(sizeof(Actor) * Test.actorCount);
 	actors[0] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 0,
     /* MODEL DATA   */ &test_plane,
@@ -94,7 +94,7 @@ Scene *createTest(void) {
 	actors[1] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 1,
     /* MODEL DATA   */ &two_cube,
-    /* POSITION     */ (float[3]){ 10.409882545471191f * xPositionMultiplier, 0.0f * yPositionMultiplier, -0.2506256401538849f * zPositionMultiplier },
+    /* POSITION     */ (float[3]){ 10.41f * xPositionMultiplier, 0.0f * yPositionMultiplier, -0.25f * zPositionMultiplier },
     /* ROTATION     */ (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
@@ -104,7 +104,7 @@ Scene *createTest(void) {
 	actors[2] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 2,
     /* MODEL DATA   */ &two_cube,
-    /* POSITION     */ (float[3]){ 10.409882545471191f * xPositionMultiplier, 2.0f * yPositionMultiplier, -0.2506256401538849f * zPositionMultiplier },
+    /* POSITION     */ (float[3]){ 10.41f * xPositionMultiplier, 2.0f * yPositionMultiplier, -0.25f * zPositionMultiplier },
     /* ROTATION     */ (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
@@ -114,7 +114,7 @@ Scene *createTest(void) {
 	actors[3] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 3,
     /* MODEL DATA   */ &two_cube,
-    /* POSITION     */ (float[3]){ 10.409882545471191f * xPositionMultiplier, 4.0f * yPositionMultiplier, -0.2506256699562073f * zPositionMultiplier },
+    /* POSITION     */ (float[3]){ 10.41f * xPositionMultiplier, 4.0f * yPositionMultiplier, -0.25f * zPositionMultiplier },
     /* ROTATION     */ (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
@@ -124,7 +124,7 @@ Scene *createTest(void) {
 	actors[4] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 4,
     /* MODEL DATA   */ &two_cube,
-    /* POSITION     */ (float[3]){ 10.409882545471191f * xPositionMultiplier, 4.0f * yPositionMultiplier, 1.7493743896484375f * zPositionMultiplier },
+    /* POSITION     */ (float[3]){ 10.41f * xPositionMultiplier, 4.0f * yPositionMultiplier, 1.75f * zPositionMultiplier },
     /* ROTATION     */ (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
@@ -134,7 +134,7 @@ Scene *createTest(void) {
 	actors[5] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 5,
     /* MODEL DATA   */ &two_cube,
-    /* POSITION     */ (float[3]){ 8.409882545471191f * xPositionMultiplier, 4.0f * yPositionMultiplier, -0.2506256401538849f * zPositionMultiplier },
+    /* POSITION     */ (float[3]){ 8.41f * xPositionMultiplier, 4.0f * yPositionMultiplier, -0.25f * zPositionMultiplier },
     /* ROTATION     */ (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
@@ -164,8 +164,8 @@ Scene *createTest(void) {
 	actors[8] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 8,
     /* MODEL DATA   */ &two_cube,
-    /* POSITION     */ (float[3]){ 0.4834599196910858f * xPositionMultiplier, 1.0249347686767578f * yPositionMultiplier, -7.0f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.8535534739494324f, 0.1464466005563736f, -0.3535533845424652f, 0.35355332493782043f },
+    /* POSITION     */ (float[3]){ 0.48f * xPositionMultiplier, 1.02f * yPositionMultiplier, -7.0f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.85f, 0.15f, -0.3535533845424652f, 0.35f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
@@ -174,9 +174,9 @@ Scene *createTest(void) {
 	actors[9] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 9,
     /* MODEL DATA   */ &two_cube,
-    /* POSITION     */ (float[3]){ -23.885473251342773f * xPositionMultiplier, 0.0f * yPositionMultiplier, -3.8254079818725586f * zPositionMultiplier },
+    /* POSITION     */ (float[3]){ -6.33f * xPositionMultiplier, 0.0f * yPositionMultiplier, -3.83f * zPositionMultiplier },
     /* ROTATION     */ (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f },
-    /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 3.0979769229888916f * scaleMultiplier},
+    /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 3.1f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
     FB_COUNT
@@ -184,9 +184,9 @@ Scene *createTest(void) {
 	actors[10] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 10,
     /* MODEL DATA   */ &two_cube,
-    /* POSITION     */ (float[3]){ -23.885473251342773f * xPositionMultiplier, 0.0f * yPositionMultiplier, 3.760194778442383f * zPositionMultiplier },
+    /* POSITION     */ (float[3]){ -6.33f * xPositionMultiplier, 0.0f * yPositionMultiplier, 3.76f * zPositionMultiplier },
     /* ROTATION     */ (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f },
-    /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 3.0979769229888916f * scaleMultiplier},
+    /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 3.1f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
     FB_COUNT
@@ -194,9 +194,9 @@ Scene *createTest(void) {
 	actors[11] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 11,
     /* MODEL DATA   */ &two_cube,
-    /* POSITION     */ (float[3]){ -23.885473251342773f * xPositionMultiplier, 6.195953845977783f * yPositionMultiplier, -0.0f * zPositionMultiplier },
+    /* POSITION     */ (float[3]){ -6.33f * xPositionMultiplier, 6.2f * yPositionMultiplier, -0.0f * zPositionMultiplier },
     /* ROTATION     */ (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f },
-    /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 4.749322891235352f * scaleMultiplier, 1.0f * scaleMultiplier},
+    /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 4.75f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
     FB_COUNT
@@ -204,7 +204,7 @@ Scene *createTest(void) {
 	actors[12] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 12,
     /* MODEL DATA   */ &two_cube,
-    /* POSITION     */ (float[3]){ -1.312874674797058f * xPositionMultiplier, 0.0f * yPositionMultiplier, 11.231840133666992f * zPositionMultiplier },
+    /* POSITION     */ (float[3]){ -1.31f * xPositionMultiplier, 0.0f * yPositionMultiplier, 11.23f * zPositionMultiplier },
     /* ROTATION     */ (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f },
     /* SCALE        */ (float[3]){ 3.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
@@ -216,8 +216,8 @@ Scene *createTest(void) {
 	actors[13] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 13,
     /* MODEL DATA   */ &feather,
-    /* POSITION     */ (float[3]){ -3.761903762817383f * xPositionMultiplier, 0.8023080825805664f * yPositionMultiplier, -3.8931334018707275f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.9417588114738464f, 0.0f, 0.0f, -0.3362892270088196f },
+    /* POSITION     */ (float[3]){ -3.76f * xPositionMultiplier, 0.8f * yPositionMultiplier, -3.89f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.94f, 0.0f, 0.0f, -0.34f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
@@ -226,7 +226,7 @@ Scene *createTest(void) {
 
   Test.actors = actors;
 
-  struct Entity *entities = malloc_uncached(sizeof(struct Entity) * Test.entityCount);
+  // Entities
 	entities[0] = createFeather(-1, &actors[13]);
 
   Test.entities = entities;

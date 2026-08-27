@@ -29,7 +29,6 @@
 // STATE
 typedef struct {
   struct Level *activeLevel;
-  Scene *activeScene;
   int requestSceneId;
   int feathersCollected;
   // struct entityState_entry *entityState;

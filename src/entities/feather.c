@@ -9,19 +9,7 @@
 
 #include "math.h"
 
-// float getPlayerDist(struct Entity *feather) {
-//   Player *player = getPlayer();
-//   fm_vec3_t myPos = {{ feather->actor->staticPos[0], feather->actor->staticPos[1], feather->actor->staticPos[2] }};
-//   float playerDist = fm_vec3_distance(&player->position, &myPos);
-//   return playerDist;
-// }
-
 void updateFeather(struct Entity *feather, uint32_t time) {
-  // float dist = getPlayerDist(feather);
-  // if (feather->skip || dist > 75.0f) {
-  //   return;
-  // }
-
   float yOffset = sin(time * 0.05f) * 0.75f;
   feather->actor->pos[1] = feather->actor->staticPos[1] + yOffset;
 }
@@ -42,7 +30,6 @@ void interact(struct Entity *feather) {
   State *state = getState();
   feather->skip = true;
   feather->actor->skip = true;
-  // update_entity_state(feather->id, INACTIVE);
   // TODO: handling actual collection
   state->feathersCollected += 1;
 }
@@ -57,7 +44,6 @@ void interactionUI(void) {
 }
 
 struct Entity createFeather(uint32_t entityId, Actor *actor) {
-  // enum EntityState state = find_state(entityId)->state;
   int aabbScale = 10;
   struct Entity newFeather = (struct Entity) {
     .id = entityId,
@@ -78,11 +64,6 @@ struct Entity createFeather(uint32_t entityId, Actor *actor) {
       (int)(actor->staticPos[2] + aabbScale),
     }
 	};
-  
-  // if (state == INACTIVE) {
-     // TODO it's a bit redundant to call this which updates the state to inactive when we know it's inactive
-    // interact(&newFeather);
-  // }
 
   return newFeather;
 }

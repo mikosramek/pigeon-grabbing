@@ -40,8 +40,13 @@ Scene *createParkNorth(void) {
   float zPositionMultiplier = 6.4f;
   float scaleMultiplier = 0.1f;
 
-  // SPAWN POINT SETUP
   SpawnPoint *spawns = malloc_uncached(sizeof(SpawnPoint) * ParkNorth.spawnCount);
+  Door *doors = malloc_uncached(sizeof(Door) * ParkNorth.doorCount);
+  T3DModel **models = malloc_uncached(sizeof(T3DModel *) * ParkNorth.modelCount);
+  Actor *actors = malloc_uncached(sizeof(Actor) * ParkNorth.actorCount);
+  struct Entity *entities = malloc_uncached(sizeof(struct Entity) * ParkNorth.entityCount);
+
+  // SPAWN POINT SETUP
   spawns[0] = (SpawnPoint){
     .id = 3,
     .angle = 1.559999942779541,
@@ -50,39 +55,37 @@ Scene *createParkNorth(void) {
   spawns[1] = (SpawnPoint){
     .id = 4,
     .angle = 1.1030865907669067,
-    .spawn = (fm_vec3_t){{ 25.967714309692383f * xPositionMultiplier, -0, 25.0361385345459f * zPositionMultiplier }},
+    .spawn = (fm_vec3_t){{ 25.97f * xPositionMultiplier, -0, 25.04f * zPositionMultiplier }},
   };
   spawns[2] = (SpawnPoint){
     .id = 5,
     .angle = 1.559999942779541,
-    .spawn = (fm_vec3_t){{ -29.98514747619629f * xPositionMultiplier, -0, 9.024652481079102f * zPositionMultiplier }},
+    .spawn = (fm_vec3_t){{ -29.99f * xPositionMultiplier, -0, 9.02f * zPositionMultiplier }},
   };
 
   ParkNorth.spawns = spawns;
 
   // DOOR SETUP
-  Door *doors = malloc_uncached(sizeof(Door) * ParkNorth.doorCount);
   doors[0] = (Door){
     .targetSpawnPointID = 1,
     .targetSceneID = 0,
-    .aabbMin = (fm_vec3_t){{ (0.0f * xPositionMultiplier) - (5.0 * xPositionMultiplier), 0, (-4.013331890106201f * zPositionMultiplier) - (1.0 * zPositionMultiplier) }},
-    .aabbMax = (fm_vec3_t){{ (0.0f * xPositionMultiplier) + (5.0 * xPositionMultiplier), 0, (-4.013331890106201f * zPositionMultiplier) + (1.0 * zPositionMultiplier) }},
+    .aabbMin = (fm_vec3_t){{ (0.0f * xPositionMultiplier) - (5.0 * xPositionMultiplier), 0, (-4.01f * zPositionMultiplier) - (1.0 * zPositionMultiplier) }},
+    .aabbMax = (fm_vec3_t){{ (0.0f * xPositionMultiplier) + (5.0 * xPositionMultiplier), 0, (-4.01f * zPositionMultiplier) + (1.0 * zPositionMultiplier) }},
   };
   doors[1] = (Door){
     .targetSpawnPointID = 1,
     .targetSceneID = 0,
-    .aabbMin = (fm_vec3_t){{ (-30.0f * xPositionMultiplier) - (5.0 * xPositionMultiplier), 0, (5.986668109893799f * zPositionMultiplier) - (1.0 * zPositionMultiplier) }},
-    .aabbMax = (fm_vec3_t){{ (-30.0f * xPositionMultiplier) + (5.0 * xPositionMultiplier), 0, (5.986668109893799f * zPositionMultiplier) + (1.0 * zPositionMultiplier) }},
+    .aabbMin = (fm_vec3_t){{ (-30.0f * xPositionMultiplier) - (5.0 * xPositionMultiplier), 0, (5.99f * zPositionMultiplier) - (1.0 * zPositionMultiplier) }},
+    .aabbMax = (fm_vec3_t){{ (-30.0f * xPositionMultiplier) + (5.0 * xPositionMultiplier), 0, (5.99f * zPositionMultiplier) + (1.0 * zPositionMultiplier) }},
   };
   doors[2] = (Door){
-    .targetSpawnPointID = 1,
-    .targetSceneID = 0,
-    .aabbMin = (fm_vec3_t){{ (29.0f * xPositionMultiplier) - (1.0 * xPositionMultiplier), 0, (24.98666763305664f * zPositionMultiplier) - (5.0 * zPositionMultiplier) }},
-    .aabbMax = (fm_vec3_t){{ (29.0f * xPositionMultiplier) + (1.0 * xPositionMultiplier), 0, (24.98666763305664f * zPositionMultiplier) + (5.0 * zPositionMultiplier) }},
+    .targetSpawnPointID = -1,
+    .targetSceneID = -1,
+    .aabbMin = (fm_vec3_t){{ (29.0f * xPositionMultiplier) - (1.0 * xPositionMultiplier), 0, (24.99f * zPositionMultiplier) - (5.0 * zPositionMultiplier) }},
+    .aabbMax = (fm_vec3_t){{ (29.0f * xPositionMultiplier) + (1.0 * xPositionMultiplier), 0, (24.99f * zPositionMultiplier) + (5.0 * zPositionMultiplier) }},
   };
 
   ParkNorth.doors = doors;
-
 
   // MODEL IMPORT
 	ModelData fat_pigeon = setupModel("rom:/fat_pigeon.t3dm");
@@ -94,7 +97,6 @@ Scene *createParkNorth(void) {
 	ModelData rock_post = setupModel("rom:/rock_post.t3dm");
 
 
-  T3DModel **models = malloc_uncached(sizeof(T3DModel *) * ParkNorth.modelCount);
 	models[0] = fat_pigeon.model;
 	models[1] = park_north_ground.model;
 	models[2] = park_north_walls.model;
@@ -103,14 +105,12 @@ Scene *createParkNorth(void) {
 	models[5] = feather.model;
 	models[6] = rock_post.model;
 
-
   ParkNorth.models = models;
 
   // make this a global thing?
   uint32_t startingIndex = 0;
 
   // ACTORS
-  Actor *actors = malloc_uncached(sizeof(Actor) * ParkNorth.actorCount);
 	actors[0] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 0,
     /* MODEL DATA   */ &park_north_walls,
@@ -134,9 +134,9 @@ Scene *createParkNorth(void) {
 	actors[2] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 2,
     /* MODEL DATA   */ &rock_post,
-    /* POSITION     */ (float[3]){ -9.338617324829102f * xPositionMultiplier, -1.0f * yPositionMultiplier, 22.109373092651367f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.998724102973938f, 0.0f, 0.0f, -0.05049978941679001f },
-    /* SCALE        */ (float[3]){ 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier},
+    /* POSITION     */ (float[3]){ -9.34f * xPositionMultiplier, -1.0f * yPositionMultiplier, 22.11f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 1.0f, 0.0f, 0.0f, -0.05f },
+    /* SCALE        */ (float[3]){ 1.46f * scaleMultiplier, 1.46f * scaleMultiplier, 1.46f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
     FB_COUNT
@@ -144,9 +144,9 @@ Scene *createParkNorth(void) {
 	actors[3] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 3,
     /* MODEL DATA   */ &rock_post,
-    /* POSITION     */ (float[3]){ 7.932077407836914f * xPositionMultiplier, -4.0f * yPositionMultiplier, 28.346012115478516f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.906396210193634f, 0.0f, 0.0f, 0.4224287271499634f },
-    /* SCALE        */ (float[3]){ 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier},
+    /* POSITION     */ (float[3]){ 7.93f * xPositionMultiplier, -4.0f * yPositionMultiplier, 28.35f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.91f, 0.0f, 0.0f, 0.42f },
+    /* SCALE        */ (float[3]){ 1.46f * scaleMultiplier, 1.46f * scaleMultiplier, 1.46f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
     FB_COUNT
@@ -154,9 +154,9 @@ Scene *createParkNorth(void) {
 	actors[4] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 4,
     /* MODEL DATA   */ &rock_post,
-    /* POSITION     */ (float[3]){ -3.741633415222168f * xPositionMultiplier, 0.0f * yPositionMultiplier, 32.18394470214844f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.9997519254684448f, 0.0f, 0.0f, -0.022271305322647095f },
-    /* SCALE        */ (float[3]){ 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier},
+    /* POSITION     */ (float[3]){ -3.74f * xPositionMultiplier, 0.0f * yPositionMultiplier, 32.18f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 1.0f, 0.0f, 0.0f, -0.02f },
+    /* SCALE        */ (float[3]){ 1.46f * scaleMultiplier, 1.46f * scaleMultiplier, 1.46f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
     FB_COUNT
@@ -164,9 +164,9 @@ Scene *createParkNorth(void) {
 	actors[5] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 5,
     /* MODEL DATA   */ &rock_post,
-    /* POSITION     */ (float[3]){ 6.332939147949219f * xPositionMultiplier, -3.0f * yPositionMultiplier, 15.952690124511719f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.47090500593185425f, 0.0f, 0.0f, 0.8821837902069092f },
-    /* SCALE        */ (float[3]){ 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier},
+    /* POSITION     */ (float[3]){ 6.33f * xPositionMultiplier, -3.0f * yPositionMultiplier, 15.95f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.47f, 0.0f, 0.0f, 0.88f },
+    /* SCALE        */ (float[3]){ 1.46f * scaleMultiplier, 1.46f * scaleMultiplier, 1.46f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
     FB_COUNT
@@ -174,9 +174,9 @@ Scene *createParkNorth(void) {
 	actors[6] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 6,
     /* MODEL DATA   */ &rock_post,
-    /* POSITION     */ (float[3]){ -3.181934356689453f * xPositionMultiplier, -2.0f * yPositionMultiplier, 14.273594856262207f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.9821704626083374f, 0.0f, 0.0f, 0.18799200654029846f },
-    /* SCALE        */ (float[3]){ 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier},
+    /* POSITION     */ (float[3]){ -3.18f * xPositionMultiplier, -2.0f * yPositionMultiplier, 14.27f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.98f, 0.0f, 0.0f, 0.19f },
+    /* SCALE        */ (float[3]){ 1.46f * scaleMultiplier, 1.46f * scaleMultiplier, 1.46f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
     FB_COUNT
@@ -184,9 +184,9 @@ Scene *createParkNorth(void) {
 	actors[7] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 7,
     /* MODEL DATA   */ &rock_post,
-    /* POSITION     */ (float[3]){ 0.8006281852722168f * xPositionMultiplier, -3.799537181854248f * yPositionMultiplier, 23.46477699279785f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.906396210193634f, 0.0f, 0.0f, 0.0f },
-    /* SCALE        */ (float[3]){ 3.350133180618286f * scaleMultiplier, 3.350133180618286f * scaleMultiplier, 1.0089550018310547f * scaleMultiplier},
+    /* POSITION     */ (float[3]){ 0.8f * xPositionMultiplier, -3.8f * yPositionMultiplier, 23.46f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.91f, 0.0f, 0.0f, 0.0f },
+    /* SCALE        */ (float[3]){ 3.35f * scaleMultiplier, 3.35f * scaleMultiplier, 1.01f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
     FB_COUNT
@@ -194,8 +194,8 @@ Scene *createParkNorth(void) {
 	actors[8] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 8,
     /* MODEL DATA   */ &rock_wall_long,
-    /* POSITION     */ (float[3]){ 4.929537773132324f * xPositionMultiplier, -2.075974941253662f * yPositionMultiplier, -7.026008605957031f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.7071068286895752f, 0.0f, 0.0f, -0.7071067094802856f },
+    /* POSITION     */ (float[3]){ 4.93f * xPositionMultiplier, -2.08f * yPositionMultiplier, -7.03f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.71f, 0.0f, 0.0f, -0.71f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
@@ -204,8 +204,8 @@ Scene *createParkNorth(void) {
 	actors[9] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 9,
     /* MODEL DATA   */ &rock_wall_long,
-    /* POSITION     */ (float[3]){ -4.787884712219238f * xPositionMultiplier, -2.075974941253662f * yPositionMultiplier, -7.1110005378723145f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ -0.7071066498756409f, 0.0f, 0.0f, -0.70710688829422f },
+    /* POSITION     */ (float[3]){ -4.79f * xPositionMultiplier, -2.08f * yPositionMultiplier, -7.11f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ -0.71f, 0.0f, 0.0f, -0.71f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
@@ -214,9 +214,9 @@ Scene *createParkNorth(void) {
 	actors[10] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 10,
     /* MODEL DATA   */ &rock_post,
-    /* POSITION     */ (float[3]){ -24.082406997680664f * xPositionMultiplier, -2.075974941253662f * yPositionMultiplier, 9.310710906982422f * zPositionMultiplier },
+    /* POSITION     */ (float[3]){ -24.08f * xPositionMultiplier, -2.08f * yPositionMultiplier, 9.31f * zPositionMultiplier },
     /* ROTATION     */ (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f },
-    /* SCALE        */ (float[3]){ 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier},
+    /* SCALE        */ (float[3]){ 1.46f * scaleMultiplier, 1.46f * scaleMultiplier, 1.46f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
     FB_COUNT
@@ -224,9 +224,9 @@ Scene *createParkNorth(void) {
 	actors[11] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 11,
     /* MODEL DATA   */ &rock_post,
-    /* POSITION     */ (float[3]){ 5.1972246170043945f * xPositionMultiplier, -2.075974941253662f * yPositionMultiplier, 0.039127349853515625f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.9999243021011353f, 0.0f, 0.0f, -0.012306091375648975f },
-    /* SCALE        */ (float[3]){ 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier},
+    /* POSITION     */ (float[3]){ 5.2f * xPositionMultiplier, -2.08f * yPositionMultiplier, 0.04f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 1.0f, 0.0f, 0.0f, -0.01f },
+    /* SCALE        */ (float[3]){ 1.46f * scaleMultiplier, 1.46f * scaleMultiplier, 1.46f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
     FB_COUNT
@@ -234,8 +234,8 @@ Scene *createParkNorth(void) {
 	actors[12] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 12,
     /* MODEL DATA   */ &iron_trim,
-    /* POSITION     */ (float[3]){ 4.533724784851074f * xPositionMultiplier, 1.924025058746338f * yPositionMultiplier, -7.026010513305664f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.7071068286895752f, 0.0f, 0.0f, -0.7071067094802856f },
+    /* POSITION     */ (float[3]){ 4.53f * xPositionMultiplier, 1.92f * yPositionMultiplier, -7.03f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.71f, 0.0f, 0.0f, -0.71f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
@@ -244,8 +244,8 @@ Scene *createParkNorth(void) {
 	actors[13] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 13,
     /* MODEL DATA   */ &iron_trim,
-    /* POSITION     */ (float[3]){ -4.392071723937988f * xPositionMultiplier, 1.924025058746338f * yPositionMultiplier, -7.111000061035156f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.7071068286895752f, 0.0f, 0.0f, -0.7071067094802856f },
+    /* POSITION     */ (float[3]){ -4.39f * xPositionMultiplier, 1.92f * yPositionMultiplier, -7.11f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.71f, 0.0f, 0.0f, -0.71f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
@@ -254,8 +254,8 @@ Scene *createParkNorth(void) {
 	actors[14] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 14,
     /* MODEL DATA   */ &rock_wall_long,
-    /* POSITION     */ (float[3]){ -24.101173400878906f * xPositionMultiplier, -2.075974941253662f * yPositionMultiplier, 11.832655906677246f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ -0.7071066498756409f, 0.0f, 0.0f, -0.70710688829422f },
+    /* POSITION     */ (float[3]){ -24.1f * xPositionMultiplier, -2.86f * yPositionMultiplier, 11.83f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ -0.71f, 0.0f, 0.0f, -0.71f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
@@ -264,8 +264,8 @@ Scene *createParkNorth(void) {
 	actors[15] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 15,
     /* MODEL DATA   */ &iron_trim,
-    /* POSITION     */ (float[3]){ -23.705360412597656f * xPositionMultiplier, 1.924025058746338f * yPositionMultiplier, 11.832655906677246f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.7071068286895752f, 0.0f, 0.0f, -0.7071067094802856f },
+    /* POSITION     */ (float[3]){ -23.71f * xPositionMultiplier, 1.14f * yPositionMultiplier, 11.83f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.71f, 0.0f, 0.0f, -0.71f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
@@ -274,8 +274,8 @@ Scene *createParkNorth(void) {
 	actors[16] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 16,
     /* MODEL DATA   */ &rock_wall_long,
-    /* POSITION     */ (float[3]){ -24.10116958618164f * xPositionMultiplier, -2.075974941253662f * yPositionMultiplier, 25.567739486694336f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ -0.7071066498756409f, 0.0f, 0.0f, -0.70710688829422f },
+    /* POSITION     */ (float[3]){ -24.1f * xPositionMultiplier, -2.86f * yPositionMultiplier, 25.57f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ -0.71f, 0.0f, 0.0f, -0.71f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
@@ -284,8 +284,8 @@ Scene *createParkNorth(void) {
 	actors[17] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 17,
     /* MODEL DATA   */ &iron_trim,
-    /* POSITION     */ (float[3]){ -23.70535659790039f * xPositionMultiplier, 1.924025058746338f * yPositionMultiplier, 25.567739486694336f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.7071068286895752f, 0.0f, 0.0f, -0.7071067094802856f },
+    /* POSITION     */ (float[3]){ -23.71f * xPositionMultiplier, 1.14f * yPositionMultiplier, 25.57f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.71f, 0.0f, 0.0f, -0.71f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
@@ -294,9 +294,9 @@ Scene *createParkNorth(void) {
 	actors[18] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 18,
     /* MODEL DATA   */ &rock_post,
-    /* POSITION     */ (float[3]){ -24.082406997680664f * xPositionMultiplier, -2.075974941253662f * yPositionMultiplier, 30.90627098083496f * zPositionMultiplier },
+    /* POSITION     */ (float[3]){ -24.08f * xPositionMultiplier, -2.08f * yPositionMultiplier, 30.91f * zPositionMultiplier },
     /* ROTATION     */ (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f },
-    /* SCALE        */ (float[3]){ 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier},
+    /* SCALE        */ (float[3]){ 1.46f * scaleMultiplier, 1.46f * scaleMultiplier, 1.46f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
     FB_COUNT
@@ -304,9 +304,9 @@ Scene *createParkNorth(void) {
 	actors[19] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 19,
     /* MODEL DATA   */ &fat_pigeon,
-    /* POSITION     */ (float[3]){ -25.623680114746094f * xPositionMultiplier, 2.5946035385131836f * yPositionMultiplier, 24.20075798034668f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.20877142250537872f, 0.0f, 0.0f, -0.9779645204544067f },
-    /* SCALE        */ (float[3]){ 0.6295814514160156f * scaleMultiplier, 0.7065135836601257f * scaleMultiplier, 0.5139351487159729f * scaleMultiplier},
+    /* POSITION     */ (float[3]){ -25.62f * xPositionMultiplier, 2.03f * yPositionMultiplier, 24.2f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.21f, 0.0f, 0.0f, -0.98f },
+    /* SCALE        */ (float[3]){ 0.63f * scaleMultiplier, 0.71f * scaleMultiplier, 0.51f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
     FB_COUNT
@@ -314,9 +314,9 @@ Scene *createParkNorth(void) {
 	actors[20] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 20,
     /* MODEL DATA   */ &rock_post,
-    /* POSITION     */ (float[3]){ -5.041791915893555f * xPositionMultiplier, -2.075974941253662f * yPositionMultiplier, 0.05805344507098198f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.9999243021011353f, 0.0f, 0.0f, -0.012306091375648975f },
-    /* SCALE        */ (float[3]){ 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier},
+    /* POSITION     */ (float[3]){ -5.04f * xPositionMultiplier, -2.08f * yPositionMultiplier, 0.06f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 1.0f, 0.0f, 0.0f, -0.01f },
+    /* SCALE        */ (float[3]){ 1.46f * scaleMultiplier, 1.46f * scaleMultiplier, 1.46f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
     FB_COUNT
@@ -324,9 +324,9 @@ Scene *createParkNorth(void) {
 	actors[21] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 21,
     /* MODEL DATA   */ &rock_post,
-    /* POSITION     */ (float[3]){ -25.619508743286133f * xPositionMultiplier, -3.142040729522705f * yPositionMultiplier, 24.23647689819336f * zPositionMultiplier },
+    /* POSITION     */ (float[3]){ -25.62f * xPositionMultiplier, -3.7f * yPositionMultiplier, 24.24f * zPositionMultiplier },
     /* ROTATION     */ (float[4]){ 1.0f, 0.0f, 0.0f, 0.0f },
-    /* SCALE        */ (float[3]){ 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier, 1.461161732673645f * scaleMultiplier},
+    /* SCALE        */ (float[3]){ 1.46f * scaleMultiplier, 1.46f * scaleMultiplier, 1.46f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
     FB_COUNT
@@ -336,8 +336,8 @@ Scene *createParkNorth(void) {
 	actors[22] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 22,
     /* MODEL DATA   */ &feather,
-    /* POSITION     */ (float[3]){ 0.8384191989898682f * xPositionMultiplier, 1.1246172189712524f * yPositionMultiplier, 23.471511840820312f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.6920505166053772f, 0.0f, 0.0f, 0.7218490839004517f },
+    /* POSITION     */ (float[3]){ 0.84f * xPositionMultiplier, 1.12f * yPositionMultiplier, 23.47f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.69f, 0.0f, 0.0f, 0.72f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
@@ -346,7 +346,7 @@ Scene *createParkNorth(void) {
 
   ParkNorth.actors = actors;
 
-  struct Entity *entities = malloc_uncached(sizeof(struct Entity) * ParkNorth.entityCount);
+  // Entities
 	entities[0] = createFeather(1, &actors[22]);
 
   ParkNorth.entities = entities;

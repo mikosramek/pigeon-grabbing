@@ -47,14 +47,14 @@ void changeParkScene(uint32_t sceneID, uint32_t spawnPointID) {
   //   }
   // }
   // assertf(nextScene != NULL, "Next scene with id of %d doesn't exist!", sceneID);
-  if (ParkLevel.activeScene != NULL) {
-    switch (ParkLevel.activeScene->id) {
-      case -1: unloadTest(); break;
-      case 0: unloadPark(); break;
-      case 1: unloadParkNorth(); break;
-      default: assertf(false, "Current scene doesn't have an unload: %d", (int)ParkLevel.activeScene->id);
-    }
-  }
+  // if (ParkLevel.activeScene != NULL) {
+  //   switch (ParkLevel.activeScene->id) {
+  //     case -1: unloadTest(); break;
+  //     case 0: unloadPark(); break;
+  //     case 1: unloadParkNorth(); break;
+  //     default: assertf(false, "Current scene doesn't have an unload: %d", (int)ParkLevel.activeScene->id);
+  //   }
+  // }
 
   switch (sceneID) {
     case -1: ParkLevel.activeScene = createTest(); break;
@@ -83,4 +83,7 @@ void changeParkScene(uint32_t sceneID, uint32_t spawnPointID) {
 
 void unloadParkLevel() {
   // free_uncached(ParkLevel.scenes);
+  unloadPark();
+  unloadParkNorth();
+  unloadTest();
 }

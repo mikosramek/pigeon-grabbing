@@ -29,7 +29,6 @@
 
 // SCENES
 #include "level.h"
-#include "sceneManager.h"
 #include "scenes/scene.h"
 #include "levels/park_level.h"
 
@@ -37,7 +36,7 @@
 static int frameIdx = 0;
 
 static State state = {
-  .activeScene = NULL,
+  .activeLevel = NULL,
   .requestSceneId = -1,
   .feathersCollected = 0,
 };
@@ -72,8 +71,8 @@ void display_debug(void) {
       rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "c_up: play | c_down: stop");
       break;
     case SCENE:
-      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 210, "current scene name: %s", state.activeScene->name);
-      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "current scene id: %i", (int)state.activeScene->id);
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 210, "current scene name: %s", state.activeLevel->activeScene->name);
+      rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 220, "current scene id: %i", (int)state.activeLevel->activeScene->id);
       rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 16, 230, "c_right/c_left: scene change");
       break;
     case HIDDEN:
@@ -84,7 +83,7 @@ void display_debug(void) {
   }
 }
 
-void handle_debug_input(SceneManager *sceneManager) {
+void handle_debug_input() {
   joypad_buttons_t buttons = joypad_get_buttons_pressed(1);
   joypad_buttons_t heldButtons = joypad_get_buttons(1);
   if (buttons.start) {
@@ -111,22 +110,22 @@ void handle_debug_input(SceneManager *sceneManager) {
   }
 
   if (DEBUG.infoMode == SCENE) {
-    State *state = getState();
-    if (buttons.c_left) {
-      if (state->activeScene->id > 0) {
-        sceneManager->loadScene(state->activeScene->id - 1);
-      } else {
-        sceneManager->loadScene(sceneManager->sceneCount - 1);
-      }
-      resetPlayer();
-    } else if (buttons.c_right) {
-      if (state->activeScene->id < sceneManager->sceneCount - 1) {
-        sceneManager->loadScene(state->activeScene->id + 1);
-      } else {
-        sceneManager->loadScene(0);
-      }
-      resetPlayer();
-    }
+    // State *state = getState();
+    // if (buttons.c_left) {
+    //   if (state->activeScene->id > 0) {
+    //     sceneManager->loadScene(state->activeScene->id - 1);
+    //   } else {
+    //     sceneManager->loadScene(sceneManager->sceneCount - 1);
+    //   }
+    //   resetPlayer();
+    // } else if (buttons.c_right) {
+    //   if (state->activeScene->id < sceneManager->sceneCount - 1) {
+    //     sceneManager->loadScene(state->activeScene->id + 1);
+    //   } else {
+    //     sceneManager->loadScene(0);
+    //   }
+    //   resetPlayer();
+    // }
   } else if (DEBUG.infoMode == AUDIO) {
     if (buttons.c_up) {
       p_audio_play_track(TRANQUIL_WALK);
@@ -173,7 +172,6 @@ int main()
   // empty, sunflower, safflower
   bool inventory[3] = { true, true, false };
   player_init(inventory);
-  // SceneManager* sceneManager = scene_manager_create(1);
   Player *player = getPlayer();
   registerParkLevel();
 
@@ -195,18 +193,6 @@ int main()
 
   p_audio_play_track(TITLE);
 
-  // Load Game Stuff
-  // entityState *state_dmap = NULL;
-  // int key = -1;
-  // dmap_insert(state_dmap, &key, (entityState){.id = -1, .state = ACTIVE });
-  // key = 0;
-  // dmap_insert(state_dmap, &key, (entityState){.id = 0, .state = ACTIVE });
-  // key = 1;
-  // dmap_insert(state_dmap, &key, (entityState){.id = 1, .state = INACTIVE });
-
-  // bool entity_states[3] = { true, false, false };
-  // state.entityState = entity_state_init(entity_states);
-
   // SETUP STATE + STARTING LEVEL
   uint32_t time = 0;
   State *state = getState();
@@ -215,14 +201,13 @@ int main()
   for(;;) {
     // UPDATE
     time += 1;
-    // sceneManager->update();
+    handle_doors();
     frameIdx = (frameIdx + 1) % FB_COUNT;
 
     joypad_poll();
     player_update();
-    // handle_debug_input(sceneManager);
+    // handle_debug_input();
     player_detect_closest_entity();
-    handle_doors();
     for (int i = 0; i < 3; i += 1) {
       mixer_try_play();
     }
@@ -251,8 +236,8 @@ int main()
     t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(player->cameraFOV), cam_near, cam_far);
     t3d_viewport_look_at(&viewport, &player->position, &player->cameraTarget, &(fm_vec3_t){{0,1,0}});
     // DRAW
-    surface_t *surface = display_get();
-    rdpq_attach(surface, display_get_zbuf());
+    // surface_t *surface = display_get();
+    rdpq_attach(display_get(), display_get_zbuf());
     t3d_frame_start();
     t3d_viewport_attach(&viewport);
 
