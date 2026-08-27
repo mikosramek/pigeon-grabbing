@@ -708,17 +708,17 @@ Scene *createPark(void) {
 // UNLOAD FUNCTION
 void unloadPark(void) {
   for (int i = 0; i < Park.modelCount; i++) {
-    cleanupModel(Park.models[i]);
+    // cleanupModel(Park.models[i]);
   }
 
-  free_uncached(Park.models);
+  // free_uncached(Park.models);
 
   for (int i = 0; i < Park.actorCount; i++) {
     deleteActor(&Park.actors[i]);
   }
 
-  free_uncached(Park.actors);
-  free_uncached(Park.entities);
-  free_uncached(Park.spawns);
-  free_uncached(Park.doors);
+  // free_uncached(Park.actors);
+  // free_uncached(Park.entities);
+  // free_uncached(Park.spawns);
+  // free_uncached(Park.doors);
 }

@@ -239,12 +239,12 @@ int main()
     // surface_t *surface = display_get();
     rdpq_attach(display_get(), display_get_zbuf());
     t3d_frame_start();
+    t3d_screen_clear_color(fogColor); //RGBA32(100, 80, 80, 0xFF)); // clears the screen 
+    t3d_screen_clear_depth(); // clears the depth buffer
     t3d_viewport_attach(&viewport);
 
     // rdpq_set_prim_color(RGBA32(0, 0, 0, 0xFF));
 
-    t3d_screen_clear_color(fogColor); //RGBA32(100, 80, 80, 0xFF)); // clears the screen 
-    t3d_screen_clear_depth(); // clears the depth buffer
 
     t3d_light_set_ambient(colorAmbient);
     t3d_light_set_directional(0, colorDir, &lightDirVec);

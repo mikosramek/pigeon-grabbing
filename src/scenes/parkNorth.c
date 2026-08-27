@@ -357,17 +357,17 @@ Scene *createParkNorth(void) {
 // UNLOAD FUNCTION
 void unloadParkNorth(void) {
   for (int i = 0; i < ParkNorth.modelCount; i++) {
-    cleanupModel(ParkNorth.models[i]);
+    // cleanupModel(ParkNorth.models[i]);
   }
 
-  free_uncached(ParkNorth.models);
+  // free_uncached(ParkNorth.models);
 
   for (int i = 0; i < ParkNorth.actorCount; i++) {
     deleteActor(&ParkNorth.actors[i]);
   }
 
-  free_uncached(ParkNorth.actors);
-  free_uncached(ParkNorth.entities);
-  free_uncached(ParkNorth.spawns);
-  free_uncached(ParkNorth.doors);
+  // free_uncached(ParkNorth.actors);
+  // free_uncached(ParkNorth.entities);
+  // free_uncached(ParkNorth.spawns);
+  // free_uncached(ParkNorth.doors);
 }

@@ -62,7 +62,7 @@ Actor setupActor(
 
 void deleteActor(Actor *actor) {
   free_uncached(actor->modelMat);
-  actor->skip = true;
+  // actor->skip = true;
 }
 
 bool shouldCull(Actor *actor, fm_vec3_t playerPosition, float cameraAngle) {
