@@ -1,6 +1,6 @@
 /*
 * PARKNORTH SCENE
-* GENERATED ON 2026-08-26
+* GENERATED ON 2026-08-28
 */
 // INCLUDES
 #include "parkNorth.h"
@@ -48,18 +48,18 @@ Scene *createParkNorth(void) {
 
   // SPAWN POINT SETUP
   spawns[0] = (SpawnPoint){
-    .id = 3,
-    .angle = 1.559999942779541,
+    .id = 2,
+    .angle = 1.56,
     .spawn = (fm_vec3_t){{ 0.0f * xPositionMultiplier, -0, -0.0f * zPositionMultiplier }},
   };
   spawns[1] = (SpawnPoint){
-    .id = 4,
-    .angle = 1.1030865907669067,
+    .id = 3,
+    .angle = 1.1031,
     .spawn = (fm_vec3_t){{ 25.9677f * xPositionMultiplier, -0, 25.0361f * zPositionMultiplier }},
   };
   spawns[2] = (SpawnPoint){
-    .id = 5,
-    .angle = 1.559999942779541,
+    .id = 4,
+    .angle = 1.56,
     .spawn = (fm_vec3_t){{ -29.9851f * xPositionMultiplier, -0, 9.0247f * zPositionMultiplier }},
   };
 
@@ -73,14 +73,14 @@ Scene *createParkNorth(void) {
     .aabbMax = (fm_vec3_t){{ (0.0f * xPositionMultiplier) + (5.0 * xPositionMultiplier), 0, (-4.0133f * zPositionMultiplier) + (1.0 * zPositionMultiplier) }},
   };
   doors[1] = (Door){
-    .targetSpawnPointID = 1,
-    .targetSceneID = 0,
+    .targetSpawnPointID = -1,
+    .targetSceneID = -1,
     .aabbMin = (fm_vec3_t){{ (-30.0f * xPositionMultiplier) - (5.0 * xPositionMultiplier), 0, (5.9867f * zPositionMultiplier) - (1.0 * zPositionMultiplier) }},
     .aabbMax = (fm_vec3_t){{ (-30.0f * xPositionMultiplier) + (5.0 * xPositionMultiplier), 0, (5.9867f * zPositionMultiplier) + (1.0 * zPositionMultiplier) }},
   };
   doors[2] = (Door){
-    .targetSpawnPointID = -1,
-    .targetSceneID = -1,
+    .targetSpawnPointID = 5,
+    .targetSceneID = 2,
     .aabbMin = (fm_vec3_t){{ (29.0f * xPositionMultiplier) - (1.0 * xPositionMultiplier), 0, (24.9867f * zPositionMultiplier) - (5.0 * zPositionMultiplier) }},
     .aabbMax = (fm_vec3_t){{ (29.0f * xPositionMultiplier) + (1.0 * xPositionMultiplier), 0, (24.9867f * zPositionMultiplier) + (5.0 * zPositionMultiplier) }},
   };

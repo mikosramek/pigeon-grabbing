@@ -6,6 +6,7 @@
 #include "../scenes/test.h"
 #include "../scenes/park.h"
 #include "../scenes/parkNorth.h"
+#include "../scenes/parkBeach.h"
 #include "../player/player.h"
 
 static struct Level ParkLevel = {
@@ -17,7 +18,8 @@ static struct Level ParkLevel = {
 void registerParkLevel() {
   ParkLevel.scenes[0] = getBasePark();
   ParkLevel.scenes[1] = getBaseParkNorth();
-  ParkLevel.scenes[2] = getBaseTest();
+  ParkLevel.scenes[2] = getBaseParkBeach();
+  ParkLevel.scenes[3] = getBaseTest();
   ParkLevel.loadScene = changeParkScene;
 }
 
@@ -52,6 +54,7 @@ void changeParkScene(uint32_t sceneID, uint32_t spawnPointID) {
       case -1: unloadTest(); break;
       case 0: unloadPark(); break;
       case 1: unloadParkNorth(); break;
+      case 2: unloadParkBeach(); break;
       default: assertf(false, "Current scene doesn't have an unload: %d", (int)ParkLevel.activeScene->id);
     }
   }
@@ -60,6 +63,7 @@ void changeParkScene(uint32_t sceneID, uint32_t spawnPointID) {
     case -1: ParkLevel.activeScene = createTest(); break;
     case 0: ParkLevel.activeScene = createPark(); break;
     case 1: ParkLevel.activeScene = createParkNorth(); break;
+    case 2: ParkLevel.activeScene = createParkBeach(); break;
     default: assertf(false, "Trying to load a scene that doesn't exist: %d", (int)sceneID);
   }
 
