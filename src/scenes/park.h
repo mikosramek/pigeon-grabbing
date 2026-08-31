@@ -15,6 +15,6 @@ Scene *getBasePark(void);
 
 Scene *createPark(void);
 
-void unloadPark(void);
+void unloadPark(void *arg);
 
 #endif

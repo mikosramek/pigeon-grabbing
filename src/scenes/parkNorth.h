@@ -15,6 +15,6 @@ Scene *getBaseParkNorth(void);
 
 Scene *createParkNorth(void);
 
-void unloadParkNorth(void);
+void unloadParkNorth(void *arg);
 
 #endif

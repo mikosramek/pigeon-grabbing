@@ -15,6 +15,6 @@ Scene *getBaseParkBeach(void);
 
 Scene *createParkBeach(void);
 
-void unloadParkBeach(void);
+void unloadParkBeach(void *arg);
 
 #endif

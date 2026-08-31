@@ -35,6 +35,9 @@ void p_audio_init(void) {
   xm64player_open(&pA->title, "rom:/title.xm64");
   xm64player_set_loop(&pA->title, true);
   xm64player_set_vol(&pA->title, 0.5f);
+
+  wav64_open(&pA->undoneInSorrow, "rom:/undone_in_sorrow.wav64");
+  wav64_set_loop(&pA->undoneInSorrow, true);
   
   pA->currentTrack = NULL;
 
@@ -63,6 +66,9 @@ void p_audio_play_track(BackgroundMusic trackToPlay) {
         xm64player_play(&pA->tranquilWalk, CHANNEL_MUSIC);
         pA->currentTrack = &pA->tranquilWalk;
       }
+      break;
+    case BGM_UNDONE_IN_SORROW:
+      // wav64_play(&pA->undoneInSorrow, CHANNEL_MUSIC);
       break;
     default:
       assertf(false, "Audio track isn't handled in p_audio_play_track (%i)", (int)trackToPlay);

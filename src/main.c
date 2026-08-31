@@ -39,6 +39,7 @@ static State state = {
   .activeLevel = NULL,
   .requestSceneId = -1,
   .feathersCollected = 0,
+  .feathers = { ACTIVE, ACTIVE, ACTIVE }
 };
 
 State *getState(void)
@@ -195,14 +196,20 @@ int main()
 
   // SETUP STATE + STARTING LEVEL
   uint32_t time = 0;
+  State *state = getState();
+
   // TODO: replace this with mem values
-  bool entities[3] = { true, false, true }; // true is ACTIVE (uncollected)
+  enum EntityState startingFeatherState[3] = {
+    ACTIVE, // park south
+    INACTIVE, // park north
+    ACTIVE // test scene
+  };
+  // state->entityState = entity_state_init(startingFeatherState);
   int feathersCollected = 0;
   for (int i = 0; i < 3; i++) {
-    feathersCollected += entities[i] ? 0 : 1;
+    feathersCollected += startingFeatherState[i] == ACTIVE ? 0 : 1;
+    state->feathers[i] = startingFeatherState[i];
   }
-  State *state = getState();
-  state->entityState = entity_state_init(entities);
   state->feathersCollected = feathersCollected;
   state->activeLevel = loadParkLevel(); // todo: turn this into the menu
 

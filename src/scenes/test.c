@@ -227,7 +227,7 @@ Scene *createTest(void) {
   Test.actors = actors;
 
   // Entities
-	entities[0] = createFeather(-1, &actors[13]);
+	entities[0] = createFeather(2, &actors[13]);
 
   Test.entities = entities;
   
@@ -235,19 +235,20 @@ Scene *createTest(void) {
 }
 
 // UNLOAD FUNCTION
-void unloadTest(void) {
-  // for (int i = 0; i < Test.modelCount; i++) {
-    // cleanupModel(Test.models[i]);
-  // }
+// Call via `rdpq_call_deferred(unloadTest, NULL);` for safety
+void unloadTest(void *arg) {
+  for (int i = 0; i < Test.modelCount; i++) {
+    cleanupModel(Test.models[i]);
+  }
 
-  // free_uncached(Test.models);
+  free_uncached(Test.models);
 
   for (int i = 0; i < Test.actorCount; i++) {
     deleteActor(&Test.actors[i]);
   }
 
-  // free_uncached(Test.actors);
-  // free_uncached(Test.entities);
-  // free_uncached(Test.spawns);
-  // free_uncached(Test.doors);
+  free_uncached(Test.actors);
+  free_uncached(Test.entities);
+  free_uncached(Test.spawns);
+  free_uncached(Test.doors);
 }

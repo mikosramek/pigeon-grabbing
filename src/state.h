@@ -10,25 +10,20 @@ enum EntityState {
   INACTIVE,
 };
 
-struct entityState_entry {
-  uint32_t id;
-  enum EntityState state;
-  struct entityState_entry *nextEntry;
-};
-
-struct entityState_entry* entity_state_init(bool states[]);
-struct entityState_entry* entity_state_find(uint32_t id);
-void entity_state_update(uint32_t id, enum EntityState state);
-
 // STATE
 typedef struct {
   struct Level *activeLevel;
   int requestSceneId;
   int feathersCollected;
   struct entityState_entry *entityState;
+  enum EntityState feathers[3];
 } State;
 
 State *getState(void);
+
+// FEATHERS
+void state_update_feather(uint32_t id, enum EntityState newState);
+enum EntityState state_get_feather(uint32_t id);
 
 // DEBUG
 enum DebugInfoMode {

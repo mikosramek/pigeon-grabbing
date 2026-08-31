@@ -111,19 +111,19 @@ Scene *createParkBeach(void) {
 }
 
 // UNLOAD FUNCTION
-void unloadParkBeach(void) {
-  // for (int i = 0; i < ParkBeach.modelCount; i++) {
-  //   cleanupModel(ParkBeach.models[i]);
-  // }
+void unloadParkBeach(void *arg) {
+  for (int i = 0; i < ParkBeach.modelCount; i++) {
+    cleanupModel(ParkBeach.models[i]);
+  }
 
-  // free_uncached(ParkBeach.models);
+  free_uncached(ParkBeach.models);
 
   for (int i = 0; i < ParkBeach.actorCount; i++) {
     deleteActor(&ParkBeach.actors[i]);
   }
 
-  // free_uncached(ParkBeach.actors);
-  // free_uncached(ParkBeach.entities);
-  // free_uncached(ParkBeach.spawns);
-  // free_uncached(ParkBeach.doors);
+  free_uncached(ParkBeach.actors);
+  free_uncached(ParkBeach.entities);
+  free_uncached(ParkBeach.spawns);
+  free_uncached(ParkBeach.doors);
 }

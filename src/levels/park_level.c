@@ -24,37 +24,17 @@ void registerParkLevel() {
 }
 
 struct Level *loadParkLevel() {
-  // use ID to find which scene to start with
-  // Scene *startingScene = NULL;
-  // for (int i = 0; i < len(ParkLevel.scenes); i += 1) {
-  //   if (ParkLevel.scenes[i]->id == ParkLevel.startingSceneID) {
-  //     startingScene = ParkLevel.scenes[i];
-  //   }
-  // }
-  // assertf(startingScene != NULL, "Starting scene with id of %d doesn't exist!", ParkLevel.startingSceneID);
-
-  
-  // createPark loads in the park
-  // ParkLevel.activeScene = createParkNorth();
   changeParkScene(-1, -1);
-
   return &ParkLevel;
 }
 
 void changeParkScene(uint32_t sceneID, uint32_t spawnPointID) {
-  // Scene *nextScene = NULL;
-  // for (int i = 0; i < len(ParkLevel.scenes); i += 1) {
-  //   if (ParkLevel.scenes[i]->id == sceneID) {
-  //     nextScene = ParkLevel.scenes[i];
-  //   }
-  // }
-  // assertf(nextScene != NULL, "Next scene with id of %d doesn't exist!", sceneID);
   if (ParkLevel.activeScene != NULL) {
     switch (ParkLevel.activeScene->id) {
-      case -1: unloadTest(); break;
-      case 0: unloadPark(); break;
-      case 1: unloadParkNorth(); break;
-      case 2: unloadParkBeach(); break;
+      case -1: rdpq_call_deferred(unloadTest, NULL); break;
+      case 0: rdpq_call_deferred(unloadPark, NULL); break;
+      case 1: rdpq_call_deferred(unloadParkNorth, NULL); break;
+      case 2: rdpq_call_deferred(unloadParkBeach, NULL); break;
       default: assertf(false, "Current scene doesn't have an unload: %d", (int)ParkLevel.activeScene->id);
     }
   }
@@ -87,7 +67,8 @@ void changeParkScene(uint32_t sceneID, uint32_t spawnPointID) {
 
 void unloadParkLevel() {
   // free_uncached(ParkLevel.scenes);
-  unloadPark();
-  unloadParkNorth();
-  unloadTest();
+  rdpq_call_deferred(unloadTest, NULL);
+  rdpq_call_deferred(unloadPark, NULL);
+  rdpq_call_deferred(unloadParkNorth, NULL);
+  rdpq_call_deferred(unloadParkBeach, NULL);
 }

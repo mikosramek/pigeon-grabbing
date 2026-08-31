@@ -17,6 +17,6 @@ Scene *getBaseTest(void);
 
 Scene *createTest(void);
 
-void unloadTest(void);
+void unloadTest(void *arg);
 
 #endif

@@ -30,7 +30,7 @@ void interact(struct Entity *feather) {
   State *state = getState();
   feather->skip = true;
   feather->actor->skip = true;
-  entity_state_update(feather->id, INACTIVE);
+  state_update_feather(feather->id, INACTIVE);
   // TODO: handling actual collection
   state->feathersCollected += 1;
 }
@@ -45,7 +45,7 @@ void interactionUI(void) {
 }
 
 struct Entity createFeather(uint32_t entityId, Actor *actor) {
-  enum EntityState state = entity_state_find(entityId)->state;
+  enum EntityState state = state_get_feather(entityId);
   int aabbScale = 10;
   struct Entity newFeather = (struct Entity) {
     .id = entityId,
