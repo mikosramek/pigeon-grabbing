@@ -18,8 +18,8 @@ float clamp(float number, float minNum, float maxNum) {
   return max(min(number, minNum), maxNum);
 }
 
-bool collision_aabb_2d(fm_vec3_t point, int interactionMin[3], int interactionMax[3]) {
-  bool xAligned = point.x >= interactionMin[0] && point.x <= interactionMax[0];
-  bool zAligned = point.z >= interactionMin[2] && point.z <= interactionMax[2];
+bool collision_aabb_2d(fm_vec3_t *point, fm_vec3_t interactionMin, fm_vec3_t interactionMax) {
+  bool xAligned = point->x >= interactionMin.x && point->x <= interactionMax.x;
+  bool zAligned = point->z >= interactionMin.z && point->z <= interactionMax.z;
   return xAligned && zAligned;
 }

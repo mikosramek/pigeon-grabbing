@@ -118,10 +118,28 @@ void player_handle_movement(void) {
     player.movementTally += 0.01f;
   }
   float yOffset = stepHeight * sin(player.movementTally * 10.0f);
+
+
+  // detect collision
+  float nextFrameZ = player.position.z + posChange.z * player.movementSpeed;
+  fm_vec3_t changeVectorZ = {{ player.position.x, player.position.y, nextFrameZ }};
+
+  // revert z movement if colliding
+  if (player_detect_collisions(&changeVectorZ)) {
+    nextFrameZ -= posChange.z * player.movementSpeed;
+  }
+
+  float nextFrameX = player.position.x + posChange.x * player.movementSpeed;
+  fm_vec3_t changeVectorX = {{ nextFrameX, player.position.y, nextFrameZ }};
+
+  // revert x movement if colliding
+  if (player_detect_collisions(&changeVectorX)) {
+    nextFrameX -= posChange.x * player.movementSpeed;
+  }
   
   // apply position
-  player.position.z += posChange.z * player.movementSpeed;
-  player.position.x += posChange.x * player.movementSpeed;
+  player.position.z = nextFrameZ;
+  player.position.x = nextFrameX;
   player.position.y = DEFAULT_CAMERA_Y + yOffset;
 
   // apply camera target
@@ -151,6 +169,10 @@ void player_handle_interaction(void) {
 
   if (pressedButtons.b) {
     player.currentItem = inventory_get_next_unlocked_item(player.currentItem);
+  }
+
+  if (pressedButtons.a) {
+    debugf(player_detect_collisions(&player.position) ? "colliding\n" : "not colliding\n");
   }
 }
 
@@ -190,12 +212,21 @@ void player_detect_closest_entity (void) {
 
 
 
-void player_detect_collision(void) {
+bool player_detect_collisions(fm_vec3_t *point) {
+  Scene *scene = getState()->activeLevel->activeScene;
+
+  for (int32_t i = 0; i < scene->colliderCount; i++) {
+    Collider collider = scene->colliders[i];
+    if (collider.type == COLLIDER_AABB) {
+      return collision_aabb_2d(point, collider.aabbMin, collider.aabbMax);
+    }
+  }
+
 
   // change the player's position by the collider (so the collider is "at" 0,0,0)
   fm_vec3_t transformedPoint;
   fm_vec3_t collisionBoxPosition = {{ 1.0f, 1.0f, 1.0f }};
-  fm_vec3_sub(&transformedPoint, &player.position, &collisionBoxPosition);
+  fm_vec3_sub(&transformedPoint, point, &collisionBoxPosition);
 
   // un-rotate the point in relation to the OBB
   
@@ -205,6 +236,7 @@ void player_detect_collision(void) {
 
   // can I do like, raycast from movement and downwards. if it hits a triangle, check the normal of that triangle
   // depending on the normal, adjust player speed
+  return false;
 }
 
 bool player_raycast_for_floor(void) {

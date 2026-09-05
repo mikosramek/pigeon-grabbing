@@ -193,7 +193,7 @@ int main()
 
   rdpq_text_register_font(FONT_BUILTIN_DEBUG_MONO, rdpq_font_load_builtin(FONT_BUILTIN_DEBUG_MONO));
 
-  p_audio_play_track(BGM_TITLE);
+  // p_audio_play_track(BGM_TITLE);
 
   // SETUP STATE + STARTING LEVEL
   uint32_t time = 0;

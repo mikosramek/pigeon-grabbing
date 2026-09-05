@@ -263,16 +263,16 @@ Scene *createTest(void) {
   // Colliders
   colliders[0] = (Collider){
     .type = COLLIDER_AABB,
-    .aabbMin = (fm_vec3_t){{ (-1.3129f * xPositionMultiplier) - (3.0793f * xPositionMultiplier), 0, (-11.2318f * zPositionMultiplier) - (1.0264f * zPositionMultiplier) }},
-    .aabbMax = (fm_vec3_t){{ (-1.3129f * xPositionMultiplier) + (3.0793f * xPositionMultiplier), 0, (-11.2318f * zPositionMultiplier) + (1.0264f * zPositionMultiplier) }},
+    .aabbMin = (fm_vec3_t){{ (-1.3129f * xPositionMultiplier) - (3.0f * xPositionMultiplier), 0, (11.2318f * zPositionMultiplier) - (1.0f * zPositionMultiplier) }},
+    .aabbMax = (fm_vec3_t){{ (-1.3129f * xPositionMultiplier) + (3.0f * xPositionMultiplier), 0, (11.2318f * zPositionMultiplier) + (1.0f * zPositionMultiplier) }},
     .pos = { -1.3129f * xPositionMultiplier, 0.0f * yPositionMultiplier, 11.2318f * zPositionMultiplier },
     .rot = { 1.0f, 0.0f, 0.0f, 0.0f },
     .scale = { 3.0793f * scaleMultiplier, 1.0264f * scaleMultiplier, 1.0264f * scaleMultiplier },
   };
   colliders[1] = (Collider){
     .type = COLLIDER_OBB,
-    .aabbMin = (fm_vec3_t){{ (14.7859f * xPositionMultiplier) - (3.0793f * xPositionMultiplier), 0, (-11.0125f * zPositionMultiplier) - (1.0264f * zPositionMultiplier) }},
-    .aabbMax = (fm_vec3_t){{ (14.7859f * xPositionMultiplier) + (3.0793f * xPositionMultiplier), 0, (-11.0125f * zPositionMultiplier) + (1.0264f * zPositionMultiplier) }},
+    .aabbMin = (fm_vec3_t){{ (14.7859f * xPositionMultiplier) - (3.0793f * xPositionMultiplier), 0, (11.0125f * zPositionMultiplier) - (1.0264f * zPositionMultiplier) }},
+    .aabbMax = (fm_vec3_t){{ (14.7859f * xPositionMultiplier) + (3.0793f * xPositionMultiplier), 0, (11.0125f * zPositionMultiplier) + (1.0264f * zPositionMultiplier) }},
     .pos = { 14.7859f * xPositionMultiplier, 0.0f * yPositionMultiplier, 11.0125f * zPositionMultiplier },
     .rot = { 0.9239f, 0.0f, 0.0f, -0.3827f },
     .scale = { 3.0793f * scaleMultiplier, 1.0264f * scaleMultiplier, 1.0264f * scaleMultiplier },

@@ -28,14 +28,18 @@ bool pigeon_guide_can_interact(struct Entity *pigeonGuide) {
 }
 
 void pigeon_guide_interact(struct Entity *pigeonGuide) {
+  // this can be handled based on ID (like, if ID is 0, and you interact, open up a gate (change entity state for gates[1] or something))
+  if (pigeonGuide->id == 0) {
+    // push dialogue
+  } else if (pigeonGuide->id == 1) {
+    // push different dialogue
+  }
   // State *state = getState();
   pigeonGuide->skip = true;
   pigeonGuide->actor->skip = true;
   // state_update_feather(pigeonGuide->id, INACTIVE);
   // TODO: handling actual collection
   // state->feathersCollected += 1;
-
-  // this can be handled based on ID (like, if ID is 0, and you interact, open up a gate (change entity state for gates[1] or something))
 }
 
 void pigeon_guide_interaction_ui(void) {

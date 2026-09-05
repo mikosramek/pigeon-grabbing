@@ -7,6 +7,6 @@ float min(float number, float minNum);
 float max(float number, float maxNum);
 float clamp(float number, float minNum, float maxNum);
 
-bool collision_aabb_2d(fm_vec3_t point, int interactionMin[3], int interactionMax[3]);
+bool collision_aabb_2d(fm_vec3_t *point, fm_vec3_t interactionMin, fm_vec3_t interactionMax);
 
 #endif
