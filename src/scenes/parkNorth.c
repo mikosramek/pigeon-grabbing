@@ -27,6 +27,8 @@ static Scene ParkNorth = (Scene) {
   .entityCount = 1,
   .doorCount = 3,
   .spawnCount = 3,
+  .colliderCount = 0,
+  .floorCount = 0,
 };
 
 Scene *getBaseParkNorth() {
@@ -88,7 +90,7 @@ Scene *createParkNorth(void) {
   ParkNorth.doors = doors;
 
   // MODEL IMPORT
-	ModelData fat_pigeon = setupModel("rom:/fat_pigeon.t3dm");
+	ModelData pigeon_guide = setupModel("rom:/pigeon_guide.t3dm");
 	ModelData park_north_ground = setupModel("rom:/park_north_ground.t3dm");
 	ModelData park_north_walls = setupModel("rom:/park_north_walls.t3dm");
 	ModelData iron_trim = setupModel("rom:/iron_trim.t3dm");
@@ -97,7 +99,7 @@ Scene *createParkNorth(void) {
 	ModelData rock_post = setupModel("rom:/rock_post.t3dm");
 
 
-	models[0] = fat_pigeon.model;
+	models[0] = pigeon_guide.model;
 	models[1] = park_north_ground.model;
 	models[2] = park_north_walls.model;
 	models[3] = iron_trim.model;
@@ -303,7 +305,7 @@ Scene *createParkNorth(void) {
   );
 	actors[19] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 19,
-    /* MODEL DATA   */ &fat_pigeon,
+    /* MODEL DATA   */ &pigeon_guide,
     /* POSITION     */ (float[3]){ -25.6237f * xPositionMultiplier, 2.0333f * yPositionMultiplier, 24.2008f * zPositionMultiplier },
     /* ROTATION     */ (float[4]){ 0.2088f, 0.0f, 0.0f, -0.978f },
     /* SCALE        */ (float[3]){ 0.6296f * scaleMultiplier, 0.7065f * scaleMultiplier, 0.5139f * scaleMultiplier},
@@ -347,7 +349,7 @@ Scene *createParkNorth(void) {
   ParkNorth.actors = actors;
 
   // Entities
-	entities[0] = createFeather(1, &actors[22]);
+	entities[0] = feather_create(1, &actors[22]);
 
   ParkNorth.entities = entities;
   
@@ -370,4 +372,6 @@ void unloadParkNorth(void *arg) {
   free_uncached(ParkNorth.entities);
   free_uncached(ParkNorth.spawns);
   free_uncached(ParkNorth.doors);
+  free_uncached(ParkNorth.colliders);
+  free_uncached(ParkNorth.floors);
 }

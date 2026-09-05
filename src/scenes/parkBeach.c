@@ -27,6 +27,8 @@ static Scene ParkBeach = (Scene) {
   .entityCount = 0,
   .doorCount = 2,
   .spawnCount = 2,
+  .colliderCount = 0,
+  .floorCount = 0,
 };
 
 Scene *getBaseParkBeach() {
@@ -126,4 +128,6 @@ void unloadParkBeach(void *arg) {
   free_uncached(ParkBeach.entities);
   free_uncached(ParkBeach.spawns);
   free_uncached(ParkBeach.doors);
+  free_uncached(ParkBeach.colliders);
+  free_uncached(ParkBeach.floors);
 }

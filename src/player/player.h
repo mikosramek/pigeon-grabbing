@@ -43,6 +43,9 @@ void player_update(void);
 void player_handle_movement(void);
 void player_handle_interaction(void);
 void player_draw_ui(void);
-void player_detect_closest_entity (void);
+void player_detect_closest_entity(void);
+
+void player_detect_collision(void);
+bool player_raycast_for_floor(void);
 
 #endif

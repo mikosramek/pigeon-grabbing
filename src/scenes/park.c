@@ -27,6 +27,8 @@ static Scene Park = (Scene) {
   .entityCount = 1,
   .doorCount = 1,
   .spawnCount = 2,
+  .colliderCount = 0,
+  .floorCount = 0,
 };
 
 Scene *getBasePark() {
@@ -698,7 +700,7 @@ Scene *createPark(void) {
   Park.actors = actors;
 
   // Entities
-	entities[0] = createFeather(0, &actors[58]);
+	entities[0] = feather_create(0, &actors[58]);
 
   Park.entities = entities;
   
@@ -721,4 +723,6 @@ void unloadPark(void *arg) {
   free_uncached(Park.entities);
   free_uncached(Park.spawns);
   free_uncached(Park.doors);
+  free_uncached(Park.colliders);
+  free_uncached(Park.floors);
 }

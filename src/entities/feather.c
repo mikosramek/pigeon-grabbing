@@ -44,7 +44,7 @@ void interactionUI(void) {
   rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 26, 230, "collect feather");
 }
 
-struct Entity createFeather(uint32_t entityId, Actor *actor) {
+struct Entity feather_create(uint32_t entityId, Actor *actor) {
   enum EntityState state = state_get_feather(entityId);
   int aabbScale = 10;
   struct Entity newFeather = (struct Entity) {

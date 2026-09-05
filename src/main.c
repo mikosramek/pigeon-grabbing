@@ -56,6 +56,7 @@ void display_debug(void) {
   if (!DEBUG.debugEnabled) {
     return;
   }
+  rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 300, 16, "fps: %f", display_get_fps());
   switch (DEBUG.infoMode) {
     case CAMERA:
       Player *player = getPlayer();

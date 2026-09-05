@@ -17,6 +17,25 @@ typedef struct {
   uint32_t targetSpawnPointID;
 } Door;
 
+enum ColliderType {
+  COLLIDER_AABB,
+  COLLIDER_OBB
+};
+typedef struct {
+  fm_vec3_t aabbMin;
+  fm_vec3_t aabbMax;
+  float pos[3];
+  float rot[4];
+  float scale[3];
+  enum ColliderType type;
+} Collider;
+
+typedef struct {
+  fm_vec3_t aabbMin;
+  fm_vec3_t aabbMax;
+  float y;
+} Floor;
+
 typedef struct {
   char *name;
   uint32_t id;
@@ -34,6 +53,12 @@ typedef struct {
   
   Door *doors;
   uint32_t doorCount;
+
+  Collider *colliders;
+  uint32_t colliderCount;
+
+  Floor *floors;
+  uint32_t floorCount;
 } Scene;
 
 #endif

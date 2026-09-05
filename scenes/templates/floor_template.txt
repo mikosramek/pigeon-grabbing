@@ -1,0 +1,5 @@
+  floors[<INDEX>] = (Floor) {
+    .y = <POS_Y>f * yPositionMultiplier,
+    .aabbMin = (fm_vec3_t){{ (<POS_X>f * xPositionMultiplier) - (<SCALE_X>f * xPositionMultiplier), 0, (<POS_Z>f * zPositionMultiplier) - (<SCALE_Z>f * zPositionMultiplier) }},
+    .aabbMax = (fm_vec3_t){{ (<POS_X>f * xPositionMultiplier) + (<SCALE_X>f * xPositionMultiplier), 0, (<POS_Z>f * zPositionMultiplier) + (<SCALE_Z>f * zPositionMultiplier) }},
+  };

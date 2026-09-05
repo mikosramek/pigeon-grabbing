@@ -698,7 +698,7 @@ Scene *createPark(void) {
   Park.actors = actors;
 
   // Entities
-	entities[0] = createFeather(0, &actors[58]);
+	entities[0] = feather_create(0, &actors[58]);
 
   Park.entities = entities;
   

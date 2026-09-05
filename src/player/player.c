@@ -188,6 +188,36 @@ void player_detect_closest_entity (void) {
   player.closestEntity = closestEntity;
 }
 
+
+
+void player_detect_collision(void) {
+
+  // change the player's position by the collider (so the collider is "at" 0,0,0)
+  fm_vec3_t transformedPoint;
+  fm_vec3_t collisionBoxPosition = {{ 1.0f, 1.0f, 1.0f }};
+  fm_vec3_sub(&transformedPoint, &player.position, &collisionBoxPosition);
+
+  // un-rotate the point in relation to the OBB
+  
+  
+  // do a more normal AABB range check against the box
+
+
+  // can I do like, raycast from movement and downwards. if it hits a triangle, check the normal of that triangle
+  // depending on the normal, adjust player speed
+}
+
+bool player_raycast_for_floor(void) {
+  // start at player 0 (I guess we have to define a player height first)
+  // march the ray downwards (y - interval)
+  // loop through each active level's floors
+    // if the ray's y is close to the floor's y (define a margin somewhere)
+      // do an aabb check on the ray's x/z against the floor's min/max
+        // if inside, then return true?
+        // else return false
+  return true;
+}
+
 // todo:
 // - throw seed
 // - pet pigeon

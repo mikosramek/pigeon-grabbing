@@ -27,13 +27,15 @@ static Scene <NAME> = (Scene) {
   .entityCount = <ENTITY_COUNT>,
   .doorCount = <DOOR_COUNT>,
   .spawnCount = <SPAWN_COUNT>,
+  .colliderCount = <COLLIDER_COUNT>,
+  .floorCount = <FLOOR_COUNT>,
 };
 
 Scene *getBase<NAME>() {
   return &<NAME>;
 }
 
-// LOAD FUNCTION
+// Load all the pieces for the <NAME> scene
 Scene *create<NAME>(void) {
   float xPositionMultiplier = 6.4f;
   float yPositionMultiplier = 6.4f;
@@ -45,6 +47,8 @@ Scene *create<NAME>(void) {
   T3DModel **models = malloc_uncached(sizeof(T3DModel *) * <NAME>.modelCount);
   Actor *actors = malloc_uncached(sizeof(Actor) * <NAME>.actorCount);
   struct Entity *entities = malloc_uncached(sizeof(struct Entity) * <NAME>.entityCount);
+  Collider *colliders = malloc_uncached(sizeof(Collider) * <NAME>.colliderCount);
+  Floor *floors = malloc_uncached(sizeof(Floor) * <NAME>.floorCount);
 
   // SPAWN POINT SETUP
 <SPAWNS>
@@ -72,6 +76,14 @@ Scene *create<NAME>(void) {
   // Entities
 <ENTITIES>
   <NAME>.entities = entities;
+
+  // Colliders
+<COLLIDERS>
+  <NAME>.colliders = colliders;
+
+  // Floors
+<FLOORS>
+  <NAME>.floors = floors;
   
   return &<NAME>;  
 }
@@ -93,4 +105,6 @@ void unload<NAME>(void *arg) {
   free_uncached(<NAME>.entities);
   free_uncached(<NAME>.spawns);
   free_uncached(<NAME>.doors);
+  free_uncached(<NAME>.colliders);
+  free_uncached(<NAME>.floors);
 }
