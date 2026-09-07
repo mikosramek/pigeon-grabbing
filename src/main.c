@@ -39,7 +39,8 @@ static State state = {
   .activeLevel = NULL,
   .requestSceneId = -1,
   .feathersCollected = 0,
-  .feathers = { ACTIVE, ACTIVE, ACTIVE }
+  .feathers = { ACTIVE, ACTIVE, ACTIVE },
+  .debugPos = (float[3]){0.0f, 0.0f, 0.0f}
 };
 
 State *getState(void)
@@ -214,6 +215,14 @@ int main()
   state->feathersCollected = feathersCollected;
   state->activeLevel = loadParkLevel(); // todo: turn this into the menu
 
+
+  T3DModel *debugModel = t3d_model_load("rom:/marker.t3dm");
+
+  rspq_block_begin();
+  t3d_model_draw(debugModel);
+  rspq_block_t *debugModelBlock = rspq_block_end();
+  T3DMat4FP *debugMats = malloc_uncached(sizeof(T3DMat4FP) * FB_COUNT);
+
   for(;;) {
     // UPDATE
     time += 1;
@@ -227,6 +236,10 @@ int main()
     for (int i = 0; i < 3; i += 1) {
       mixer_try_play();
     }
+
+    state->debugPos[0] = player->position.x; // = (float[3]){aabbMin.x, aabbMin.y, aabbMin.z};
+    state->debugPos[1] = player->position.y; // = (float[3]){aabbMin.x, aabbMin.y, aabbMin.z};
+    state->debugPos[2] = player->position.z;
     
     // joypad_buttons_t buttons = joypad_get_buttons_pressed(0);
     
@@ -241,6 +254,9 @@ int main()
       t3d_mat4fp_from_srt(&actors[i].modelMat[frameIdx], actors[i].scale, actors[i].rot, actors[i].pos);
     }
 
+    Collider colliderToDebug = state->activeLevel->activeScene->colliders[0];
+    t3d_mat4fp_from_srt(&debugMats[frameIdx], (float[3]){ 0.1f, 0.1f, 0.1f}, (float[4]){0.0f, 0.0f , 0.0f, 0.0f}, state->debugPos);
+
     struct Entity *entities = state->activeLevel->activeScene->entities;
     for(int i = 0; i < state->activeLevel->activeScene->entityCount; i++) {
       if (!entities[i].skip) {
@@ -250,7 +266,8 @@ int main()
 
     // set camera
     t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(player->cameraFOV), cam_near, cam_far);
-    t3d_viewport_look_at(&viewport, &player->position, &player->cameraTarget, &(fm_vec3_t){{0,1,0}});
+    // t3d_viewport_look_at(&viewport, &player->position, &player->cameraTarget, &(fm_vec3_t){{0,1,0}});
+    t3d_viewport_look_at(&viewport, &(fm_vec3_t){{ 0, 30, 0}}, &player->position, &(fm_vec3_t){{0,1,0}});
     // DRAW
     // surface_t *surface = display_get();
     rdpq_attach(display_get(), display_get_zbuf());
@@ -286,6 +303,8 @@ int main()
         rspq_block_run(actors[i].dpl);
       }
     }
+    t3d_matrix_set(&debugMats[frameIdx], true);
+    rspq_block_run(debugModelBlock);
     // we then pop a "singular" matrix
     t3d_matrix_pop(1);
 

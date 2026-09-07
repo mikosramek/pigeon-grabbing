@@ -17,6 +17,7 @@ typedef struct {
   int feathersCollected;
   struct entityState_entry *entityState;
   enum EntityState feathers[3];
+  float debugPos[3];
 } State;
 
 State *getState(void);

@@ -1,6 +1,6 @@
 /*
 * TEST SCENE
-* GENERATED ON 2026-09-04
+* GENERATED ON 2026-09-06
 */
 // INCLUDES
 #include "test.h"
@@ -29,7 +29,7 @@ static Scene Test = (Scene) {
   .entityCount = 2,
   .doorCount = 1,
   .spawnCount = 1,
-  .colliderCount = 2,
+  .colliderCount = 1,
   .floorCount = 1,
 };
 
@@ -56,7 +56,7 @@ Scene *createTest(void) {
   spawns[0] = (SpawnPoint){
     .id = -1,
     .angle = 0.0,
-    .spawn = (fm_vec3_t){{ 0.0f * xPositionMultiplier, -0, -0.0f * zPositionMultiplier }},
+    .spawn = (fm_vec3_t){{ 3.0f * xPositionMultiplier, -0, -0.0f * zPositionMultiplier }},
   };
 
   Test.spawns = spawns;
@@ -222,9 +222,9 @@ Scene *createTest(void) {
 	actors[13] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 13,
     /* MODEL DATA   */ &two_cube,
-    /* POSITION     */ (float[3]){ 14.7859f * xPositionMultiplier, 0.0f * yPositionMultiplier, 11.0125f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.9239f, 0.0f, 0.0f, -0.3827f },
-    /* SCALE        */ (float[3]){ 3.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
+    /* POSITION     */ (float[3]){ 0.0f * xPositionMultiplier, 0.0f * yPositionMultiplier, -0.0f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.8536f, 0.0f, 0.0f, -0.3536f },
+    /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
     FB_COUNT
@@ -261,21 +261,13 @@ Scene *createTest(void) {
   Test.entities = entities;
 
   // Colliders
-  colliders[0] = (Collider){
-    .type = COLLIDER_AABB,
-    .aabbMin = (fm_vec3_t){{ (-1.3129f * xPositionMultiplier) - (3.0f * xPositionMultiplier), 0, (11.2318f * zPositionMultiplier) - (1.0f * zPositionMultiplier) }},
-    .aabbMax = (fm_vec3_t){{ (-1.3129f * xPositionMultiplier) + (3.0f * xPositionMultiplier), 0, (11.2318f * zPositionMultiplier) + (1.0f * zPositionMultiplier) }},
-    .pos = { -1.3129f * xPositionMultiplier, 0.0f * yPositionMultiplier, 11.2318f * zPositionMultiplier },
-    .rot = { 1.0f, 0.0f, 0.0f, 0.0f },
-    .scale = { 3.0793f * scaleMultiplier, 1.0264f * scaleMultiplier, 1.0264f * scaleMultiplier },
-  };
-  colliders[1] = (Collider){
+  colliders[0] = (Collider) {
     .type = COLLIDER_OBB,
-    .aabbMin = (fm_vec3_t){{ (14.7859f * xPositionMultiplier) - (3.0793f * xPositionMultiplier), 0, (11.0125f * zPositionMultiplier) - (1.0264f * zPositionMultiplier) }},
-    .aabbMax = (fm_vec3_t){{ (14.7859f * xPositionMultiplier) + (3.0793f * xPositionMultiplier), 0, (11.0125f * zPositionMultiplier) + (1.0264f * zPositionMultiplier) }},
-    .pos = { 14.7859f * xPositionMultiplier, 0.0f * yPositionMultiplier, 11.0125f * zPositionMultiplier },
-    .rot = { 0.9239f, 0.0f, 0.0f, -0.3827f },
-    .scale = { 3.0793f * scaleMultiplier, 1.0264f * scaleMultiplier, 1.0264f * scaleMultiplier },
+    .aabbMin = (fm_vec3_t){{ (0.0f * xPositionMultiplier) - (1.0f * xPositionMultiplier), 0, (0.0f * zPositionMultiplier) - (1.0f * zPositionMultiplier) }},
+    .aabbMax = (fm_vec3_t){{ (0.0f * xPositionMultiplier) + (1.0f * xPositionMultiplier), 0, (0.0f * zPositionMultiplier) + (1.0f * zPositionMultiplier) }},
+    .pos = { 0.0f * xPositionMultiplier, 0.0f * yPositionMultiplier, -0.0f * zPositionMultiplier },
+    .rot = { 0.8536f, 0.0f, 0.0f, -0.3536f },
+    .scale = { 1.0f * xPositionMultiplier, 1.0f * yPositionMultiplier, 1.0f * zPositionMultiplier },
   };
 
   Test.colliders = colliders;
