@@ -210,104 +210,43 @@ void player_detect_closest_entity (void) {
   player.closestEntity = closestEntity;
 }
 
-fm_vec3_t rotate_vector_by_inverse_quaternion(fm_vec3_t *point, float quaternion[4]) {
-    // Conjugate of a unit quaternion flips the signs of the vector components (x, y, z).
-    // The scalar component (w) stays positive.
-    float qw =  quaternion[0];
-    float qx = -quaternion[1];
-    float qy = -quaternion[2];
-    float qz = -quaternion[3];
-
-    // Precalculate cross product components: (q_xyz X v)
-    float cx = qy * point->z - qz * point->y;
-    float cy = qz * point->x - qx * point->z;
-    float cz = qx * point->y - qy * point->x;
-
-    // Add scaling by the scalar w: (q_xyz X v) + w * v
-    cx += qw * point->x;
-    cy += qw * point->y;
-    cz += qw * point->z;
-
-    fm_vec3_t final;
-
-    // Calculate final out vector: v + 2 * (q_xyz X intermediate_vector)
-    final.x = point->x + 2.0f * (qy * cz - qz * cy);
-    final.y = point->y + 2.0f * (qz * cx - qx * cz);
-    final.z = point->z + 2.0f * (qx * cy - qy * cx);
-
-    return final;
-}
-
 bool player_detect_collisions(fm_vec3_t *point) {
   State *state = getState();
   Scene *scene = state->activeLevel->activeScene;
 
   for (int32_t i = 0; i < scene->colliderCount; i++) {
     Collider collider = scene->colliders[i];
-    debugf("\n*** %i type %i ***\n", (int)i, collider.type);
+    // debugf("\n*** %i type %i ***\n", (int)i, collider.type);
     if (collider.type == COLLIDER_AABB && collision_aabb_2d(point, collider.aabbMin, collider.aabbMax)) {
       return true;
     } else if(collider.type == COLLIDER_OBB) {
-      // apply reverse transformation to player
-      // fm_vec3_t transformedPoint;
-      // fm_vec3_t collisionBoxPosition = {{ collider.pos[0], collider.pos[1], collider.pos[2] }};
-      // fm_vec3_sub(&transformedPoint, point, &collisionBoxPosition);
+      float relative[3] = {
+        point->x - collider.pos[0],
+        point->y - collider.pos[1],
+        point->z - collider.pos[2]
+      };
+      float normalizedRot[4];
+      normalize_quat(collider.rot, normalizedRot);
+      float inverseRot[4] = {
+        -normalizedRot[0],
+        -normalizedRot[1],
+        -normalizedRot[2],
+        normalizedRot[3]
+      };
+      float local[3];
+      rotate_vec2_by_quat(relative, inverseRot, local);
+      bool collision =
+        local[0] >= -collider.scale[0] &&
+        local[0] <=  collider.scale[0] &&
+        local[2] >= -collider.scale[2] &&
+        local[2] <=  collider.scale[2];
 
-      // apply reverse rotation to player
-      // fm_vec3_t rotatedPoint = rotate_vector_by_inverse_quaternion(&transformedPoint, collider.rot);
-
-      // debugf("%f/%f/%f \n", collider.pos[0], collider.pos[1], collider.pos[2]);
-      // debugf("%f/%f \n", point->x, point->z);
-      // debugf("%f/%f \n", transformedPoint.x, transformedPoint.z);
-      // debugf("%f/%f \n", rotatedPoint.x, rotatedPoint.z);
-      // debugf("-- %f/%f \n", collider.scale[0], collider.scale[2]);
-      // if (fabsf(rotatedPoint.x) > collider.scale[0]) return true;
-      // if (fabsf(rotatedPoint.y) > collider.scale[1]) return true;
-      // if (fabsf(rotatedPoint.z) > collider.scale[2]) return true;
-      // fm_vec3_t aabbMin = (fm_vec3_t){{ -(collider.scale[0]), 0, -(collider.scale[2]) }};
-      // fm_vec3_t aabbMax = (fm_vec3_t){{ +(collider.scale[0]), 0, +(collider.scale[2]) }};
-      // debugf("%f/%f\n", aabbMin.x, aabbMin.z);
-      // debugf("%f/%f\n", aabbMax.x, aabbMax.z);
-
-      // state->debugPos[0] = aabbMax.x; // = (float[3]){aabbMin.x, aabbMin.y, aabbMin.z};
-      // state->debugPos[1] = aabbMax.y; // = (float[3]){aabbMin.x, aabbMin.y, aabbMin.z};
-      // state->debugPos[2] = aabbMax.z; // = (float[3]){aabbMin.x, aabbMin.y, aabbMin.z};
-
-      // if (collision_aabb_2d(&rotatedPoint, aabbMin, aabbMax)) {
-      //   return true;
-      // }
-
-      // fm_vec3_dot()
-
-      // fm_vec3_t pointA;
-      // fm_vec3_t noWRot = { collider.rot[1], collider.rot[2], collider.rot[3] };
-      // float scalar = collider.rot[0];
-
-      // fm_vec3_mul
-
-      // fm_vec3_t rotatedPoint = 2.0f * fm_vec3_dot(&noWRot, &pointA) * noWRot
-      //                          + (scalar*scalar - dot(noWRot, noWRot)) * pointA
-      //                          + 2.0f * scalar * fm_vec3_cross(&noWRot, &pointA);
-
-      // move player point to local transform (point = point - collider pos)
-        // when the player is on top of the collider, this point should be 0
-      // get two points for each axis (x/z) -> so (pos.x) + scale.x and (pos.x) - scale.x
-      // apply collider's rotation to those points, and then use that x??? / z???
-      // if x is within those x and y is within those y, you're colliding
+      if (collision) {
+        return true;
+      }
     }
   }
 
-
-  // change the player's position by the collider (so the collider is "at" 0,0,0)
-
-  // un-rotate the point in relation to the OBB
-  
-  
-  // do a more normal AABB range check against the box
-
-
-  // can I do like, raycast from movement and downwards. if it hits a triangle, check the normal of that triangle
-  // depending on the normal, adjust player speed
   return false;
 }
 

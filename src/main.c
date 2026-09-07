@@ -266,8 +266,9 @@ int main()
 
     // set camera
     t3d_viewport_set_projection(&viewport, T3D_DEG_TO_RAD(player->cameraFOV), cam_near, cam_far);
-    // t3d_viewport_look_at(&viewport, &player->position, &player->cameraTarget, &(fm_vec3_t){{0,1,0}});
-    t3d_viewport_look_at(&viewport, &(fm_vec3_t){{ 0, 30, 0}}, &player->position, &(fm_vec3_t){{0,1,0}});
+    t3d_viewport_look_at(&viewport, &player->position, &player->cameraTarget, &(fm_vec3_t){{0,1,0}});
+    // t3d_viewport_look_at(&viewport, &(fm_vec3_t){{ 0, 30, 0}}, &player->position, &(fm_vec3_t){{0,1,0}});
+    
     // DRAW
     // surface_t *surface = display_get();
     rdpq_attach(display_get(), display_get_zbuf());

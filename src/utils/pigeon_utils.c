@@ -39,7 +39,7 @@ Actor setupActor(
     .id = id,
     .pos = {pos[0], pos[1], pos[2]},
     .staticPos = {pos[0], pos[1], pos[2]},
-    .rot = {rot[1], rot[3], -rot[2], rot[0]},
+    .rot = {rot[0], rot[1], rot[2], rot[3]},
     .scale = {scale[0], scale[2], scale[1]},
     .dpl = modelData->dpl,
     .modelMat = malloc_uncached(sizeof(T3DMat4FP) * fbCount),
