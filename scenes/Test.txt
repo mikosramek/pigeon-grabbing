@@ -1,6 +1,6 @@
 /*
 * TEST SCENE
-* GENERATED ON 2026-09-06
+* GENERATED ON 2026-09-13
 */
 // INCLUDES
 #include "test.h"
@@ -24,13 +24,13 @@
 static Scene Test = (Scene) {
   .id = -1,
   .name = "Test",
-  .actorCount = 17,
+  .actorCount = 27,
   .modelCount = 4,
-  .entityCount = 2,
+  .entityCount = 4,
   .doorCount = 1,
   .spawnCount = 1,
-  .colliderCount = 3,
-  .floorCount = 1,
+  .colliderCount = 5,
+  .floorCount = 0,
 };
 
 Scene *getBaseTest() {
@@ -56,7 +56,7 @@ Scene *createTest(void) {
   spawns[0] = (SpawnPoint){
     .id = -1,
     .angle = 0.0,
-    .spawn = (fm_vec3_t){{ 3.0f * xPositionMultiplier, -0, -0.0f * zPositionMultiplier }},
+    .spawn = (fm_vec3_t){{ 0.0f * xPositionMultiplier, -0, -0.0f * zPositionMultiplier }},
   };
 
   Test.spawns = spawns;
@@ -152,8 +152,8 @@ Scene *createTest(void) {
 	actors[6] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 6,
     /* MODEL DATA   */ &two_cube,
-    /* POSITION     */ (float[3]){ 3.8235f * xPositionMultiplier, -1.7057f * yPositionMultiplier, -8.8541f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.0f, 0.0f, -0.0f, 1.0f },
+    /* POSITION     */ (float[3]){ 21.3786f * xPositionMultiplier, -1.7057f * yPositionMultiplier, -11.2738f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.0f, -0.7071f, -0.0f, 0.7071f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
@@ -172,7 +172,7 @@ Scene *createTest(void) {
 	actors[8] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 8,
     /* MODEL DATA   */ &two_cube,
-    /* POSITION     */ (float[3]){ 0.4835f * xPositionMultiplier, 1.0249f * yPositionMultiplier, -17.7535f * zPositionMultiplier },
+    /* POSITION     */ (float[3]){ -5.1529f * xPositionMultiplier, 1.0249f * yPositionMultiplier, -17.7535f * zPositionMultiplier },
     /* ROTATION     */ (float[4]){ 0.1464f, 0.3536f, 0.3535533845424652f, 0.8536f },
     /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
@@ -212,7 +212,7 @@ Scene *createTest(void) {
 	actors[12] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 12,
     /* MODEL DATA   */ &two_cube,
-    /* POSITION     */ (float[3]){ -1.3129f * xPositionMultiplier, 0.0f * yPositionMultiplier, 11.2318f * zPositionMultiplier },
+    /* POSITION     */ (float[3]){ -20.3216f * xPositionMultiplier, 0.0f * yPositionMultiplier, 21.5098f * zPositionMultiplier },
     /* ROTATION     */ (float[4]){ 0.0f, 0.0f, -0.0f, 1.0f },
     /* SCALE        */ (float[3]){ 3.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
     /* SKIP         */ false,
@@ -239,10 +239,90 @@ Scene *createTest(void) {
     /* SKIP CULLING */ false,
     FB_COUNT
   );
-
-	// Entity Actors
 	actors[15] = setupActor(
     /* ACTOR INDEX  */ startingIndex + 15,
+    /* MODEL DATA   */ &two_cube,
+    /* POSITION     */ (float[3]){ 0.0f * xPositionMultiplier, 0.0f * yPositionMultiplier, -32.0f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.0f, 0.0f, -0.0f, 1.0f },
+    /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
+    /* SKIP         */ false,
+    /* SKIP CULLING */ false,
+    FB_COUNT
+  );
+	actors[16] = setupActor(
+    /* ACTOR INDEX  */ startingIndex + 16,
+    /* MODEL DATA   */ &two_cube,
+    /* POSITION     */ (float[3]){ 0.0f * xPositionMultiplier, 0.0f * yPositionMultiplier, 32.0f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.0f, 0.0f, -0.0f, 1.0f },
+    /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
+    /* SKIP         */ false,
+    /* SKIP CULLING */ false,
+    FB_COUNT
+  );
+	actors[17] = setupActor(
+    /* ACTOR INDEX  */ startingIndex + 17,
+    /* MODEL DATA   */ &two_cube,
+    /* POSITION     */ (float[3]){ 21.3312f * xPositionMultiplier, -1.7057f * yPositionMultiplier, -6.292f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.0f, -0.7071f, -0.0f, 0.7071f },
+    /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
+    /* SKIP         */ false,
+    /* SKIP CULLING */ false,
+    FB_COUNT
+  );
+	actors[18] = setupActor(
+    /* ACTOR INDEX  */ startingIndex + 18,
+    /* MODEL DATA   */ &two_cube,
+    /* POSITION     */ (float[3]){ 21.4261f * xPositionMultiplier, -1.7057f * yPositionMultiplier, -1.2626f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.0f, -0.7071f, -0.0f, 0.7071f },
+    /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
+    /* SKIP         */ false,
+    /* SKIP CULLING */ false,
+    FB_COUNT
+  );
+	actors[19] = setupActor(
+    /* ACTOR INDEX  */ startingIndex + 19,
+    /* MODEL DATA   */ &two_cube,
+    /* POSITION     */ (float[3]){ -15.0902f * xPositionMultiplier, 0.0f * yPositionMultiplier, 10.3292f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.0f, 0.0f, -0.0f, 1.0f },
+    /* SCALE        */ (float[3]){ 3.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
+    /* SKIP         */ false,
+    /* SKIP CULLING */ false,
+    FB_COUNT
+  );
+	actors[20] = setupActor(
+    /* ACTOR INDEX  */ startingIndex + 20,
+    /* MODEL DATA   */ &two_cube,
+    /* POSITION     */ (float[3]){ -25.0314f * xPositionMultiplier, 0.0f * yPositionMultiplier, 10.2627f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.0f, 0.0f, -0.0f, 1.0f },
+    /* SCALE        */ (float[3]){ 3.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
+    /* SKIP         */ false,
+    /* SKIP CULLING */ false,
+    FB_COUNT
+  );
+	actors[21] = setupActor(
+    /* ACTOR INDEX  */ startingIndex + 21,
+    /* MODEL DATA   */ &two_cube,
+    /* POSITION     */ (float[3]){ -32.0f * xPositionMultiplier, 0.0f * yPositionMultiplier, -0.0f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.0f, 0.0f, -0.0f, 1.0f },
+    /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
+    /* SKIP         */ false,
+    /* SKIP CULLING */ false,
+    FB_COUNT
+  );
+	actors[22] = setupActor(
+    /* ACTOR INDEX  */ startingIndex + 22,
+    /* MODEL DATA   */ &two_cube,
+    /* POSITION     */ (float[3]){ 32.0f * xPositionMultiplier, 0.0f * yPositionMultiplier, -0.0f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.0f, 0.0f, -0.0f, 1.0f },
+    /* SCALE        */ (float[3]){ 1.0f * scaleMultiplier, 1.0f * scaleMultiplier, 1.0f * scaleMultiplier},
+    /* SKIP         */ false,
+    /* SKIP CULLING */ false,
+    FB_COUNT
+  );
+
+	// Entity Actors
+	actors[23] = setupActor(
+    /* ACTOR INDEX  */ startingIndex + 23,
     /* MODEL DATA   */ &feather,
     /* POSITION     */ (float[3]){ -1.2643f * xPositionMultiplier, 0.571f * yPositionMultiplier, -8.8541f * zPositionMultiplier },
     /* ROTATION     */ (float[4]){ 0.0f, -0.3363f, -0.0f, 0.9418f },
@@ -251,11 +331,31 @@ Scene *createTest(void) {
     /* SKIP CULLING */ false,
     FB_COUNT
   );
-	actors[16] = setupActor(
-    /* ACTOR INDEX  */ startingIndex + 16,
+	actors[24] = setupActor(
+    /* ACTOR INDEX  */ startingIndex + 24,
     /* MODEL DATA   */ &pigeon_guide,
-    /* POSITION     */ (float[3]){ 3.8235f * xPositionMultiplier, 0.2066f * yPositionMultiplier, -8.8541f * zPositionMultiplier },
-    /* ROTATION     */ (float[4]){ 0.0f, 0.7025f, -0.0f, 0.7117f },
+    /* POSITION     */ (float[3]){ 21.3786f * xPositionMultiplier, 0.2066f * yPositionMultiplier, -11.2738f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.0f, -0.0065f, -0.0f, 1.0f },
+    /* SCALE        */ (float[3]){ 0.732f * scaleMultiplier, 1.6244f * scaleMultiplier, 0.8004f * scaleMultiplier},
+    /* SKIP         */ false,
+    /* SKIP CULLING */ false,
+    FB_COUNT
+  );
+	actors[25] = setupActor(
+    /* ACTOR INDEX  */ startingIndex + 25,
+    /* MODEL DATA   */ &pigeon_guide,
+    /* POSITION     */ (float[3]){ 21.3312f * xPositionMultiplier, 0.2066f * yPositionMultiplier, -6.292f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.0f, -0.0065f, -0.0f, 1.0f },
+    /* SCALE        */ (float[3]){ 0.732f * scaleMultiplier, 1.6244f * scaleMultiplier, 0.8004f * scaleMultiplier},
+    /* SKIP         */ false,
+    /* SKIP CULLING */ false,
+    FB_COUNT
+  );
+	actors[26] = setupActor(
+    /* ACTOR INDEX  */ startingIndex + 26,
+    /* MODEL DATA   */ &pigeon_guide,
+    /* POSITION     */ (float[3]){ 21.4261f * xPositionMultiplier, 0.2066f * yPositionMultiplier, -1.2626f * zPositionMultiplier },
+    /* ROTATION     */ (float[4]){ 0.0f, -0.0065f, -0.0f, 1.0f },
     /* SCALE        */ (float[3]){ 0.732f * scaleMultiplier, 1.6244f * scaleMultiplier, 0.8004f * scaleMultiplier},
     /* SKIP         */ false,
     /* SKIP CULLING */ false,
@@ -265,17 +365,19 @@ Scene *createTest(void) {
   Test.actors = actors;
 
   // Entities
-	entities[0] = feather_create(-1, &actors[15]);
-	entities[1] = pigeon_guide_create(0, &actors[16]);
+	entities[0] = feather_create(-1, &actors[23]);
+	entities[1] = pigeon_guide_create(0, &actors[24]);
+	entities[2] = pigeon_guide_create(1, &actors[25]);
+	entities[3] = pigeon_guide_create(2, &actors[26]);
 
   Test.entities = entities;
 
   // Colliders
   colliders[0] = (Collider) {
     .type = COLLIDER_AABB,
-    .aabbMin = (fm_vec3_t){{ (-1.3129f * xPositionMultiplier) - (3.3f * xPositionMultiplier), 0, (11.2318f * zPositionMultiplier) - (1.3f * zPositionMultiplier) }},
-    .aabbMax = (fm_vec3_t){{ (-1.3129f * xPositionMultiplier) + (3.3f * xPositionMultiplier), 0, (11.2318f * zPositionMultiplier) + (1.3f * zPositionMultiplier) }},
-    .pos = { -1.3129f * xPositionMultiplier, 0.0f * yPositionMultiplier, 11.2318f * zPositionMultiplier },
+    .aabbMin = (fm_vec3_t){{ (-20.3216f * xPositionMultiplier) - (3.3f * xPositionMultiplier), 0, (21.5098f * zPositionMultiplier) - (1.3f * zPositionMultiplier) }},
+    .aabbMax = (fm_vec3_t){{ (-20.3216f * xPositionMultiplier) + (3.3f * xPositionMultiplier), 0, (21.5098f * zPositionMultiplier) + (1.3f * zPositionMultiplier) }},
+    .pos = { -20.3216f * xPositionMultiplier, 0.0f * yPositionMultiplier, 21.5098f * zPositionMultiplier },
     .rot = { 0.0f, 0.0f, -0.0f, 1.0f },
     .scale = { 3.3f * scaleMultiplier, 1.3f * scaleMultiplier, 1.0f * scaleMultiplier },
   };
@@ -295,15 +397,26 @@ Scene *createTest(void) {
     .rot = { 0.0f, 0.7886f, -0.0f, -0.3266f },
     .scale = { 1.3f * xPositionMultiplier, 1.0f * yPositionMultiplier, 3.3f * zPositionMultiplier },
   };
+  colliders[3] = (Collider) {
+    .type = COLLIDER_AABB,
+    .aabbMin = (fm_vec3_t){{ (-15.0902f * xPositionMultiplier) - (3.5f * xPositionMultiplier), 0, (10.3292f * zPositionMultiplier) - (1.5f * zPositionMultiplier) }},
+    .aabbMax = (fm_vec3_t){{ (-15.0902f * xPositionMultiplier) + (3.5f * xPositionMultiplier), 0, (10.3292f * zPositionMultiplier) + (1.5f * zPositionMultiplier) }},
+    .pos = { -15.0902f * xPositionMultiplier, 0.0f * yPositionMultiplier, 10.3292f * zPositionMultiplier },
+    .rot = { 0.0f, 0.0f, -0.0f, 1.0f },
+    .scale = { 3.5f * scaleMultiplier, 1.5f * scaleMultiplier, 1.0f * scaleMultiplier },
+  };
+  colliders[4] = (Collider) {
+    .type = COLLIDER_AABB,
+    .aabbMin = (fm_vec3_t){{ (-25.0314f * xPositionMultiplier) - (4.0f * xPositionMultiplier), 0, (10.2627f * zPositionMultiplier) - (2.0f * zPositionMultiplier) }},
+    .aabbMax = (fm_vec3_t){{ (-25.0314f * xPositionMultiplier) + (4.0f * xPositionMultiplier), 0, (10.2627f * zPositionMultiplier) + (2.0f * zPositionMultiplier) }},
+    .pos = { -25.0314f * xPositionMultiplier, 0.0f * yPositionMultiplier, 10.2627f * zPositionMultiplier },
+    .rot = { 0.0f, 0.0f, -0.0f, 1.0f },
+    .scale = { 4.0f * scaleMultiplier, 2.0f * scaleMultiplier, 1.0f * scaleMultiplier },
+  };
 
   Test.colliders = colliders;
 
   // Floors
-  floors[0] = (Floor) {
-    .y = 0.0f * yPositionMultiplier,
-    .aabbMin = (fm_vec3_t){{ (0.0f * xPositionMultiplier) - (30.0f * xPositionMultiplier), 0, (0.0f * zPositionMultiplier) - (30.0f * zPositionMultiplier) }},
-    .aabbMax = (fm_vec3_t){{ (0.0f * xPositionMultiplier) + (30.0f * xPositionMultiplier), 0, (0.0f * zPositionMultiplier) + (30.0f * zPositionMultiplier) }},
-  };
 
   Test.floors = floors;
   

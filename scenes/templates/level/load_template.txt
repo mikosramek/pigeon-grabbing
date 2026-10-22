@@ -1,0 +1,1 @@
+case <SCENE_ID>: <LEVEL_NAME>Level.activeScene = create<SCENE_NAME>(); break;

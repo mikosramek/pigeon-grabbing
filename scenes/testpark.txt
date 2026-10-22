@@ -1,0 +1,110 @@
+/*
+* TESTPARK SCENE
+* GENERATED ON 2026-10-06
+*/
+// INCLUDES
+#include "testpark.h"
+
+#include "scene.h"
+#include "../globals.h"
+#include "../utils/pigeon_utils.h"
+#include "../entities/entity.h"
+
+// ENTITIES
+
+
+#include <libdragon.h>
+#include <t3d/t3d.h>
+#include <t3d/t3dmodel.h>
+
+// DEFINITIONS
+
+static Scene testpark = (Scene) {
+  .id = 0,
+  .name = "testpark",
+  .actorCount = 0,
+  .modelCount = 0,
+  .entityCount = 0,
+  .doorCount = 0,
+  .spawnCount = 0,
+  .colliderCount = 0,
+  .floorCount = 0,
+};
+
+Scene *getBasetestpark() {
+  return &testpark;
+}
+
+// Load all the pieces for the testpark scene
+Scene *createtestpark(void) {
+  float xPositionMultiplier = 6.4f;
+  float yPositionMultiplier = 6.4f;
+  float zPositionMultiplier = 6.4f;
+  float scaleMultiplier = 0.1f;
+
+  SpawnPoint *spawns = malloc_uncached(sizeof(SpawnPoint) * testpark.spawnCount);
+  Door *doors = malloc_uncached(sizeof(Door) * testpark.doorCount);
+  T3DModel **models = malloc_uncached(sizeof(T3DModel *) * testpark.modelCount);
+  Actor *actors = malloc_uncached(sizeof(Actor) * testpark.actorCount);
+  struct Entity *entities = malloc_uncached(sizeof(struct Entity) * testpark.entityCount);
+  Collider *colliders = malloc_uncached(sizeof(Collider) * testpark.colliderCount);
+  Floor *floors = malloc_uncached(sizeof(Floor) * testpark.floorCount);
+
+  // SPAWN POINT SETUP
+
+  testpark.spawns = spawns;
+
+  // DOOR SETUP
+
+  testpark.doors = doors;
+
+  // MODEL IMPORT
+
+
+
+  testpark.models = models;
+
+  // make this a global thing?
+  uint32_t startingIndex = 0;
+
+  // ACTORS
+
+	// Entity Actors
+
+  testpark.actors = actors;
+
+  // Entities
+
+  testpark.entities = entities;
+
+  // Colliders
+
+  testpark.colliders = colliders;
+
+  // Floors
+
+  testpark.floors = floors;
+  
+  return &testpark;  
+}
+
+// Unload the testpark scene
+// Call via `rdpq_call_deferred(unloadtestpark, NULL);` for safety
+void unloadtestpark(void *arg) {
+  for (int i = 0; i < testpark.modelCount; i++) {
+    cleanupModel(testpark.models[i]);
+  }
+
+  free_uncached(testpark.models);
+
+  for (int i = 0; i < testpark.actorCount; i++) {
+    deleteActor(&testpark.actors[i]);
+  }
+
+  free_uncached(testpark.actors);
+  free_uncached(testpark.entities);
+  free_uncached(testpark.spawns);
+  free_uncached(testpark.doors);
+  free_uncached(testpark.colliders);
+  free_uncached(testpark.floors);
+}

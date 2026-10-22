@@ -130,7 +130,7 @@ void player_handle_movement(void) {
   }
 
   float nextFrameX = player.position.x + posChange.x * player.movementSpeed;
-  fm_vec3_t changeVectorX = {{ nextFrameX, player.position.y, nextFrameZ }};
+  fm_vec3_t changeVectorX = {{ nextFrameX, player.position.y, player.position.z }};
 
   // revert x movement if colliding
   if (player_detect_collisions(&changeVectorX)) {
@@ -169,10 +169,6 @@ void player_handle_interaction(void) {
 
   if (pressedButtons.b) {
     player.currentItem = inventory_get_next_unlocked_item(player.currentItem);
-  }
-
-  if (pressedButtons.a) {
-    debugf(player_detect_collisions(&player.position) ? "colliding\n" : "not colliding\n");
   }
 }
 

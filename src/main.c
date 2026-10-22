@@ -27,6 +27,9 @@
 #include "utils/doors.h"
 #include "entities/entity.h"
 
+// MENUS
+#include "menus/menu_intro.h"
+
 // SCENES
 #include "level.h"
 #include "scenes/scene.h"
@@ -57,7 +60,7 @@ void display_debug(void) {
   if (!DEBUG.debugEnabled) {
     return;
   }
-  rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 300, 16, "fps: %f", display_get_fps());
+  rdpq_text_printf(NULL, FONT_BUILTIN_DEBUG_MONO, 230, 16, "fps: %f", display_get_fps());
   switch (DEBUG.infoMode) {
     case CAMERA:
       Player *player = getPlayer();
@@ -222,6 +225,8 @@ int main()
   t3d_model_draw(debugModel);
   rspq_block_t *debugModelBlock = rspq_block_end();
   T3DMat4FP *debugMats = malloc_uncached(sizeof(T3DMat4FP) * FB_COUNT);
+
+  run_menu_intro();
 
   for(;;) {
     // UPDATE

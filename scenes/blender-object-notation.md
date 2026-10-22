@@ -27,6 +27,8 @@ ids are scoped to that entity type (eg Feathers)
 
 ### Feather
 
+`e_feather`
+
 ### Pigeon Guide
 
 ## Floors

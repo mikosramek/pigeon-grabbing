@@ -67,8 +67,13 @@ void changeParkScene(uint32_t sceneID, uint32_t spawnPointID) {
 
 void unloadParkLevel() {
   // free_uncached(ParkLevel.scenes);
-  rdpq_call_deferred(unloadTest, NULL);
-  rdpq_call_deferred(unloadPark, NULL);
-  rdpq_call_deferred(unloadParkNorth, NULL);
-  rdpq_call_deferred(unloadParkBeach, NULL);
+  if (ParkLevel.activeScene != NULL) {
+    switch (ParkLevel.activeScene->id) {
+      case -1: rdpq_call_deferred(unloadTest, NULL); break;
+      case 0: rdpq_call_deferred(unloadPark, NULL); break;
+      case 1: rdpq_call_deferred(unloadParkNorth, NULL); break;
+      case 2: rdpq_call_deferred(unloadParkBeach, NULL); break;
+      default: assertf(false, "Current scene doesn't have an unload: %d", (int)ParkLevel.activeScene->id);
+    }
+  }
 }

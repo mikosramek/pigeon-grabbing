@@ -1,0 +1,1 @@
+case <SCENE_ID>: rdpq_call_deferred(unload<SCENE_NAME>, NULL); break;

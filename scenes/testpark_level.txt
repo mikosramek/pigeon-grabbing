@@ -1,0 +1,67 @@
+#include "testpark_level.h"
+#include <libdragon.h>
+#include "../level.h"
+#include "../player/player.h"
+#include "../scenes/scene.h"
+<IMPORTS>
+
+static struct Level TestParkLevel = {
+  .id = 0,
+  .totalFeatherCount = 1,
+};
+
+
+void registerTestParkLevel() {
+  // TestParkLevel.scenes[<INDEX>] = get<SCENE>();
+  <REGISTER>
+}
+
+struct Level *loadTestParkLevel() {
+  changeTestParkScene(0, 0); // assume scene 0 & spawn 0
+  return &TestParkLevel;
+}
+
+void changeTestParkScene(uint32_t sceneID, uint32_t spawnPointID) {
+  // unload active scene
+  if (TestParkLevel.activeScene != NULL) {
+    switch (TestParkLevel.activeScene->id) {
+      <UNLOAD>
+      default: assertf(false, "Current scene doesn't have an unload: %d", (int)TestParkLevel.activeScene->id);
+    }
+  }
+
+  // load target scene
+  switch (sceneID) {
+    <LOAD>
+    default: assertf(false, "Trying to load a scene that doesn't exist: %d", (int)sceneID);
+  }
+
+  // find spawn point via ID
+  SpawnPoint *spawn = NULL;
+  for (int i = 0; i < TestParkLevel.activeScene->spawnCount; i += 1) {
+    uint32_t id = TestParkLevel.activeScene->spawns[i].id;
+    if (id == spawnPointID) {
+      spawn = &TestParkLevel.activeScene->spawns[i];
+    }
+  }
+
+  assertf(spawn != NULL, "NO SPAWN FOUND!");
+  
+  // move player to spawnPoint
+  Player *p = getPlayer();
+  p->position = spawn->spawn;
+  p->cameraAngle = spawn->angle;
+}
+
+
+void unloadTestParkLevel() {
+  // free_uncached(TestParkLevel.scenes);
+
+  // unload the active scene
+  if (TestParkLevel.activeScene != NULL) {
+    switch (TestParkLevel.activeScene->id) {
+      <UNLOAD>
+      default: assertf(false, "Current scene doesn't have an unload: %d", (int)TestParkLevel.activeScene->id);
+    }
+  }
+}

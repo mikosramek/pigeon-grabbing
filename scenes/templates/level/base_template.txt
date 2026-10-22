@@ -1,0 +1,67 @@
+#include "<LEVEL_NAME_LOWERCASE>_level.h"
+#include <libdragon.h>
+#include "../level.h"
+#include "../player/player.h"
+#include "../scenes/scene.h"
+<IMPORTS>
+
+static struct Level <LEVEL_NAME>Level = {
+  .id = <ID>,
+  .totalFeatherCount = <FEATHER_COUNT>,
+};
+
+
+void register<LEVEL_NAME>Level() {
+  // <LEVEL_NAME>Level.scenes[<INDEX>] = get<SCENE>();
+  <REGISTER>
+}
+
+struct Level *load<LEVEL_NAME>Level() {
+  change<LEVEL_NAME>Scene(0, 0); // assume scene 0 & spawn 0
+  return &<LEVEL_NAME>Level;
+}
+
+void change<LEVEL_NAME>Scene(uint32_t sceneID, uint32_t spawnPointID) {
+  // unload active scene
+  if (<LEVEL_NAME>Level.activeScene != NULL) {
+    switch (<LEVEL_NAME>Level.activeScene->id) {
+      <UNLOAD>
+      default: assertf(false, "Current scene doesn't have an unload: %d", (int)<LEVEL_NAME>Level.activeScene->id);
+    }
+  }
+
+  // load target scene
+  switch (sceneID) {
+    <LOAD>
+    default: assertf(false, "Trying to load a scene that doesn't exist: %d", (int)sceneID);
+  }
+
+  // find spawn point via ID
+  SpawnPoint *spawn = NULL;
+  for (int i = 0; i < <LEVEL_NAME>Level.activeScene->spawnCount; i += 1) {
+    uint32_t id = <LEVEL_NAME>Level.activeScene->spawns[i].id;
+    if (id == spawnPointID) {
+      spawn = &<LEVEL_NAME>Level.activeScene->spawns[i];
+    }
+  }
+
+  assertf(spawn != NULL, "NO SPAWN FOUND!");
+  
+  // move player to spawnPoint
+  Player *p = getPlayer();
+  p->position = spawn->spawn;
+  p->cameraAngle = spawn->angle;
+}
+
+
+void unload<LEVEL_NAME>Level() {
+  // free_uncached(<LEVEL_NAME>Level.scenes);
+
+  // unload the active scene
+  if (<LEVEL_NAME>Level.activeScene != NULL) {
+    switch (<LEVEL_NAME>Level.activeScene->id) {
+      <UNLOAD>
+      default: assertf(false, "Current scene doesn't have an unload: %d", (int)<LEVEL_NAME>Level.activeScene->id);
+    }
+  }
+}
