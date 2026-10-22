@@ -1,5 +1,7 @@
 # Pigeon Grabbing
 
+![Pigeon grabbing n64 box art](./pigeon_grabbing_box_art.jpg)
+
 An N64 game about grabbing pigeons.
 
 ## Development
