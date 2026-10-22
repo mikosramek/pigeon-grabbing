@@ -1,0 +1,22 @@
+name: Build and Package Output
+
+on:
+  push:
+    tags:
+      - "*"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Makefile build target
+        run: make
+
+      - name: Package and upload output file
+        uses: actions/upload-artifact@v4
+        with:
+          name: packaged-output
+          path: pigeon_grabbing.z64
